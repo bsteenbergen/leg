@@ -1,4 +1,4 @@
-![Logo](https://raw.githubusercontent.com/bsteenbergen/koala/main/docs/koala_logo.png)
+![Logo](https://raw.githubusercontent.com/bsteenbergen/koala/main/docs/koala_logo.PNG)
 
 # koala
 
