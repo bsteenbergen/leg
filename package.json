@@ -2,7 +2,7 @@
   "name": "koala",
   "version": "1.0.0",
   "description": "Compiler for koala",
-  "main": "src/koala.js",
+  "main": "src/mum.js",
   "type": "module",
   "directories": {
     "doc": "docs",
