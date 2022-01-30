@@ -4,6 +4,8 @@
 
 Compiler for the language koala
 
+
+mum is created by @elenasmartinez, @elenasmartinez, @bsteenbergen, @kirakira0, @hallegv 
 ## Features
 
 - ...
