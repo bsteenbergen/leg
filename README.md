@@ -5,7 +5,8 @@
 Compiler for the language koala
 
 
-mum is created by @elenasmartinez, @elenasmartinez, @bsteenbergen, @kirakira0, @hallegv 
+mum is created by [Elena Martinez](https://github.com/elenasmartinez), [Brittany Steenbergen](https://github.com/bsteenbergen), [Kira Toal](https://github.com/kirakira0), [Halle Vogelpohl](https://github.com/hallegv)
+
 ## Features
 
 - ...
