@@ -1,7 +1,7 @@
 {
-  "name": "koala",
+  "name": "mum",
   "version": "1.0.0",
-  "description": "Compiler for koala",
+  "description": "Compiler for mum",
   "main": "src/mum.js",
   "type": "module",
   "directories": {
@@ -14,7 +14,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/bsteenbergen/koala.git"
+    "url": "git+https://github.com/bsteenbergen/mum.git"
   },
   "keywords": [
     "Compilers"
@@ -22,9 +22,9 @@
   "author": "",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/bsteenbergen/koala/issues"
+    "url": "https://github.com/bsteenbergen/mum/issues"
   },
-  "homepage": "https://github.com/bsteenbergen/koala#readme",
+  "homepage": "https://github.com/bsteenbergen/mum#readme",
   "devDependencies": {
     "c8": "^7.11.0",
     "mocha": "^9.2.0"
