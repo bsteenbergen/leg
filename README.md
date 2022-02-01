@@ -18,8 +18,7 @@ mum is a general purpose programming language intended for beginner to intermedi
 
 # Features
 
-- Dynamic Typing 
-- Object-Oriented
+- Static Typing 
 - Functions 
 - Built-In Data Structures 
 - Single and Multi-line Comments 
@@ -66,7 +65,7 @@ mum's types and built-in data structures are similar to those of Python.
 | Operation | JavaScript  | mum               |
 | --------- | ----------- | ----------------- |
 | AND       | &&          | &&                |
-| OR        | "||"        | "||"              |
+| OR        | `\|\|`        | `\|\|`              |
 | NOT       | !           | !                 |
 | NAND      |             | !&                |
 | NOR       |             | !|                |
@@ -161,9 +160,35 @@ task greet(name) yields fullGreeting:
 </table>
 
 
-## Classes and Objects 
+# Loops 
+  
+# Comments 
+  
+## Single Line Comments 
+<table>
+<tr>
+  <td>
+    <pre style="margin-left: 0; width:100%">
+  let num dollarValue = 50.0 # Here's a single line comment!  
 
-- classes = templates, objects = ?
-
-
-## Examples
+    </td>
+</tr>
+</table>
+  
+## Multi-Line Comments 
+<table>
+<tr>
+  <td>
+    <pre style="margin-left: 0; width:100%">
+  task getAbsoluteValue(num n):
+    #* 
+    And here is a multi-line comment, for when you have a lot to say 
+    but want to keep your code looking clean!
+    *#
+    if n >= 0:
+        yield n
+    else:
+        return -n 
+    </td>
+</tr>
+</table>
