@@ -1,13 +1,13 @@
-task isPalindrome(str) yields bool:
-    left = 0
-    right = str.length - 1
+task isPalindrome(str toCheck) yields bool palindrome:
+    num left = 0
+    num right = toCheck.length - 1
 
     loop until left >= right:
-        if str[left] != str[right] yield false
+        if toCheck[left] != toCheck[right] palindrome = false
         left++
         right++
     
-    yield true
+    palindrome = true
 
 
 
