@@ -24,7 +24,6 @@ mum is a general purpose programming language intended for beginner to intermedi
 - Single and Multi-line Comments 
 - Flexible Loop Declarations 
 - Conditional Statements 
-- Built-In Exception Objects
 
 # Types and Data Structures 
 
@@ -125,7 +124,7 @@ function square(num) {
     </td>
     <td>
       <pre style="margin-left: 0; width:100%">
-task square(num n): n^2
+task square(num n) yields n^2
     </td>
   </tr>
 </table>
@@ -149,18 +148,51 @@ function greet(name) {
     </td>
     <td>
       <pre style="margin-left: 0; width:100%">
-task greet(str name) yields str fullGreeting:
+task greet(str name) yields fullGreeting:
   str greeting = "Hello, "
   str exclamations = ""
   iter = 0 loop iter += 1 until iter = len(name):
     str exclamations += "!"
-  fullGreeting = greeting + name + exclamations 
+  str fullGreeting = greeting + name + exclamations 
     </td>
   </tr>
 </table>
 
 
 # Loops 
+  
+mum loops can be declared in several different ways. Users may define an iterator, step logic, and a stopping condition to create a loop reminiscent of JavaScript for loops. The syntax is as follows:
+
+[iterator definition] loop [step logic] until [stop condition] 
+
+For example: 
+
+<table>
+  <tr>
+    <td>
+      <pre style="margin-left: 0; width:100%">
+  num iter = 0 loop iter += 2 until iter == 10: 
+    mumble("Hello!)
+    </td>
+  </tr>
+</table>
+  
+If the user does not wish to use an iterator, they may build something more akin to a while loop by declaring a loop with the following syntax: 
+
+loop until [stop condition] 
+
+For example: 
+
+<table>
+  <tr>
+    <td>
+      <pre style="margin-left: 0; width:100%">
+  loop until !sunny: 
+    rainyDays += 1
+    </td>
+  </tr>
+</table> 
+
   
 # Comments 
   
@@ -179,7 +211,7 @@ task greet(str name) yields str fullGreeting:
 <tr>
   <td>
     <pre style="margin-left: 0; width:100%">
-  task getAbsoluteValue(num n) yields num n:
+  task getAbsoluteValue(num n):
     #* 
     And here is a multi-line comment, for when you have a lot to say 
     but want to keep your code looking clean!
