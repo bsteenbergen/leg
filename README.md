@@ -1,6 +1,6 @@
 <img src="https://raw.githubusercontent.com/bsteenbergen/mum/main/docs/mum_logo.PNG" width="600" height="200"/>
 
-# mum
+## mum
 
 In “The Philosophy of Ruby: A Conversation with Yukihiro Matsumoto, Part I”, the creator of the Ruby programming language says the following: 
 
@@ -18,8 +18,49 @@ mum is a general purpose programming language intended for beginner to intermedi
 
 ## Features
 
-- ...
-- ...
-- ...
+- Dynamic Typing 
+- Object-Oriented
+- Functions 
+- Built-In Data Structures 
+- Single and Multi-line Comments 
+- Flexible Loop Declarations 
+- Conditional Statements 
+- Built-In Exception Objects
+
+## Types and Data Structures 
+
+mum's types and built-in data structures are similar to those of Python.
+
+# Types 
+
+| Python      | mum               |
+| ----------- | ----------------- |
+| boolean     | bool              |
+| string      | str               |
+| number      | num               |
+
+# Data Structures 
+
+| Python      | mum               |
+| ----------- | ----------------- |
+| list        | list              |
+| set         | set               |
+| dictionary  | map               |
+
+
+## Functions 
+
+mum function declarations require the following components: 
+
+- The "task" keyword to denote the use of a function 
+- The function name 
+- Function inputs 
+- Optionally, the user may return a value using the "yields keyword" 
+-   "yields" must be followed either by an expression, or an identifier, a colon, and a statement
+
+## Classes and Objects 
+
+- classes = templates, objects = ?
+
 
 ## Examples
