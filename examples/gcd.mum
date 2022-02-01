@@ -1,4 +1,4 @@
-task gcd(a, b) yields commonDenominator:
+task gcd(num a, num b) yields num commonDenominator:
     if a == 0:
         commonDenominator = b
     loop until b == 0:
