@@ -125,7 +125,7 @@ function square(num) {
     </td>
     <td>
       <pre style="margin-left: 0; width:100%">
-task square(num) yields num**2
+task square(num n): n^2
     </td>
   </tr>
 </table>
@@ -149,11 +149,11 @@ function greet(name) {
     </td>
     <td>
       <pre style="margin-left: 0; width:100%">
-task greet(name) yields fullGreeting:
-  greeting = "Hello, "
-  exclamations = ""
+task greet(str name) yields str fullGreeting:
+  str greeting = "Hello, "
+  str exclamations = ""
   iter = 0 loop iter += 1 until iter = len(name):
-    exclamations += "!"
+    str exclamations += "!"
   fullGreeting = greeting + name + exclamations 
     </td>
   </tr>
@@ -169,7 +169,7 @@ task greet(name) yields fullGreeting:
 <tr>
   <td>
     <pre style="margin-left: 0; width:100%">
-  let num dollarValue = 50.0 # Here's a single line comment!  
+  num dollarValue = 50.0 # Here's a single line comment!  
   </td>
 </tr>
 </table>
@@ -179,7 +179,7 @@ task greet(name) yields fullGreeting:
 <tr>
   <td>
     <pre style="margin-left: 0; width:100%">
-  task getAbsoluteValue(num n):
+  task getAbsoluteValue(num n) yields num n:
     #* 
     And here is a multi-line comment, for when you have a lot to say 
     but want to keep your code looking clean!
@@ -187,7 +187,7 @@ task greet(name) yields fullGreeting:
     if n >= 0:
         yield n
     else:
-        return -n 
+        yield -n 
     </td>
 </tr>
 </table>
