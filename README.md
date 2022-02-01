@@ -56,7 +56,26 @@ mum function declarations require the following components:
 - The function name 
 - Function inputs 
 - Optionally, the user may return a value using the "yields keyword" 
--   "yields" must be followed either by an expression, or an identifier, a colon, and a statement
+  - "yields" must be followed either by an expression, or an identifier, a colon, and a statement
+
+### Void Functions
+
+<table>
+  <tr>Python</tr><tr>mum</tr>
+  <tr>
+    <td>
+      <pre style="margin-left: 0; width:100%">
+function sayHi():
+  console.log(“Hi!”);
+    </td>
+    <td>
+      <pre style="margin-left: 0; width:100%">
+task sayHi():
+	mumble("Hi!")
+    </td>
+  </tr>
+</table>
+
 
 ## Classes and Objects 
 
