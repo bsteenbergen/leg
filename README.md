@@ -66,7 +66,7 @@ mum's types and built-in data structures are similar to those of Python.
 | Operation | JavaScript  | mum               |
 | --------- | ----------- | ----------------- |
 | AND       | &&          | &&                |
-| OR        | ||          | ||                |
+| OR        | "||"        | "||"              |
 | NOT       | !           | !                 |
 | NAND      |             | !&                |
 | NOR       |             | !|                |
