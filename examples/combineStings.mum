@@ -1,0 +1,2 @@
+task combineStrings(str1, str2) yields combinedString:
+	combinedString = str1 + str2

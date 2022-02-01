@@ -1,0 +1,1 @@
+task square(number) yields number^2

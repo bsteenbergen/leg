@@ -1,0 +1,5 @@
+task isEven(num) yields answer:
+    if rem num and == 0:
+        answer = true
+    else: 
+        answer = false
