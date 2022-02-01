@@ -1,0 +1,14 @@
+task isPalindrome(str) yields bool:
+    left = 0
+    right = str.length - 1
+
+    loop until left >= right:
+        if str[left] != str[right] yield false
+        left++
+        right++
+    
+    yield true
+
+
+
+    
