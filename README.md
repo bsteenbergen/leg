@@ -152,7 +152,7 @@ task greet(str name) yields fullGreeting:
   str greeting = "Hello, "
   str exclamations = ""
   iter = 0 loop iter += 1 until iter = len(name):
-    str exclamations += "!"
+    exclamations += "!"
   str fullGreeting = greeting + name + exclamations 
     </td>
   </tr>
