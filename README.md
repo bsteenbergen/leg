@@ -170,8 +170,7 @@ task greet(name) yields fullGreeting:
   <td>
     <pre style="margin-left: 0; width:100%">
   let num dollarValue = 50.0 # Here's a single line comment!  
-
-    </td>
+  </td>
 </tr>
 </table>
   
