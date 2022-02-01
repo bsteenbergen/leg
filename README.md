@@ -1,6 +1,6 @@
 <img src="https://raw.githubusercontent.com/bsteenbergen/mum/main/docs/mum_logo.PNG" width="600" height="200"/>
 
-## mum
+# mum
 
 In “The Philosophy of Ruby: A Conversation with Yukihiro Matsumoto, Part I”, the creator of the Ruby programming language says the following: 
 
@@ -10,16 +10,15 @@ Inspired by Matsumoto’s comments on writing programming languages for humans a
 
 mum is a general purpose programming language intended for beginner to intermediate programmers.
 
-# Authors 
+## Authors 
 - [Elena Martinez](https://github.com/elenasmartinez)
 - [Brittany Steenbergen](https://github.com/bsteenbergen)
 - [Kira Toal](https://github.com/kirakira0)
 - [Halle Vogelpohl](https://github.com/hallegv)
 
-## Features
+# Features
 
-- Dynamic Typing 
-- Object-Oriented
+- Static Typing 
 - Functions 
 - Built-In Data Structures 
 - Single and Multi-line Comments 
@@ -27,28 +26,64 @@ mum is a general purpose programming language intended for beginner to intermedi
 - Conditional Statements 
 - Built-In Exception Objects
 
-## Types and Data Structures 
+# Types and Data Structures 
 
 mum's types and built-in data structures are similar to those of Python.
 
-# Types 
+## Types 
 
-| Python      | mum               |
+| JavaScript  | mum               |
 | ----------- | ----------------- |
 | boolean     | bool              |
 | string      | str               |
 | number      | num               |
 
-# Data Structures 
+## Data Structures 
 
-| Python      | mum               |
+| JavaScript  | mum               |
 | ----------- | ----------------- |
 | list        | list              |
 | set         | set               |
 | dictionary  | map               |
 
+# Operators and Comparators 
 
-## Functions 
+## Arithmetic Operators 
+
+| JavaScript  | mum               |
+| ----------- | ----------------- |
+| x = 2       | x = 2             |
+| x + 2       | x + 2             |
+| x - 2       | x - 2             | 
+| x * 2       | x * 2             | 
+| x / 2       | x / 2             | 
+| x % 2       | rem x / 2         | 
+| x ** 2      | x ^ 2             | 
+
+## Logical Operators
+
+| Operation | JavaScript  | mum               |
+| --------- | ----------- | ----------------- |
+| AND       | &&          | &&                |
+| OR        | `\|\|`        | `\|\|`              |
+| NOT       | !           | !                 |
+| NAND      |             | !&                |
+| NOR       |             | !|                |
+
+
+## Comparators 
+
+| JavaScript  | mum               |
+| ----------- | ----------------- |
+| x > 2       | x > 2             |
+| x < 2       | x < 2             |
+| x >= 2      | x >= 2            | 
+| x <= 2      | x <= 2            | 
+| x == 2      | x == 2            | 
+| x != 2      | x != 2            | 
+
+
+# Functions 
 
 mum function declarations require the following components: 
 
@@ -61,25 +96,98 @@ mum function declarations require the following components:
 ### Void Functions
 
 <table>
-  <tr>Python</tr><tr>mum</tr>
+  <th>JavaScript</th><th>mum</th>
   <tr>
     <td>
       <pre style="margin-left: 0; width:100%">
-function sayHi():
+function sayHi() {
   console.log(“Hi!”);
+}
     </td>
     <td>
       <pre style="margin-left: 0; width:100%">
 task sayHi():
-	mumble("Hi!")
+  mumble("Hi!")
+    </td>
+  </tr>
+</table>
+
+### Non-Void Functions 
+
+<table>
+  <th>JavScript</th><th>mum</th>
+  <tr>
+    <td>
+      <pre style="margin-left: 0; width:100%">
+function square(num) {
+  returns num**2;
+}
+    </td>
+    <td>
+      <pre style="margin-left: 0; width:100%">
+task square(num) yields num**2
+    </td>
+  </tr>
+</table>
+
+### Non-Void Functions With Return Value in Method Signature
+
+<table>
+  <th>JavaScript</th><th>mum</th>
+  <tr>
+    <td>
+      <pre style="margin-left: 0; width:100%">
+function greet(name) {
+  greeting = "Hello, "
+  exclamations = ""
+  for (let i = 0; i < len(name); i++) {
+    exclamations += "!"
+  }
+  fullGreeting = greeting + name + exclamations
+  return fullGreeting
+}
+    </td>
+    <td>
+      <pre style="margin-left: 0; width:100%">
+task greet(name) yields fullGreeting:
+  greeting = "Hello, "
+  exclamations = ""
+  iter = 0 loop iter += 1 until iter = len(name):
+    exclamations += "!"
+  fullGreeting = greeting + name + exclamations 
     </td>
   </tr>
 </table>
 
 
-## Classes and Objects 
-
-- classes = templates, objects = ?
-
-
-## Examples
+# Loops 
+  
+# Comments 
+  
+## Single Line Comments 
+<table>
+<tr>
+  <td>
+    <pre style="margin-left: 0; width:100%">
+  let num dollarValue = 50.0 # Here's a single line comment!  
+  </td>
+</tr>
+</table>
+  
+## Multi-Line Comments 
+<table>
+<tr>
+  <td>
+    <pre style="margin-left: 0; width:100%">
+  task getAbsoluteValue(num n):
+    #* 
+    And here is a multi-line comment, for when you have a lot to say 
+    but want to keep your code looking clean!
+    *#
+    if n >= 0:
+        yield n
+    else:
+        return -n 
+    </td>
+</tr>
+</table>
