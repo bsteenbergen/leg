@@ -2,28 +2,56 @@ import fs from "fs"
 import ohm from "ohm-js"
 import * as core from "./core.js"
 
-const bellaGrammar = ohm.grammar(fs.readFileSync("src/bella.ohm"))
+// TODO: clean up
 
-const astBuilder = bellaGrammar.createSemantics().addOperation("ast", {
+const mumGrammar = ohm.grammar(fs.readFileSync("src/mum.ohm"))
+
+const astBuilder = mumGrammar.createSemantics().addOperation("ast", {
   Program(body) {
     return new core.Program(body.ast())
   },
-  Statement_vardec(_let, id, _eq, initializer, _semicolon) {
-    return new core.VariableDeclaration(id.ast(), initializer.ast())
+  Statement_print(_mumble, argument) {
+    return new core.PrintStatement(argument.ast())
   },
-  Statement_fundec(_fun, id, _open, params, _close, _equals, body, _semicolon) {
+
+  Statement_vardec(type, id, _eq, initializer) {
+    return new core.VariableDeclaration(type.ast(), id.ast(), initializer.ast())
+  },
+
+  // TODO --> ASK IF WE EVEN NEED THREE DIFFERENT FUNCDECS
+
+  // fundec1 --> no yield, block
+  //   Statement_fundec1(_task, id, _open, params, _close, _colon, body) {
+  //     return new core.FunctionDeclaration(
+  //       id.ast(),
+  //       params.asIteration().ast(),
+  //       body.ast()
+  //     )
+  //   },
+
+  //   // fundec2 --> yields, no block
+  //   Statement_fundec2(_task, id, _open, params, _close, body) {
+  //     return new core.FunctionDeclaration(
+  //       id.ast(),
+  //       params.asIteration().ast(),
+  //       body.ast()
+  //     )
+  //   },
+
+  // fundec3 --> yields AND block
+  Statement_fundec(_task, id, _open, params, _close, body) {
     return new core.FunctionDeclaration(
       id.ast(),
       params.asIteration().ast(),
       body.ast()
     )
   },
-  Statement_assign(id, _eq, expression, _semicolon) {
+
+  Statement_assign(id, _eq, expression) {
     return new core.Assignment(id.ast(), expression.ast())
   },
-  Statement_print(_print, argument, _semicolon) {
-    return new core.PrintStatement(argument.ast())
-  },
+
+  /* unscreened ... */
   Statement_while(_while, test, body) {
     return new core.WhileStatement(test.ast(), body.ast())
   },

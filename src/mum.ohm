@@ -1,0 +1,96 @@
+mum {
+
+  Program = Stmt+
+  Stmt    = "mumble" Exp                     --print
+          | Type id "=" Exp                  --vardec
+          | id "=" Exp                       --assignment
+          | "task" id Params ("yields" Exp)? (":" Block)?     --fundec
+          | (Type id "=" Exp)? "loop" (~"until" Exp)? "until" Exp ":" Exp --loop 
+          | "if" Exp Block ("elseif" Exp Block)* ("else" Block)? ":"  -- if
+  
+  Params  = ("(" ListOf<Param, ","> ")")?
+  Param   = Type id
+  Args    = "(" ListOf<Exp, ","> ")"
+  Block   = Stmt*  
+  Type    = "bool"
+          | "str"
+          | "num"
+  
+  Exp     = Exp "||" Exp0           --or
+          | Exp "&&" Exp0           --and
+          | Exp0
+  Exp0    = Exp0 relop Exp1                  --binary
+          | Exp1 
+  Exp1    = Exp1 logicop Exp2                --binary      
+          | logicop Exp2					--logicopexp
+          | Exp2
+  Exp2    = Exp2 ("+=" | "-=" | "+" | "-") Exp3            --binary
+          | Exp3
+  Exp3    = Exp3 ("*" | "/") Exp4            --binary
+  		  | "rem" Exp3 "/" Exp4              --modulo
+          | Exp4
+  Exp4    = Exp5 "^" Exp4                   --binary
+          | Exp5      
+  Exp5   = num                      
+          | id Args                          --call
+          | id
+          | str
+          | "(" Exp ")"                      --parens
+      
+  num     = digit+ ("." digit+)?
+  id      = letter ("_" | letter | digit)*
+  str     = "\"" (~"\\" ~"\"" ~"\n" any)* "\""
+  logicop = ("!&" | "!|" | "!")
+  relop   = ("<=" | "<" | "!=" | "==" | ">=" | ">")
+  
+  space   += "//" (~"\n" any)* ("\n" | end)  --comment
+}
+
+
+// mum {
+
+//   Program = Stmt+
+//   Stmt    = "mumble" Exp                     --print
+//           | Type id "=" Exp                  --vardec
+//           | id "=" Exp                       --assignment
+//           | "task" id Params ("yields" Exp)? (":" Block)?     --fundec
+//           | (Type id "=" Exp)? "loop" (~"until" Exp)? "until" Exp ":" Exp --loop 
+//           | "if" Exp Block ("elseif" Exp Block)* ("else" Block)? ":"  -- if
+  
+//   Params  = ("(" ListOf<Param, ","> ")")?
+//   Param   = Type id
+//   Args    = "(" ListOf<Exp, ","> ")"
+//   Block   = Stmt*  
+//   Type    = "bool"
+//           | "str"
+//           | "num"
+  
+//   Exp     = Exp "||" Exp0           --or
+//           | Exp "&&" Exp0           --and
+//           | Exp0
+//   Exp0    = Exp0 relop Exp1                  --binary
+//           | Exp1 
+//   Exp1    = Exp1 logicop Exp2                --binary      
+//           | logicop Exp2					--logicopexp
+//           | Exp2
+//   Exp2    = Exp2 ("+=" | "-=" | "+" | "-") Exp3            --binary
+//           | Exp3
+//   Exp3    = Exp3 ("*" | "/") Exp4            --binary
+//   		  | "rem" Exp3 "/" Exp4              --modulo
+//           | Exp4
+//   Exp4    = Exp5 "^" Exp4                   --binary
+//           | Exp5      
+//   Exp5   = num                      
+//           | id Args                          --call
+//           | id
+//           | str
+//           | "(" Exp ")"                      --parens
+      
+//   num     = digit+ ("." digit+)?
+//   id      = letter ("_" | letter | digit)*
+//   str     = "\"" (~"\\" ~"\"" ~"\n" any)* "\""
+//   logicop = ("!&" | "!|" | "!")
+//   relop   = ("<=" | "<" | "!=" | "==" | ">=" | ">")
+  
+//   space   += "//" (~"\n" any)* ("\n" | end)  --comment
+// }
