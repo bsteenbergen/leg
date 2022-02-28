@@ -14,7 +14,7 @@ const syntaxChecks = [
   ["short if", 'if (true): mumble("good!")'],
   ["while with empty block", "while true"],
   ["while with one statement block", "while true num x = 1"],
-  ["for half-open range", "num i = 1\nloop until i > 10:\ni += 1\nend"]
+  ["for half-open range", "num i = 1\nloop until i > 10:\ni += 1\nend"],
   ["for closed range", "num i = 1\nloop until i > 10:\ni += 1\nend"],
   ["relational operators", 'mumble(1<2||1<=2||1==2||1!=2||1>=2||1>2)'],
   ["arithmetic", "task arithmetic() yields 2 * x + 3 / 5 - 7 "],
@@ -24,9 +24,9 @@ const syntaxChecks = [
   ["non-Latin letters in identifiers", "let コンパイラ = 100"],
   ["a simple string literal", 'mumble("😎💯")'],
   ["end of program inside comment", "mumble(0) // yay"],
-  ["comments with no text", "mumble(1)//\nmumble(0)//"],
+  ["comments with no text", "mumble(1)//\nmumble(0)//"]
 ]
-          // I GOT TO HERE SO FAR (EVERYTHING ABOVE)
+
 // Programs with syntax errors that the parser will detect
 const syntaxErrors = [
   ["non-letter in an identifier", "str ab😭c = 2", /Line 1, col 7:/],
@@ -44,7 +44,7 @@ const syntaxErrors = [
   ["string lit with unknown escape", 'mumble("ab\\zcdef")', /col 11/],
   ["string lit with newline", 'mumble("ab\\zcdef")', /col 11/],
   ["string lit with quote", 'mumble("ab\\zcdef")', /col 11/],
-  ["string lit with code point too long", 'mumble("\\u{1111111}")', /col 17/],
+  ["string lit with code point too long", 'mumble("\\u{1111111}")', /col 17/]
 ]
 
 describe("The parser", () => {
