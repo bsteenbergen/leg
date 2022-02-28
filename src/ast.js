@@ -51,18 +51,27 @@ const astBuilder = mumGrammar.createSemantics().addOperation("ast", {
     return new core.Assignment(id.ast(), expression.ast())
   },
 
-  /* unscreened ... */
-  Statement_while(_while, test, body) {
+
+ 
+ /** WE DO NOT HAVE WHILE?
+  * 
+  *  */ Statement_while(_while, test, body) {
     return new core.WhileStatement(test.ast(), body.ast())
   },
+
   Block(_open, body, _close) {
     return body.ast()
   },
+
+     /* unscreened ... */
   Exp_unary(op, operand) {
     return new core.UnaryExpression(op.ast(), operand.ast())
   },
-  Exp_ternary(test, _questionMark, consequent, _colon, alternate) {
-    return new core.Conditional(test.ast(), consequent.ast(), alternate.ast())
+//  Exp_ternary(test, _questionMark, consequent, _colon, alternate) {
+ //   return new core.Conditional(test.ast(), consequent.ast(), alternate.ast())
+ // },
+  Exp0_binary(left, op, right) {
+    return new core.BinaryExpression(op.ast(), left.ast(), right.ast())
   },
   Exp1_binary(left, op, right) {
     return new core.BinaryExpression(op.ast(), left.ast(), right.ast())
@@ -79,9 +88,7 @@ const astBuilder = mumGrammar.createSemantics().addOperation("ast", {
   Exp5_binary(left, op, right) {
     return new core.BinaryExpression(op.ast(), left.ast(), right.ast())
   },
-  Exp6_binary(left, op, right) {
-    return new core.BinaryExpression(op.ast(), left.ast(), right.ast())
-  },
+  
   Exp7_parens(_open, expression, _close) {
     return expression.ast()
   },
