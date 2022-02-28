@@ -40,6 +40,8 @@ mum {
           | "until"
           | "task"
           | "yields"
+          | "true"
+          | "false"
   
   Exp     = Exp "||" Exp0                                  --or
           | Exp "&&" Exp0                                  --and
