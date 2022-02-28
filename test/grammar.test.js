@@ -18,7 +18,6 @@ const syntaxChecks = [
   ["for closed range", "num i = 1\nloop until i > 10:\ni += 1\nend"],
   ["relational operators", 'mumble(1<2||1<=2||1==2||1!=2||1>=2||1>2)'],
   ["arithmetic", "task arithmetic() yields 2 * x + 3 / 5 - 7 "],
-  ["boolean literals", "let x = false || true"],
   ["empty array literal", "List l = []\nmumble(l)"],
   ["nonempty array literal", "List l = [5, 2]\nmumble(l)"],
   ["parentheses", "mumble(83 * (((((((((13 / 21))))))))) + 1 - 0)"],
@@ -27,7 +26,7 @@ const syntaxChecks = [
   ["end of program inside comment", "mumble(0) // yay"],
   ["comments with no text", "mumble(1)//\nmumble(0)//"],
 ]
-
+          // I GOT TO HERE SO FAR (EVERYTHING ABOVE)
 // Programs with syntax errors that the parser will detect
 const syntaxErrors = [
   ["non-letter in an identifier", "str ab😭c = 2", /Line 1, col 7:/],
@@ -37,22 +36,15 @@ const syntaxErrors = [
   ["an expression starting with a )", "yield )", /Line 1, col 8:/],
   ["a statement starting with a )", "mumble(5)\n)", /Line 2, col 1:/],
   ["an expression starting with a *", "num x = * 71", /Line 1, col 9:/],
-  ["while without parenthesis around condition", "while true:\nmumble(71)", /Line 2, col 1/],
-        // I GOT TO HERE SO FAR (EVERYTHING ABOVE)
-  ["if without braces", "if x < 3\nprint(1)", /Line 2, col 1/],
-  ["while as identifier", "let for = 3", /Line 1, col 5/],
-  ["if as identifier", "let if = 8", /Line 1, col 5/],
-  ["unbalanced brackets", "function f(): int[", /Line 1, col 18/],
-  ["empty array without type", "print([])", /Line 1, col 9/],
-  ["bad array literal", "print([1,2,])", /Line 1, col 12/],
-  ["empty subscript", "print(a[])", /Line 1, col 9/],
-  ["true is not assignable", "true = 1", /Line 1, col 5/],
-  ["false is not assignable", "false = 1", /Line 1, col 6/],
-  ["no-paren function type", "function f(g:int->int) {}", /Line 1, col 17/],
-  ["string lit with unknown escape", 'print("ab\\zcdef")', /col 11/],
-  ["string lit with newline", 'print("ab\\zcdef")', /col 11/],
-  ["string lit with quote", 'print("ab\\zcdef")', /col 11/],
-  ["string lit with code point too long", 'print("\\u{1111111}")', /col 17/],
+  ["if as identifier", "str if = 2", /Line 1, col 5/],
+  ["empty array without type declaration", "mumble([])", /Line 1, col 9/],
+  ["bad array literal", "List l = [2, 3,]", /Line 1, col 12/],
+  ["true is not assignable", "bool true = 1", /Line 1, col 5/],
+  ["false is not assignable", "bool false = 1", /Line 1, col 6/],
+  ["string lit with unknown escape", 'mumble("ab\\zcdef")', /col 11/],
+  ["string lit with newline", 'mumble("ab\\zcdef")', /col 11/],
+  ["string lit with quote", 'mumble("ab\\zcdef")', /col 11/],
+  ["string lit with code point too long", 'mumble("\\u{1111111}")', /col 17/],
 ]
 
 describe("The parser", () => {
