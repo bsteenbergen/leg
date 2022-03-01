@@ -13,29 +13,25 @@ export class Program {
   }
 }
 
-export class PrintStatement {
-    constructor(argument) {
-      Object.assign(this, { argument })
-    }
+export class PrintStmt {
+  constructor(argument) {
+    Object.assign(this, { argument })
   }
+}
 
-  export class VariableDeclaration {
-    constructor(type, variable, initializer) {
-      Object.assign(this, { type, variable, initializer })
-    }
+export class VariableDeclaration {
+  constructor(type, variable, initializer) {
+    Object.assign(this, { type, variable, initializer })
   }
+}
 
 export class FunctionDeclaration {
-    constructor(funName, params, body) {
-      Object.assign(this, { funName, params, body })
-    }
+  constructor(funName, params, body) {
+    Object.assign(this, { funName, params, body })
   }
+}
 
-  
-
-
-/* unscreened */ 
-
+/* unscreened */
 
 export class Assignment {
   constructor(target, source) {
@@ -43,19 +39,17 @@ export class Assignment {
   }
 }
 
-
-
 // export class WhileStatement {
 //   constructor(test, body) {
 //     Object.assign(this, { test, body })
 //   }
 // }
 
-export class LoopStatement {
-    constructor(..., body) {
-        ...
-    }
-}
+// export class LoopStatement {
+//     constructor(..., body) {
+//         ...
+//     }
+// }
 
 export class Call {
   constructor(callee, args) {
@@ -89,6 +83,10 @@ export class Token {
     Object.assign(this, { category, source })
   }
   get lexeme() {
+    // Ohm holds this for us, nice
+    return this.source.contents
+  }
+  get description() {
     return this.source.contents
   }
 }
@@ -107,12 +105,12 @@ export class Function {
 
 export const standardLibrary = Object.freeze({
   π: new Variable("π", true),
-//   sqrt: new Function("sqrt", 1, true),
-//   sin: new Function("sin", 1, true),
-//   cos: new Function("cos", 1, true),
-//   exp: new Function("exp", 1, true),
-//   ln: new Function("ln", 1, true),
-//   hypot: new Function("hypot", 2, true),
+  //   sqrt: new Function("sqrt", 1, true),
+  //   sin: new Function("sin", 1, true),
+  //   cos: new Function("cos", 1, true),
+  //   exp: new Function("exp", 1, true),
+  //   ln: new Function("ln", 1, true),
+  //   hypot: new Function("hypot", 2, true),
 })
 
 // Throw an error message that takes advantage of Ohm's messaging

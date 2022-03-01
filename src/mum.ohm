@@ -6,10 +6,12 @@ mum {
           | List
           | Map
           | id "=" Exp                                       --assignment
-          | "task" id Params ("yields" Exp) (":" Suite)?     --fundec
+          | FunDecl
           | "loop" Control ":" Suite                         --loop 
-          | IfStmt ("else" ":" (Suite | IfStmt))?            -- if
+          | IfStmt ("else" ":" (Suite | IfStmt))?            --if
           | Exp
+
+  FunDecl = "task" id Params ("yields" Exp) (":" Suite)?
 
   Params  = ("(" ListOf<Param, ","> ")")?
   Param   = Type id
@@ -32,7 +34,7 @@ mum {
   MapType = TypeLit "->" TypeLit
   List    = "List" id "=" "[" ListOf<TypeLit, ","> "]"
           
-  keyword = "end"
+  Keyword = "end"
           | "if"
           | "else"
           | "elseif"
@@ -65,7 +67,7 @@ mum {
           | "(" Exp ")"                                    --parens
       
   num     = digit+ ("." digit+)?
-  id      = (~keyword) letter ("_" | letter | digit)*
+  id      = (~Keyword) letter ("_" | letter | digit)*
   str     = "\"" (~"\\" ~"\"" ~"\n" any)* "\""
   bool    = "true" | "false"
   logicop = ("!&" | "!|" | "!")
