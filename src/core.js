@@ -5,12 +5,6 @@
 // generation are handled by other modules. This keeps the compiler organized
 // by phase.
 
-/**
- * Do we need classes for:
- * - Control since it's just Exps
- * - Suite since it's like Program
- */
-
 import util from "util"
 
 export class Program {
@@ -19,7 +13,13 @@ export class Program {
   }
 }
 
-export class PrintStmt {
+export class Suite {
+  constructor(statements) {
+    this.statements = statements
+  }
+}
+
+export class PrintStatement {
   constructor(argument) {
     Object.assign(this, { argument })
   }
@@ -53,16 +53,23 @@ export class Function {
   }
 }
 
-export class Parameter {
+export class Param {
   constructor(name, type) {
     Object.assign(this, { name, type })
+  }
+}
+
+export class Type {
+  // Type of all basic type int, float, string, etc. and superclass of others
+  constructor(description) {
+    Object.assign(this, { description })
   }
 }
 
 // Assuming 'num' in 
 // "arr" "<" Type "," num ">"    --arrtype
 // in mum.ohm means fixed len for arr
-export class ArrayExpression {
+export class Array {
   // Example: ["Halle", "Brittany", "Kira", "Elena", "Ray"]
   constructor(elements) {
     this.elements = elements
@@ -75,14 +82,34 @@ export class EmptyArray {
   }
 }
 
-export class ArrayType extends Type {
+// rename to ArrayType and update ast.js?
+export class Type_arrtype extends Type {
   constructor(baseType, length) {
     super(`[${baseType.description}, ${length.description}]`)
     Object.assign(this, {baseType, length})
   }
 }
 
-export class MapExpression {
+export class List {
+  constructor(elements) {
+    this.elements = elements
+  }
+}
+
+export class EmptyList {
+  constructor(baseType) {
+    Object.assign(this, {baseType})
+  }
+}
+
+export class ListType extends Type {
+  constructor(baseType) {
+    super(`[${baseType.description}]`)
+    Object.assign(this, {baseType})
+  }
+}
+
+export class Map {
   constructor(expressions) {
     this.expressions = expressions
   }
@@ -94,7 +121,8 @@ export class EmptyMap {
   }
 }
 
-export class MapType extends Type {
+// rename to MapType and update ast.js?
+export class Type_maptype extends Type {
   constructor(keyType, valueType) {
     super(`[${keyType.description}, ${valueType.description}]`)
     Object.assign(this, {keyType, valueType})
@@ -113,16 +141,15 @@ export class TypeDeclaration {
   }
 }
 
-export class Type {
-  // Type of all basic type int, float, string, etc. and superclass of others
-  constructor(description) {
-    Object.assign(this, { description })
+export class IfShort {
+  constructor(tests, consequent) {
+    Object.assign(this, { tests, consequent });
   }
-}
+};
 
-export class IfStatement {
-  constructor(tests, consequents, alternate) {
-    Object.assign(this, { tests, consequents, alternate });
+export class IfLong {
+  constructor(tests, consequent, alternate) {
+    Object.assign(this, { tests, consequent, alternate });
   }
 };
 
@@ -153,6 +180,12 @@ export class UnaryExpression {
 export class Loop {
   constructor(initExp, body) {
     Object.assign(this, {initExp, body})
+  }
+}
+
+export class Control {
+  constructor(expression) {
+    this.expression = expression
   }
 }
 
