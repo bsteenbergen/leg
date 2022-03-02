@@ -5,6 +5,12 @@
 // generation are handled by other modules. This keeps the compiler organized
 // by phase.
 
+/**
+ * Do we need classes for:
+ * - Control since it's just Exps
+ * - Suite since it's like Program
+ */
+
 import util from "util"
 
 export class Program {
@@ -20,16 +26,105 @@ export class PrintStmt {
 }
 
 export class VariableDeclaration {
-  constructor(type, variable, initializer) {
-    Object.assign(this, { type, variable, initializer })
+  constructor(modifier, variable, initializer) {
+    Object.assign(this, { modifier, variable, initializer })
   }
 }
 
-export class FunctionDeclaration {
-  constructor(funName, params, body) {
-    Object.assign(this, { funName, params, body })
+export class Variable {
+  constructor(name, readOnly) {
+    Object.assign(this, { name, readOnly })
   }
 }
+
+ /* 
+  * we aren't sure if we need to do 'returnExp' or 'returnVar' 
+  * since we 'yield Exp' 
+  */
+export class FunctionDeclaration {
+  constructor(funName, params, returnExp, body) {
+    Object.assign(this, { funName, params, returnExp, body })
+  }
+}
+
+export class Function {
+  constructor(name, paramCount, readOnly) {
+    Object.assign(this, { name, paramCount, readOnly })
+  }
+}
+
+export class Parameter {
+  constructor(name, type) {
+    Object.assign(this, { name, type })
+  }
+}
+
+// Assuming 'num' in 
+// "arr" "<" Type "," num ">"    --arrtype
+// in mum.ohm means fixed len for arr
+export class ArrayExpression {
+  // Example: ["Halle", "Brittany", "Kira", "Elena", "Ray"]
+  constructor(elements) {
+    this.elements = elements
+  }
+}
+
+export class EmptyArray {
+  constructor(baseType) {
+    Object.assign(this, {baseType, length: 0})
+  }
+}
+
+export class ArrayType extends Type {
+  constructor(baseType, length) {
+    super(`[${baseType.description}, ${length.description}]`)
+    Object.assign(this, {baseType, length})
+  }
+}
+
+export class MapExpression {
+  constructor(expressions) {
+    this.expressions = expressions
+  }
+}
+
+export class EmptyMap {
+  constructor(keyType, valueType) {
+    Object.assign(this, {keyType, valueType})
+  }
+}
+
+export class MapType extends Type {
+  constructor(keyType, valueType) {
+    super(`[${keyType.description}, ${valueType.description}]`)
+    Object.assign(this, {keyType, valueType})
+  }
+}
+
+export class Binding {
+  constructor(key, value) {
+    Object.assign(this, { key, value });
+  }
+};
+
+export class TypeDeclaration {
+  constructor(type) {
+    this.type = type
+  }
+}
+
+export class Type {
+  // Type of all basic type int, float, string, etc. and superclass of others
+  constructor(description) {
+    Object.assign(this, { description })
+  }
+}
+
+export class IfStatement {
+  constructor(tests, consequents, alternate) {
+    Object.assign(this, { tests, consequents, alternate });
+  }
+};
 
 export class Assignment {
   constructor(target, source) {
@@ -43,12 +138,6 @@ export class Call {
   }
 }
 
-export class Conditional {
-  constructor(test, consequent, alternate) {
-    Object.assign(this, { test, consequent, alternate })
-  }
-}
-
 export class BinaryExpression {
   constructor(op, left, right) {
     Object.assign(this, { op, left, right })
@@ -58,6 +147,12 @@ export class BinaryExpression {
 export class UnaryExpression {
   constructor(op, operand) {
     Object.assign(this, { op, operand })
+  }
+}
+
+export class Loop {
+  constructor(initExp, body) {
+    Object.assign(this, {initExp, body})
   }
 }
 
@@ -74,18 +169,6 @@ export class Token {
   }
   get description() {
     return this.source.contents
-  }
-}
-
-export class Variable {
-  constructor(name, readOnly) {
-    Object.assign(this, { name, readOnly })
-  }
-}
-
-export class Function {
-  constructor(name, paramCount, readOnly) {
-    Object.assign(this, { name, paramCount, readOnly })
   }
 }
 
