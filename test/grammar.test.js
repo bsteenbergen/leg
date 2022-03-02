@@ -5,7 +5,7 @@ import ast from "../src/ast.js"
 const syntaxChecks = [
   ["simplest syntactically correct program", "break"],
   ["multiple statements", 'mumble("hey")\nbreak\nreturn'],
-  ["variable declarations", "str s = 'silly'"],
+  ["variable declarations", 'str s = "silly"'],
   ["type declarations", "num n = 2"],
   ["function with one param", "task square(num) yields num^2"],
   ["function with two params", "task combineStrings(str str1, str str2) yields combinedString:\ncombinedString = str1 + str2\nend"],
