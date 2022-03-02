@@ -1,40 +1,45 @@
 mum {
 
   Program = Stmt+
-  Stmt    = "mumble" Exp                                     --print
-          | Type id "=" Exp                                  --vardec
-          | List
-          | Map
-          | id "=" Exp                                       --assignment
-          | FunDecl
-          | "loop" Control ":" Suite                         --loop 
-          | IfStmt ("else" ":" (Suite | IfStmt))?            --if
+  
+  Stmt    = Print
+  	  | VarDecl
+          | FunDecl 
+          | Loop
+          | If
           | Exp
-
-  FunDecl = "task" id Params ("yields" Exp) (":" Suite)?
-
-  Params  = ("(" ListOf<Param, ","> ")")?
+  
+  Print   = "mumble" "(" Exp ")"
+  
+  VarDecl = Type id "=" Exp 
+          
+  FunDecl = "task" id "(" (ListOf<Param, ",">)? ")" ("yields" Exp)? (":" Suite)? 
+  
+  List    = "[" ListOf<Exp, ","> "]"
+  
+  Array   = "[" ListOf<Exp, ","> "]"
+  
+  Map     = "{" ListOf<Binding, ","> "}"
+  Binding = Exp "->" Exp
+  
+  Loop    = "loop" Control ":" Suite
+  
+  Control = "until" Exp  // only while loops for now
+  
+  If      = if Exp Suite else (Suite | If)            --long
+          | if Exp Suite                              --short
+              
+  Suite   = Stmt* "end"
+  
   Param   = Type id
-  Args    = "(" ListOf<Exp, ","> ")"
-  Suite   = Stmt* "end" 
-  Control = "until" Exp
-  
-  IfStmt  = "if" Exp ":" Stmt* ("elseif" Exp ":" Stmt*)*
-  
   Type    = "bool"
           | "str"
           | "num"
+          | "list"
+          | "arr" "<" Type "," num ">"    --arrtype
+          | "map" "<" Type "," Type ">"   --maptype
           
-  TypeLit = num
-          | str
-          | bool
-          | id  // this is here for now but i dont think we want it here forever
-          
-  Map     = "Map" id "=" "{" ListOf<MapType, ","> "}"
-  MapType = TypeLit "->" TypeLit
-  List    = "List" id "=" "[" ListOf<TypeLit, ","> "]"
-          
-  Keyword = "end"
+ keyword = "end"
           | "if"
           | "else"
           | "elseif"
@@ -44,34 +49,43 @@ mum {
           | "yields"
           | "true"
           | "false"
+          | "mumble"
   
-  Exp     = Exp "||" Exp0                                  --or
-          | Exp "&&" Exp0                                  --and
+  Exp     = Exp "||" Exp0           --or
+          | Exp "&&" Exp0           --and
           | Exp0
-  Exp0    = Exp0 relop Exp1                                --binary
+  Exp0    = Exp0 relop Exp1                  --binary
           | Exp1 
-  Exp1    = Exp1 logicop Exp2                              --binary  
-          | logicop Exp2                                   --beforeexp
+  Exp1    = Exp1 logicop Exp2                --binary      
           | Exp2
-  Exp2    = Exp2 ("+=" | "-=" | "+" | "-") Exp3            --binary
+  Exp2    = Exp2 ("+" | "-") Exp3            --binary
           | Exp3
-  Exp3    = Exp3 ("*" | "/") Exp4                          --binary
-  	  | "rem" Exp3 "/" Exp4                            --modulo
+  Exp3    = Exp3 ("*" | "/") Exp4            --binary
+  		  | "rem" Exp3 "/" Exp4              --modulo
           | Exp4
-  Exp4    = Exp5 "^" Exp4                                  --binary
+  Exp4    = Exp5 "^" Exp4                   --binary
           | Exp5      
   Exp5   = num                      
-          | id Args                                        --call
+          | id "(" ListOf<Exp, ","> ")"      --call
           | id
-          | str
-          | "(" Exp ")"                                    --parens
+          | "true"
+          | "false"
+          | strlit
+          | Array
+          | Map 
+          | List
+          | "(" Exp ")"                      --parens
+          
       
   num     = digit+ ("." digit+)?
-  id      = (~Keyword) letter ("_" | letter | digit)*
-  str     = "\"" (~"\\" ~"\"" ~"\n" any)* "\""
-  bool    = "true" | "false"
+  id      = ~keyword letter ("_" | letter | digit)*
+  strlit  = "\"" char* "\""         
+  char    = ~"\\" ~"\"" ~"\n" ~"~" any
   logicop = ("!&" | "!|" | "!")
   relop   = ("<=" | "<" | "!=" | "==" | ">=" | ">")
+  
+  if          = "if" ~alnum
+  else        = "else" ~alnum
   
   space   += "//" (~"\n" any)* ("\n" | end)  --comment
 }

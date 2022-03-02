@@ -31,25 +31,11 @@ export class FunctionDeclaration {
   }
 }
 
-/* unscreened */
-
 export class Assignment {
   constructor(target, source) {
     Object.assign(this, { target, source })
   }
 }
-
-// export class WhileStatement {
-//   constructor(test, body) {
-//     Object.assign(this, { test, body })
-//   }
-// }
-
-// export class LoopStatement {
-//     constructor(..., body) {
-//         ...
-//     }
-// }
 
 export class Call {
   constructor(callee, args) {
@@ -102,16 +88,6 @@ export class Function {
     Object.assign(this, { name, paramCount, readOnly })
   }
 }
-
-export const standardLibrary = Object.freeze({
-  π: new Variable("π", true),
-  //   sqrt: new Function("sqrt", 1, true),
-  //   sin: new Function("sin", 1, true),
-  //   cos: new Function("cos", 1, true),
-  //   exp: new Function("exp", 1, true),
-  //   ln: new Function("ln", 1, true),
-  //   hypot: new Function("hypot", 2, true),
-})
 
 // Throw an error message that takes advantage of Ohm's messaging
 export function error(message, token) {
