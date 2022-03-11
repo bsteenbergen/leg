@@ -7,8 +7,11 @@ const syntaxChecks = [
   ["multiple statements", 'mumble("hey")\nbreak\nreturn'],
   ["variable declarations", 'str s = "silly"'],
   ["type declarations", "num n = 2"],
-  ["function with one param", "task square(num) yields num^2"],
-  ["function with two params", "task combineStrings(str str1, str str2) yields combinedString:\ncombinedString = str1 + str2\nend"],
+  ["function with one param", "task square(num toSquare) yields num^2"],
+  [
+    "function with two params",
+    "task combineStrings(str str1, str str2) yields combinedString:\ncombinedString = str1 + str2\nend",
+  ],
   ["array type returned", "task returnList() yields List"],
   ["assignments", "abc=9*3 a=1"],
   ["short if", 'if (true): mumble("good!")'],
@@ -16,7 +19,7 @@ const syntaxChecks = [
   ["while with one statement block", "while true num x = 1"],
   ["for half-open range", "num i = 1\nloop until i > 10:\ni += 1\nend"],
   ["for closed range", "num i = 1\nloop until i > 10:\ni += 1\nend"],
-  ["relational operators", 'mumble(1<2||1<=2||1==2||1!=2||1>=2||1>2)'],
+  ["relational operators", "mumble(1<2||1<=2||1==2||1!=2||1>=2||1>2)"],
   ["arithmetic", "task arithmetic() yields 2 * x + 3 / 5 - 7 "],
   ["empty array literal", "List l = []\nmumble(l)"],
   ["nonempty array literal", "List l = [5, 2]\nmumble(l)"],
@@ -24,7 +27,7 @@ const syntaxChecks = [
   ["non-Latin letters in identifiers", "let コンパイラ = 100"],
   ["a simple string literal", 'mumble("😎💯")'],
   ["end of program inside comment", "mumble(0) // yay"],
-  ["comments with no text", "mumble(1)//\nmumble(0)//"]
+  ["comments with no text", "mumble(1)//\nmumble(0)//"],
 ]
 
 // Programs with syntax errors that the parser will detect
@@ -44,7 +47,7 @@ const syntaxErrors = [
   ["string lit with unknown escape", 'mumble("ab\\zcdef")', /col 11/],
   ["string lit with newline", 'mumble("ab\\zcdef")', /col 11/],
   ["string lit with quote", 'mumble("ab\\zcdef")', /col 11/],
-  ["string lit with code point too long", 'mumble("\\u{1111111}")', /col 17/]
+  ["string lit with code point too long", 'mumble("\\u{1111111}")', /col 17/],
 ]
 
 describe("The parser", () => {

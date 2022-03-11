@@ -1,3 +1,4 @@
+import { equal } from "assert"
 import fs from "fs"
 import { Suite } from "mocha"
 import ohm from "ohm-js"
@@ -27,6 +28,9 @@ const astBuilder = mumGrammar.createSemantics().addOperation("ast", {
       yieldExp.ast(),
       suite.ast()
     )
+  },
+  Assign(target, _eq, source) {
+    return new core.Assign(target, source)
   },
   List(_open, params, _close) {
     return new core.List(params.asIteration().ast())

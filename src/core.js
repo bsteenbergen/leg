@@ -141,6 +141,11 @@ export class TypeDeclaration {
   }
 }
 
+export class Assign {
+  constructor(target, source) {
+    Object.assign(this, { target, source })
+  }
+}
 export class IfShort {
   constructor(tests, consequent) {
     Object.assign(this, { tests, consequent })
