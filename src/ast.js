@@ -100,25 +100,18 @@ const astBuilder = mumGrammar.createSemantics().addOperation("ast", {
   true(_) {
     return new core.Token("Bool", this.source)
   },
-  /** 
   false(_) {
     return new core.Token("Bool", this.source)
   },
-  intlit(_digits) {
+  num(_whole, _dot, _fraction) {
     return new core.Token("Int", this.source)
   },
-  floatlit(_whole, _point, _fraction, _e, _sign, _exponent) {
-    return new core.Token("Float", this.source)
-  },
-  */
   strlit(_openQuote, _chars, _closeQuote) {
     return new core.Token("Str", this.source)
   },
-  /**
   _terminal() {
     return new core.Token("Sym", this.source)
   },
-  */
   _iter(...children) {
     return children.map((child) => child.ast())
   },
