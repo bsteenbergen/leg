@@ -40,15 +40,15 @@ mum {
           | "map" "<" Type "," Type ">"   --maptype
           
  keyword = "end"
-          | "if"
-          | "else"
+          | if
+          | else
           | "elseif"
           | "loop"
           | "until"
           | "task"
           | "yields"
-          | "true"
-          | "false"
+          | true
+          | false
           | "mumble"
   
   Exp     = Exp "||" Exp0           --or
@@ -68,8 +68,8 @@ mum {
   Exp5   = num                      
           | id "(" ListOf<Exp, ","> ")"      --call
           | id
-          | "true"
-          | "false"
+          | true
+          | false
           | strlit
           | Array
           | Map 
@@ -86,6 +86,8 @@ mum {
   
   if          = "if" ~alnum
   else        = "else" ~alnum
+  true        = "true" ~alnum
+  false       = "false" ~alnum
   
   space   += "//" (~"\n" any)* ("\n" | end)  --comment
 }

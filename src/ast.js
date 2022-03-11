@@ -10,7 +10,7 @@ const astBuilder = mumGrammar.createSemantics().addOperation("ast", {
   Program(body) {
     return new core.Program(body.ast())
   },
-  Print(_print, expression) {
+  Print(_print, _open, expression, _close) {
     return new core.PrintStatement(expression.ast())
   },
   VarDecl(type, id, _eq, initializer) {
@@ -20,7 +20,7 @@ const astBuilder = mumGrammar.createSemantics().addOperation("ast", {
       initializer.ast()
     )
   },
-  FunDecl(_task, id, _open, params, _close, yieldExp, suite) {
+  FunDecl(_task, id, _open, params, _close, _yields, yieldExp, _colons, suite) {
     return new core.FunctionDeclaration(
       id.ast(),
       params.asIteration().ast(),
@@ -61,33 +61,32 @@ const astBuilder = mumGrammar.createSemantics().addOperation("ast", {
   Type_arrtype(_arr, _open, type, _comma, num, _close) {
     return new core.Type_arrtype(type.ast(), num.sourceString)
   },
-  Keyword_maptype(_map, _open, type1, _comma, type2, _close) {
+  Type_maptype(_map, _open, type1, _comma, type2, _close) {
     return new core.Type_maptype(type1.ast(), type2.ast())
   },
-  Exp_or(op, left, right) {
-    return new core.BinaryExpression(op.sourceString, left.ast(), right.ast())
+  Exp_or(left, op, right) {
+    return new core.BinaryExpression(left.ast(), op.sourceString, right.ast())
   },
-  Exp_and(op, left, right) {
-    return new core.BinaryExpression(op.sourceString, left.ast(), right.ast())
+  Exp_and(left, op, right) {
+    return new core.BinaryExpression(left.ast(), op.sourceString, right.ast())
   },
-  Exp0_binary(op, left, right) {
-    return new core.BinaryExpression(op.sourceString, left.ast(), right.ast())
+  Exp0_binary(left, op, right) {
+    return new core.BinaryExpression(left.ast(), op.sourceString, right.ast())
   },
-  Exp1_binary(op, left, right) {
-    return new core.BinaryExpression(op.sourceString, left.ast(), right.ast())
+  Exp1_binary(left, op, right) {
+    return new core.BinaryExpression(left.ast(), op.sourceString, right.ast())
   },
-  Exp1_beforeexp() {},
-  Exp2_binary(op, left, right) {
-    return new core.BinaryExpression(op.sourceString, left.ast(), right.ast())
+  Exp2_binary(left, op, right) {
+    return new core.BinaryExpression(left.ast(), op.sourceString, right.ast())
   },
-  Exp3_binary(op, left, right) {
-    return new core.BinaryExpression(op.sourceString, left.ast(), right.ast())
+  Exp3_binary(left, op, right) {
+    return new core.BinaryExpression(left.ast(), op.sourceString, right.ast())
   },
-  Exp3_modulo(op, left, right) {
-    return new core.BinaryExpression(op.sourceString, left.ast(), right.ast())
+  Exp3_modulo(_rem, left, op, right) {
+    return new core.BinaryExpression(left.ast(), op.sourceString, right.ast())
   },
-  Exp4_binary(op, left, right) {
-    return new core.BinaryExpression(op.sourceString, left.ast(), right.ast())
+  Exp4_binary(left, op, right) {
+    return new core.BinaryExpression(left.ast(), op.sourceString, right.ast())
   },
   Exp5_call(id, _open, expList, _close) {
     return new core.Call(id.ast(), expList.asIteration.ast())
@@ -95,6 +94,32 @@ const astBuilder = mumGrammar.createSemantics().addOperation("ast", {
   Exp5_parens(_open, exp, _closed) {
     return new core.ExpParens(exp.ast())
   },
+  id(_first, _rest) {
+    return new core.Token("Id", this.source)
+  },
+  true(_) {
+    return new core.Token("Bool", this.source)
+  },
+  /** 
+  false(_) {
+    return new core.Token("Bool", this.source)
+  },
+  intlit(_digits) {
+    return new core.Token("Int", this.source)
+  },
+  floatlit(_whole, _point, _fraction, _e, _sign, _exponent) {
+    return new core.Token("Float", this.source)
+  },
+  stringlit(_openQuote, _chars, _closeQuote) {
+    return new core.Token("Str", this.source)
+  },
+  _terminal() {
+    return new core.Token("Sym", this.source)
+  },
+  */
+  _iter(...children) {
+    return children.map(child => child.ast())
+  }
 })
 
 export default function ast(sourceCode) {
