@@ -110,9 +110,11 @@ const astBuilder = mumGrammar.createSemantics().addOperation("ast", {
   floatlit(_whole, _point, _fraction, _e, _sign, _exponent) {
     return new core.Token("Float", this.source)
   },
-  stringlit(_openQuote, _chars, _closeQuote) {
+  */
+  strlit(_openQuote, _chars, _closeQuote) {
     return new core.Token("Str", this.source)
   },
+  /**
   _terminal() {
     return new core.Token("Sym", this.source)
   },
