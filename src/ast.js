@@ -32,10 +32,10 @@ const astBuilder = mumGrammar.createSemantics().addOperation("ast", {
     return new core.List(params.asIteration().ast())
   },
   Array(_open, params, _close) {
-    return new core.Array(params.asIteration().ast())
+    return new core.MumArray(params.asIteration().ast())
   },
   Map(_open, bindings, _closed) {
-    return new core.Map(bindings.asIteration().ast())
+    return new core.Dictionary(bindings.asIteration().ast())
   },
   Binding(exp1, _arrow, exp2) {
     return new core.Binding(exp1.ast(), exp2.ast())
@@ -120,8 +120,8 @@ const astBuilder = mumGrammar.createSemantics().addOperation("ast", {
   },
   */
   _iter(...children) {
-    return children.map(child => child.ast())
-  }
+    return children.map((child) => child.ast())
+  },
 })
 
 export default function ast(sourceCode) {

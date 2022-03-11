@@ -37,10 +37,10 @@ export class Variable {
   }
 }
 
- /* 
-  * we aren't sure if we need to do 'returnExp' or 'returnVar' 
-  * since we 'yield Exp' 
-  */
+/*
+ * we aren't sure if we need to do 'returnExp' or 'returnVar'
+ * since we 'yield Exp'
+ */
 export class FunctionDeclaration {
   constructor(funName, params, returnExp, body) {
     Object.assign(this, { funName, params, returnExp, body })
@@ -66,10 +66,10 @@ export class Type {
   }
 }
 
-// Assuming 'num' in 
+// Assuming 'num' in
 // "arr" "<" Type "," num ">"    --arrtype
 // in mum.ohm means fixed len for arr
-export class Array {
+export class MumArray {
   // Example: ["Halle", "Brittany", "Kira", "Elena", "Ray"]
   constructor(elements) {
     this.elements = elements
@@ -78,7 +78,7 @@ export class Array {
 
 export class EmptyArray {
   constructor(baseType) {
-    Object.assign(this, {baseType, length: 0})
+    Object.assign(this, { baseType, length: 0 })
   }
 }
 
@@ -86,7 +86,7 @@ export class EmptyArray {
 export class Type_arrtype extends Type {
   constructor(baseType, length) {
     super(`[${baseType.description}, ${length.description}]`)
-    Object.assign(this, {baseType, length})
+    Object.assign(this, { baseType, length })
   }
 }
 
@@ -98,42 +98,42 @@ export class List {
 
 export class EmptyList {
   constructor(baseType) {
-    Object.assign(this, {baseType})
+    Object.assign(this, { baseType })
   }
 }
 
 export class ListType extends Type {
   constructor(baseType) {
     super(`[${baseType.description}]`)
-    Object.assign(this, {baseType})
+    Object.assign(this, { baseType })
   }
 }
 
-export class Map {
+export class Dictionary {
   constructor(expressions) {
     this.expressions = expressions
   }
 }
 
-export class EmptyMap {
+export class EmptyDictionary {
   constructor(keyType, valueType) {
-    Object.assign(this, {keyType, valueType})
+    Object.assign(this, { keyType, valueType })
   }
 }
 
-// rename to MapType and update ast.js?
+// rename to DictionaryType and update ast.js?
 export class Type_maptype extends Type {
   constructor(keyType, valueType) {
     super(`[${keyType.description}, ${valueType.description}]`)
-    Object.assign(this, {keyType, valueType})
+    Object.assign(this, { keyType, valueType })
   }
 }
 
 export class Binding {
   constructor(key, value) {
-    Object.assign(this, { key, value });
+    Object.assign(this, { key, value })
   }
-};
+}
 
 export class TypeDeclaration {
   constructor(type) {
@@ -143,15 +143,15 @@ export class TypeDeclaration {
 
 export class IfShort {
   constructor(tests, consequent) {
-    Object.assign(this, { tests, consequent });
+    Object.assign(this, { tests, consequent })
   }
-};
+}
 
 export class IfLong {
   constructor(tests, consequent, alternate) {
-    Object.assign(this, { tests, consequent, alternate });
+    Object.assign(this, { tests, consequent, alternate })
   }
-};
+}
 
 export class Assignment {
   constructor(target, source) {
@@ -179,7 +179,7 @@ export class UnaryExpression {
 
 export class Loop {
   constructor(initExp, body) {
-    Object.assign(this, {initExp, body})
+    Object.assign(this, { initExp, body })
   }
 }
 
