@@ -16,9 +16,9 @@ mum {
           
   FunDecl = "task" id "(" (ListOf<Param, ",">) ")" ("yields" Exp)? (":" Suite)? 
   
-  List    = "[" Type ListOf<Exp, ","> "]"
+  List    = "[" ListOf<Exp, ","> "]"
   
-  Array   = "[" Type ListOf<Exp, ","> "]"
+  Array   = "[" ListOf<Exp, ","> "]"
   
   Map     = "{" ListOf<Binding, ","> "}"
   Binding = Exp "->" Exp
