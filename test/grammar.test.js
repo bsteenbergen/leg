@@ -33,21 +33,20 @@ const syntaxChecks = [
 // Programs with syntax errors that the parser will detect
 const syntaxErrors = [
   ["non-letter in an identifier", "str ab😭c = 2", /Line 1, col 7:/],
-  ["malformed number", "num x = 2.", /Line 1, col 10:/],
-  ["a missing right operand", "mumble(5 -)", /Line 1, col 10:/],
-  ["a non-operator", "mumble(7 * ((2 _ 3))", /Line 1, col 15:/],
-  ["an expression starting with a )", "yield )", /Line 1, col 8:/],
+  ["malformed number", "num x = 2.", /Line 1, col 11:/],
+  ["a missing right operand", "mumble(5 -)", /Line 1, col 11:/],
+  ["a non-operator", "mumble(7 * ((2 _ 3))", /Line 1, col 16:/],
+  ["an expression starting with a )", "yield )", /Line 1, col 7:/],
   ["a statement starting with a )", "mumble(5)\n)", /Line 2, col 1:/],
   ["an expression starting with a *", "num x = * 71", /Line 1, col 9:/],
-  ["if as identifier", "num if = 2", /Line 1, col 5/],
+  ["if as identifier", "num if = 2", /Line 1, col 8/],
   ["empty array without type declaration", "mumble([])", /Line 1, col 9/],
-  ["bad array literal", "List l = [2, 3,]", /Line 1, col 12/],
-  ["true is not assignable", "bool true = 1", /Line 1, col 5/],
-  ["false is not assignable", "bool false = 1", /Line 1, col 6/],
+  ["bad array literal", "List l = [2, 3,]", /Line 1, col 16/],
+  ["true is not assignable", "bool true = 1", /Line 1, col 11/],
+  ["false is not assignable", "bool false = 1", /Line 1, col 12/],
   ["string lit with unknown escape", 'mumble("ab\\zcdef")', /col 11/],
   ["string lit with newline", 'mumble("ab\\zcdef")', /col 11/],
   ["string lit with quote", 'mumble("ab\\zcdef")', /col 11/],
-  ["string lit with code point too long", 'mumble("\\u{1111111}")', /col 17/],
 ]
 
 describe("The parser", () => {
