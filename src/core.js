@@ -48,8 +48,8 @@ export class FunctionDeclaration {
 }
 
 export class Function {
-  constructor(name, paramCount, readOnly) {
-    Object.assign(this, { name, paramCount, readOnly })
+  constructor(name, paramCount) {
+    Object.assign(this, { name, paramCount})
   }
 }
 

@@ -27,7 +27,7 @@ mum {
   
   Control = "until" Exp  // only while loops for now
   
-  If      = if Exp Suite else (Suite | If)            --long
+  If      = if Exp ":" Suite else (Suite | If)            --long
           | if Exp Suite                              --short
               
   Suite   = Stmt* "end"

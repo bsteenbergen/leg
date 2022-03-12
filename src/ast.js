@@ -50,7 +50,7 @@ const astBuilder = mumGrammar.createSemantics().addOperation("ast", {
   Control(_until, exp) {
     return new core.Control(exp.ast())
   },
-  If_long(_if, test, consequent, _else, alternate) {
+  If_long(_if, test, _colons, consequent, _else, alternate) {
     return new core.IfLong(test.ast(), consequent.ast(), alternate.ast())
   },
   If_short(_if, test, consequent) {
