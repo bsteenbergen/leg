@@ -66,6 +66,12 @@ export class Type {
   }
 }
 
+export class ExpParens {
+  constructor(exp){
+    Object.assign(this, { exp })
+  }
+}
+
 // Assuming 'num' in
 // "arr" "<" Type "," num ">"    --arrtype
 // in mum.ohm means fixed len for arr
@@ -171,8 +177,8 @@ export class Call {
 }
 
 export class BinaryExpression {
-  constructor(op, left, right) {
-    Object.assign(this, { op, left, right })
+  constructor(left, op, right) {
+    Object.assign(this, { left, op, right })
   }
 }
 

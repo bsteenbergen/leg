@@ -6,7 +6,7 @@ task isPalindrome(str toCheck) yields bool palindrome:
         if toCheck[left] != toCheck[right] palindrome = false
         left++
         right++
-    
+        
     palindrome = true
 
 
