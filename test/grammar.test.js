@@ -39,7 +39,7 @@ const syntaxErrors = [
   ["an expression starting with a )", "yield )", /Line 1, col 8:/],
   ["a statement starting with a )", "mumble(5)\n)", /Line 2, col 1:/],
   ["an expression starting with a *", "num x = * 71", /Line 1, col 9:/],
-  ["if as identifier", "str if = 2", /Line 1, col 5/],
+  ["if as identifier", "num if = 2", /Line 1, col 5/],
   ["empty array without type declaration", "mumble([])", /Line 1, col 9/],
   ["bad array literal", "List l = [2, 3,]", /Line 1, col 12/],
   ["true is not assignable", "bool true = 1", /Line 1, col 5/],

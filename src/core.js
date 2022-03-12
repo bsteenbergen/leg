@@ -97,8 +97,8 @@ export class Type_arrtype extends Type {
 }
 
 export class List {
-  constructor(elements) {
-    this.elements = elements
+  constructor(type, elements) {
+    Object.assign(this, { type, elements })
   }
 }
 
