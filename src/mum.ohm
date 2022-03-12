@@ -45,11 +45,11 @@ mum {
  keyword = "end"
           | if
           | else
-          | "elseif"
-          | "loop"
-          | "until"
-          | "task"
-          | "yields"
+          | elseif
+          | loop
+          | until
+          | task
+          | yields
           | true
           | false
           | "mumble"
@@ -91,6 +91,12 @@ mum {
   else        = "else" ~alnum
   true        = "true" ~alnum
   false       = "false" ~alnum
+  elseif      = "elseif" ~alnum
+  loop        = "loop" ~alnum
+  until       = "until" ~alnum
+  task        = "task" ~alnum
+  yields      = "yields" ~alnum
+
   
   space   += "//" (~"\n" any)* ("\n" | end)  --comment
 }

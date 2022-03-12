@@ -21,7 +21,7 @@ const syntaxChecks = [
   ["for closed range", "num i = 1\nloop until i > 10:\ni = i + 1\nend"],
   ["relational operators", "mumble(1<2||1<=2||1==2||1!=2||1>=2||1>2)"],
   ["arithmetic", "task arithmetic() yields 2 * x + 3 / 5 - 7 "],
-  ["empty array literal", "List l = []\nmumble(l)"],
+  ["empty array literal", "List num l = []\nmumble(l)"],
   ["nonempty array literal", "List l = [5, 2]\nmumble(l)"],
   ["parentheses", "mumble(83 * (((((((((13 / 21))))))))) + 1 - 0)"],
   ["non-Latin letters in identifiers", "let コンパイラ = 100"],
