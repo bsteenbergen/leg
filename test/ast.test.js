@@ -13,7 +13,7 @@ task combineStrings(str str1, str str2) yields combinedString:
 	str combinedString = str1 + str2
 end 
 `
-const expected = `   1 | Program statements = [#2, #3, #4, #7, #10, #16, ]
+const expected = `   1 | Program statements = [#2,#3,#4,#7,#10]
     2 | PrintStatement argument=(Str, ""hi there!"")
     3 | VariableDeclaration modifier='num' variable='x' initializer=(Int,"2")
     4 | FunctionDeclaration funName=(Id,"cube") params=[#5] returnExp=[#6] body=[]
@@ -27,8 +27,7 @@ const expected = `   1 | Program statements = [#2, #3, #4, #7, #10, #16, ]
     12 | Param name=(Sym,"str") type='str2'
     13 | Suite statements=[#14]
     14 | VariableDeclaration modifier='str' variable='combinedString' initializer=#15
-    15 | BinaryExpression left=(Id,"str1") op='+' right=(Id,"str2")
-`
+    15 | BinaryExpression left=(Id,"str1") op='+' right=(Id,"str2")`
 
 describe("The AST generator", () => {
     it("produces a correct AST", () => {
