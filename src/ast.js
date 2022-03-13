@@ -32,9 +32,9 @@ const astBuilder = mumGrammar.createSemantics().addOperation("ast", {
   Assign(target, _eq, source) {
     return new core.Assign(target, source)
   },
-  List(_open, params, _close) {
-    return new core.List(params.asIteration().ast())
-  },
+ // List(_open, params, _close) {
+  //  return new core.List(params.asIteration().ast())
+  //},
   Array(_open, params, _close) {
     return new core.MumArray(params.asIteration().ast())
   },

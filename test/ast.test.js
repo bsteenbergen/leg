@@ -22,9 +22,8 @@ else
 end
 if x !1 && x !2 mumble("x is not 1 or 2") 
 end 
-list counting = [1, "two", 3, "four"]
 `
-const expected = `   1 | Program statements=[#2,#3,#4,#7,#11,#17,#20,#23,#29,#35]
+const expected = `   1 | Program statements=[#2,#3,#4,#7,#11,#17,#20,#23,#29]
    2 | PrintStatement argument=(Str,""hi there!"")
    3 | VariableDeclaration modifier='num' variable='x' initializer=(Int,"2")
    4 | FunctionDeclaration funName=(Id,"cube") params=[#5] returnExp=[#6] body=[]
@@ -57,9 +56,7 @@ const expected = `   1 | Program statements=[#2,#3,#4,#7,#11,#17,#20,#23,#29,#35
   31 | BinaryExpression left=(Id,"x") op='!' right=(Int,"1")
   32 | BinaryExpression left=(Id,"x") op='!' right=(Int,"2")
   33 | Suite statements=[#34]
-  34 | PrintStatement argument=(Str,""x is not 1 or 2"")
-  35 | VariableDeclaration modifier='list' variable='counting' initializer=#36
-  36 | MumArray elements=[(Int,"1"),(Str,""two""),(Int,"3"),(Str,""four"")]`
+  34 | PrintStatement argument=(Str,""x is not 1 or 2"")`
 
 describe("The AST generator", () => {
   it("produces a correct AST", () => {

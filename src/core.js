@@ -96,11 +96,12 @@ export class Type_arrtype extends Type {
   }
 }
 
-export class List {
+/** export class List {
   constructor(type, elements) {
     Object.assign(this, { type, elements })
   }
 }
+*/ 
 
 
 export class EmptyList {
