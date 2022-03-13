@@ -102,6 +102,7 @@ export class List {
   }
 }
 
+
 export class EmptyList {
   constructor(baseType) {
     Object.assign(this, { baseType })
@@ -141,11 +142,11 @@ export class Binding {
   }
 }
 
-export class TypeDeclaration {
-  constructor(type) {
-    this.type = type
-  }
-}
+//export class TypeDeclaration {
+ // constructor(type) {
+  //  this.type = type
+ // }
+//}
 
 export class Assign {
   constructor(target, source) {
@@ -161,12 +162,6 @@ export class IfShort {
 export class IfLong {
   constructor(tests, consequent, alternate) {
     Object.assign(this, { tests, consequent, alternate })
-  }
-}
-
-export class Assignment {
-  constructor(target, source) {
-    Object.assign(this, { target, source })
   }
 }
 
