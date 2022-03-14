@@ -100,9 +100,6 @@ const astBuilder = mumGrammar.createSemantics().addOperation("ast", {
   Exp5_parens(_open, exp, _closed) {
     return new core.ExpParens(exp.ast())
   },
-  Exp6_emptyarray(type, id, _eq, _open, _closed) {
-    return new core.EmptyArray(type.sourceString, id.ast())
-  },
   id(_first, _rest) {
     return new core.Token("Id", this.source)
   },
