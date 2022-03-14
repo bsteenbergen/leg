@@ -16,7 +16,7 @@ const astBuilder = mumGrammar.createSemantics().addOperation("ast", {
   },
   VarDecl(type, id, _eq, initializer) {
     return new core.VariableDeclaration(
-      type.sourceString,
+      type.ast(),
       id.sourceString,
       initializer.ast()
     )
@@ -32,7 +32,7 @@ const astBuilder = mumGrammar.createSemantics().addOperation("ast", {
   Assign(target, _eq, source) {
     return new core.Assign(target, source)
   },
- // List(_open, params, _close) {
+  // List(_open, params, _close) {
   //  return new core.List(params.asIteration().ast())
   //},
   Array(_open, params, _close) {

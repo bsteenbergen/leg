@@ -26,7 +26,7 @@ end
 `
 const expected = `   1 | Program statements=[#2,#3,#4,#7,#11,#17,#20,#23,#29]
    2 | PrintStatement argument=(Str,""hi there!"")
-   3 | VariableDeclaration modifier='num' variable='x' initializer=(Int,"2")
+   3 | VariableDeclaration modifier=(Sym,"num") variable='x' initializer=(Int,"2")
    4 | FunctionDeclaration funName=(Id,"cube") params=[#5] returnExp=[#6] body=[]
    5 | Param name=(Sym,"num") type='y'
    6 | BinaryExpression left=(Id,"int") op='^' right=(Int,"3")
@@ -38,7 +38,7 @@ const expected = `   1 | Program statements=[#2,#3,#4,#7,#11,#17,#20,#23,#29]
   12 | Param name=(Sym,"str") type='str1'
   13 | Param name=(Sym,"str") type='str2'
   14 | Suite statements=[#15]
-  15 | VariableDeclaration modifier='str' variable='combinedString' initializer=#16
+  15 | VariableDeclaration modifier=(Sym,"str") variable='combinedString' initializer=#16
   16 | BinaryExpression left=(Id,"str1") op='+' right=(Id,"str2")
   17 | FunctionDeclaration funName=(Id,"greeting") params=[#18] returnExp=[#19] body=[]
   18 | Param name=(Sym,"str") type='name'
@@ -49,9 +49,9 @@ const expected = `   1 | Program statements=[#2,#3,#4,#7,#11,#17,#20,#23,#29]
   23 | IfLong tests=#24 consequent=#25 alternate=#27
   24 | BinaryExpression left=(Id,"x") op='>=' right=(Int,"0")
   25 | Suite statements=[#26]
-  26 | VariableDeclaration modifier='bool' variable='greater' initializer=(Bool,"true")
+  26 | VariableDeclaration modifier=(Sym,"bool") variable='greater' initializer=(Bool,"true")
   27 | Suite statements=[#28]
-  28 | VariableDeclaration modifier='bool' variable='greater' initializer=(Bool,"false")
+  28 | VariableDeclaration modifier=(Sym,"bool") variable='greater' initializer=(Bool,"false")
   29 | IfShort tests=#30 consequent=#33
   30 | BinaryExpression left=#31 op='&&' right=#32
   31 | BinaryExpression left=(Id,"x") op='!' right=(Int,"1")
@@ -63,16 +63,17 @@ const mapSrc = `
 map <str, num> m = {"a" -> 1, "b" -> 2}
 `
 const mapExpected = `   1 | Program statements=[#2]
-   2 | VariableDeclaration modifier='map <str, num>' variable='m' initializer=#3
-   3 | Dictionary expressions=[#4,#5]
-   4 | Binding key=(Str,""a"") value=(Int,"1")
-   5 | Binding key=(Str,""b"") value=(Int,"2")`
+   2 | VariableDeclaration modifier=#3 variable='m' initializer=#4
+   3 | Type_maptype description='[str, num]' keyType=(Sym,"str") valueType=(Sym,"num")
+   4 | Dictionary expressions=[#5,#6]
+   5 | Binding key=(Str,""a"") value=(Int,"1")
+   6 | Binding key=(Str,""b"") value=(Int,"2")`
 
 describe("The AST generator", () => {
   it("produces a correct AST", () => {
     assert.deepStrictEqual(util.format(ast(source)), expected)
-  }),
-    it("produces a correct AST with maps", () => {
-      assert.deepStrictEqual(util.format(ast(mapSrc)), mapExpected)
-    })
+  })
+  it("produces a correct AST with maps", () => {
+    assert.deepStrictEqual(util.format(ast(mapSrc)), mapExpected)
+  })
 })
