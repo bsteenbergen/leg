@@ -93,7 +93,6 @@ export class Dictionary {
   }
 }
 
-// rename to DictionaryType and update ast.js?
 
 export class Binding {
   constructor(key, value) {

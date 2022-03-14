@@ -25,7 +25,7 @@ end
 ["1", "2", "3", "jump"]
 {"one" -> 1, "two" -> 2}
 `
-const expected = `   1 | Program statements=[#2,#3,#4,#7,#11,#17,#20,#23,#29,#35]
+const expected = `   1 | Program statements=[#2,#3,#4,#7,#11,#17,#20,#23,#29,#35,#36]
    2 | PrintStatement argument=(Str,""hi there!"")
    3 | VariableDeclaration modifier=(Sym,"num") variable='x' initializer=(Int,"2")
    4 | FunctionDeclaration funName=(Id,"cube") params=[#5] returnExp=[#6] body=[]
@@ -59,7 +59,10 @@ const expected = `   1 | Program statements=[#2,#3,#4,#7,#11,#17,#20,#23,#29,#35
   32 | BinaryExpression left=(Id,"x") op='!' right=(Int,"2")
   33 | Suite statements=[#34]
   34 | PrintStatement argument=(Str,""x is not 1 or 2"")
-  35 | List type=[(Int,"1"),(Str,""two""),(Int,"3")] elements=undefined`
+  35 | List elements=[(Str,""1""),(Str,""2""),(Str,""3""),(Str,""jump"")]
+  36 | Dictionary expressions=[#37,#38]
+  37 | Binding key=(Str,""one"") value=(Int,"1")
+  38 | Binding key=(Str,""two"") value=(Int,"2")`
 
 const mapSrc = `
 map <str, num> m = {"a" -> 1, "b" -> 2}

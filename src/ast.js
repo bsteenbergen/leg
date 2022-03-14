@@ -59,7 +59,7 @@ const astBuilder = mumGrammar.createSemantics().addOperation("ast", {
   Param(type, id) {
     return new core.Param(type.ast(), id.sourceString)
   },
-  Type_maptype(_map, _open, type1, _comma, type2, _close) {
+   Type_maptype(_map, _open, type1, _comma, type2, _close) {
     return new core.Type_maptype(type1.ast(), type2.ast())
   },
   Exp_or(left, op, right) {
