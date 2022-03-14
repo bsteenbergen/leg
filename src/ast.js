@@ -32,11 +32,8 @@ const astBuilder = mumGrammar.createSemantics().addOperation("ast", {
   Assign(target, _eq, source) {
     return new core.Assign(target, source)
   },
-   List(_open, params, _close) {
+  List(_open, params, _close) {
     return new core.List(params.asIteration().ast())
-  },
-  Array(_open, params, _close) {
-    return new core.MumArray(params.asIteration().ast())
   },
   Map(_open, bindings, _closed) {
     return new core.Dictionary(bindings.asIteration().ast())
@@ -61,9 +58,6 @@ const astBuilder = mumGrammar.createSemantics().addOperation("ast", {
   },
   Param(type, id) {
     return new core.Param(type.ast(), id.sourceString)
-  },
-  Type_arrtype(_arr, _open, type, _comma, num, _close) {
-    return new core.Type_arrtype(type.ast(), num.sourceString)
   },
   Type_maptype(_map, _open, type1, _comma, type2, _close) {
     return new core.Type_maptype(type1.ast(), type2.ast())

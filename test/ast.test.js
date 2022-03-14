@@ -22,8 +22,10 @@ else
 end
 if x !1 && x !2 mumble("x is not 1 or 2") 
 end 
+["1", "2", "3", "jump"]
+{"one" -> 1, "two" -> 2}
 `
-const expected = `   1 | Program statements=[#2,#3,#4,#7,#11,#17,#20,#23,#29]
+const expected = `   1 | Program statements=[#2,#3,#4,#7,#11,#17,#20,#23,#29,#35]
    2 | PrintStatement argument=(Str,""hi there!"")
    3 | VariableDeclaration modifier=(Sym,"num") variable='x' initializer=(Int,"2")
    4 | FunctionDeclaration funName=(Id,"cube") params=[#5] returnExp=[#6] body=[]
@@ -56,7 +58,8 @@ const expected = `   1 | Program statements=[#2,#3,#4,#7,#11,#17,#20,#23,#29]
   31 | BinaryExpression left=(Id,"x") op='!' right=(Int,"1")
   32 | BinaryExpression left=(Id,"x") op='!' right=(Int,"2")
   33 | Suite statements=[#34]
-  34 | PrintStatement argument=(Str,""x is not 1 or 2"")`
+  34 | PrintStatement argument=(Str,""x is not 1 or 2"")
+  35 | List type=[(Int,"1"),(Str,""two""),(Int,"3")] elements=undefined`
 
 const mapSrc = `
 map <str, num> m = {"a" -> 1, "b" -> 2}
