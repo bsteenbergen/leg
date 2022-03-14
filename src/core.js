@@ -160,9 +160,9 @@ export class Token {
 
 // Throw an error message that takes advantage of Ohm's messaging
 export function error(message, token) {
-  if (token) {
-    throw new Error(`${token.source.getLineAndColumnMessage()}${message}`)
-  }
+  //if (token) {
+  //  throw new Error(`${token.source.getLineAndColumnMessage()}${message}`)
+  //}
   throw new Error(message)
 }
 
@@ -193,8 +193,9 @@ Program.prototype[util.inspect.custom] = function () {
       if (tags.has(e)) return `#${tags.get(e)}`
       if (e?.constructor === Token) {
         return `(${e.category},"${e.lexeme}"${
-          e.value ? "," + view(e.value) : ""
-        })`
+       //   e.value ? "," + view(e.value) : ""
+       ""
+       })`
       }
       if (Array.isArray(e)) return `[${e.map(view)}]`
       return util.inspect(e)
