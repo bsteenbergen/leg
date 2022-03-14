@@ -53,6 +53,7 @@ mum {
           | true
           | false
           | "mumble"
+          | rem
   
   Exp     = Exp "||" Exp0           --or
           | Exp "&&" Exp0           --and
