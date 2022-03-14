@@ -58,18 +58,12 @@ export class ExpParens {
 // Assuming 'num' in
 // "arr" "<" Type "," num ">"    --arrtype
 // in mum.ohm means fixed len for arr
-export class MumArray {
+//export class MumArray {
   // Example: ["Halle", "Brittany", "Kira", "Elena", "Ray"]
-  constructor(elements) {
-    this.elements = elements
-  }
-}
-
-export class EmptyArray {
-  constructor(baseType, arrname) {
-    Object.assign(this, {baseType, arrname, length : 0})
-  }
-}
+ // constructor(elements) {
+  //  this.elements = elements
+ // }
+//}
 
 export class Type {
   // Type of all basic type int, float, string, etc. and superclass of others
@@ -78,24 +72,18 @@ export class Type {
   }
  }
  
-// rename to ArrayType and update ast.js?
-export class Type_arrtype extends Type {
-  constructor(baseType, length) {
-    super(`[${baseType.description}, ${length.description}]`)
-    Object.assign(this, { baseType, length })
-  }
+export class Type_maptype extends Type {
+ constructor(keyType, valueType) {
+   super(`[${keyType.description}, ${valueType.description}]`)
+   Object.assign(this, { keyType, valueType })
+ }
 }
+
+// rename to ArrayType and update ast.js?
 
 export class List {
-  constructor(type, elements) {
-    Object.assign(this, { type, elements })
-  }
-}
-
-
-export class EmptyList {
-  constructor(baseType) {
-    Object.assign(this, { baseType })
+  constructor(elements) {
+    Object.assign(this, {elements })
   }
 }
 
@@ -105,20 +93,7 @@ export class Dictionary {
   }
 }
 
-export class EmptyDictionary {
-  constructor(keyType, valueType) {
-    Object.assign(this, { keyType, valueType })
-  }
-}
-
 // rename to DictionaryType and update ast.js?
-export class Type_maptype extends Type {
-  constructor(keyType, valueType) {
-    super(`[${keyType.description}, ${valueType.description}]`)
-    Object.assign(this, { keyType, valueType })
-  }
-}
-
 
 export class Binding {
   constructor(key, value) {

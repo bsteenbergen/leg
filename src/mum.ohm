@@ -18,9 +18,8 @@ mum {
   
   List    = "[" ListOf<Exp, ","> "]"
   
-  Array   = "[" ListOf<Exp, ","> "]"
-  
-  Map     = "{" ListOf<Binding, ","> "}"
+  Map     =  "{" ListOf<Binding, ","> "}"
+
   Binding = Exp "->" Exp
   
   Loop    = "loop" Control ":" Suite
@@ -39,7 +38,6 @@ mum {
           | "str"
           | "num"
           | "list"
-          | "arr" "<" Type "," num ">"    --arrtype
           | "map" "<" Type "," Type ">"   --maptype
           
  keyword = "end"
@@ -70,19 +68,17 @@ mum {
           | Exp4
   Exp4    = Exp5 "^" Exp4                   --binary
           | Exp5      
+
   Exp5   = num                      
-          | id  "(" (ListOf<id, ",">) ")"    --call
+          | id  "("      (ListOf<Param, ",">) ")"    --call
           | id
           | true
           | false
-          | strlit
-          | Array
+          | strlit      
           | Map 
           | List
           | "(" Exp ")"                      --parens
-          | Exp6
-
-  Exp6   =  Type id "=" "[""]"                    --emptyarray
+        
       
   num     = digit+ ("." digit+)?
   id      = ~keyword letter ("_" | letter | digit)*
