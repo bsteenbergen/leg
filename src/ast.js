@@ -62,9 +62,11 @@ const astBuilder = mumGrammar.createSemantics().addOperation("ast", {
   Param(type, id) {
     return new core.Param(type.ast(), id.sourceString)
   },
+  /** 
   Type_arrtype(_arr, _open, type, _comma, num, _close) {
     return new core.Type_arrtype(type.ast(), num.sourceString)
   },
+  **/
   Type_maptype(_map, _open, type1, _comma, type2, _close) {
     return new core.Type_maptype(type1.ast(), type2.ast())
   },
@@ -92,11 +94,14 @@ const astBuilder = mumGrammar.createSemantics().addOperation("ast", {
   Exp4_binary(left, op, right) {
     return new core.BinaryExpression(left.ast(), op.sourceString, right.ast())
   },
-  Exp5_call(id, _open, expList, _close) {
-    return new core.Call(id.ast(), expList.asIteration.ast())
+  Exp5_call(id, _open, params, _close) {
+    return new core.Call(id.ast(), params.asIteration.ast())
   },
   Exp5_parens(_open, exp, _closed) {
     return new core.ExpParens(exp.ast())
+  },
+  Exp6_emptyarray(type, id, _eq, _open, _closed) {
+    return new core.EmptyArray(type.sourceString, id.ast())
   },
   id(_first, _rest) {
     return new core.Token("Id", this.source)

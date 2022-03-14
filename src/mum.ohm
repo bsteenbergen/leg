@@ -69,7 +69,7 @@ mum {
   Exp4    = Exp5 "^" Exp4                   --binary
           | Exp5      
   Exp5   = num                      
-          | id "(" ListOf<Exp, ","> ")"      --call
+          | id  "(" (ListOf<id, ",">) ")"    --call
           | id
           | true
           | false
@@ -78,7 +78,9 @@ mum {
           | Map 
           | List
           | "(" Exp ")"                      --parens
-          
+          | Exp6
+
+  Exp6   =  Type id "=" "[""]"                    --emptyarray
       
   num     = digit+ ("." digit+)?
   id      = ~keyword letter ("_" | letter | digit)*

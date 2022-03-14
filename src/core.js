@@ -31,12 +31,6 @@ export class VariableDeclaration {
   }
 }
 
-export class Variable {
-  constructor(name, readOnly) {
-    Object.assign(this, { name, readOnly })
-  }
-}
-
 /*
  * we aren't sure if we need to do 'returnExp' or 'returnVar'
  * since we 'yield Exp'
@@ -47,24 +41,13 @@ export class FunctionDeclaration {
   }
 }
 
-export class Function {
-  constructor(name, paramCount) {
-    Object.assign(this, { name, paramCount})
-  }
-}
-
 export class Param {
   constructor(name, type) {
     Object.assign(this, { name, type })
   }
 }
 
-export class Type {
-  // Type of all basic type int, float, string, etc. and superclass of others
-  constructor(description) {
-    Object.assign(this, { description })
-  }
-}
+
 
 export class ExpParens {
   constructor(exp){
@@ -83,11 +66,18 @@ export class MumArray {
 }
 
 export class EmptyArray {
-  constructor(baseType) {
-    Object.assign(this, { baseType, length: 0 })
+  constructor(baseType, arrname) {
+    Object.assign(this, {baseType, arrname, length : 0})
   }
 }
 
+export class Type {
+  // Type of all basic type int, float, string, etc. and superclass of others
+  constructor(description) {
+    Object.assign(this, { description })
+  }
+ }
+ 
 // rename to ArrayType and update ast.js?
 export class Type_arrtype extends Type {
   constructor(baseType, length) {
@@ -96,23 +86,15 @@ export class Type_arrtype extends Type {
   }
 }
 
-/** export class List {
+export class List {
   constructor(type, elements) {
     Object.assign(this, { type, elements })
   }
 }
-*/ 
 
 
 export class EmptyList {
   constructor(baseType) {
-    Object.assign(this, { baseType })
-  }
-}
-
-export class ListType extends Type {
-  constructor(baseType) {
-    super(`[${baseType.description}]`)
     Object.assign(this, { baseType })
   }
 }
@@ -137,17 +119,12 @@ export class Type_maptype extends Type {
   }
 }
 
+
 export class Binding {
   constructor(key, value) {
     Object.assign(this, { key, value })
   }
 }
-
-//export class TypeDeclaration {
- // constructor(type) {
-  //  this.type = type
- // }
-//}
 
 export class Assign {
   constructor(target, source) {
@@ -178,11 +155,6 @@ export class BinaryExpression {
   }
 }
 
-export class UnaryExpression {
-  constructor(op, operand) {
-    Object.assign(this, { op, operand })
-  }
-}
 
 export class Loop {
   constructor(initExp, body) {
