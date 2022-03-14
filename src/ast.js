@@ -94,9 +94,9 @@ const astBuilder = mumGrammar.createSemantics().addOperation("ast", {
   Exp4_binary(left, op, right) {
     return new core.BinaryExpression(left.ast(), op.sourceString, right.ast())
   },
-  Exp5_call(id, _open, params, _close) {
-    return new core.Call(id.ast(), params.asIteration.ast())
-  },
+  //Exp5_call(id, _open, params, _close) {
+    //return new core.Call(id.ast(), params.asIteration.ast())
+  //},
   Exp5_parens(_open, exp, _closed) {
     return new core.ExpParens(exp.ast())
   },
