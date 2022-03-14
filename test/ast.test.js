@@ -59,8 +59,20 @@ const expected = `   1 | Program statements=[#2,#3,#4,#7,#11,#17,#20,#23,#29]
   33 | Suite statements=[#34]
   34 | PrintStatement argument=(Str,""x is not 1 or 2"")`
 
+const mapSrc = `
+map <str, num> m = {"a" -> 1, "b" -> 2}
+`
+const mapExpected = `   1 | Program statements=[#2]
+   2 | VariableDeclaration modifier='map <str, num>' variable='m' initializer=#3
+   3 | Dictionary expressions=[#4,#5]
+   4 | Binding key=(Str,""a"") value=(Int,"1")
+   5 | Binding key=(Str,""b"") value=(Int,"2")`
+
 describe("The AST generator", () => {
   it("produces a correct AST", () => {
     assert.deepStrictEqual(util.format(ast(source)), expected)
-  })
+  }),
+    it("produces a correct AST with maps", () => {
+      assert.deepStrictEqual(util.format(ast(mapSrc)), mapExpected)
+    })
 })
