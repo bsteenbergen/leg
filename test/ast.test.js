@@ -7,7 +7,7 @@ const source = `
 mumble("hi there!")
 num x = 2
 task cube(num y) yields int^3
-if z >= 0 yield rem z / 2 
+if a >= 0  rem a / 2
 end
 task combineStrings(str str1, str str2) yields combinedString:
 	str combinedString = str1 + str2
@@ -31,9 +31,9 @@ const expected = `   1 | Program statements=[#2,#3,#4,#7,#11,#17,#20,#23,#29]
    5 | Param name=(Sym,"num") type='y'
    6 | BinaryExpression left=(Id,"int") op='^' right=(Int,"3")
    7 | IfShort tests=#8 consequent=#9
-   8 | BinaryExpression left=(Id,"z") op='>=' right=(Int,"0")
-   9 | Suite statements=[(Id,"yield"),(Id,"rem"),#10]
-  10 | BinaryExpression left=(Id,"z") op='/' right=(Int,"2")
+   8 | BinaryExpression left=(Id,"a") op='>=' right=(Int,"0")
+   9 | Suite statements=[#10]
+  10 | BinaryExpression left=(Id,"a") op='/' right=(Int,"2")
   11 | FunctionDeclaration funName=(Id,"combineStrings") params=[#12,#13] returnExp=[(Id,"combinedString")] body=[#14]
   12 | Param name=(Sym,"str") type='str1'
   13 | Param name=(Sym,"str") type='str2'

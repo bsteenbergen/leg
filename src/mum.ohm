@@ -65,7 +65,8 @@ mum {
   Exp2    = Exp2 ("+" | "-") Exp3            --binary
           | Exp3
   Exp3    = Exp3 ("*" | "/") Exp4            --binary
-  		  | rem Exp3 "/" Exp4              --modulo
+  		  | rem Exp5 "/" Exp5         --modulo
+ 
           | Exp4
   Exp4    = Exp5 "^" Exp4                   --binary
           | Exp5      
