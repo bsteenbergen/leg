@@ -64,7 +64,7 @@ mum {
   Exp2    = Exp2 ("+" | "-") Exp3            --binary
           | Exp3
   Exp3    = Exp3 ("*" | "/") Exp4            --binary
-  		  | "rem" Exp3 "/" Exp4              --modulo
+  		  | rem Exp3 "/" Exp4              --modulo
           | Exp4
   Exp4    = Exp5 "^" Exp4                   --binary
           | Exp5      
@@ -98,6 +98,7 @@ mum {
   until       = "until" ~alnum
   task        = "task" ~alnum
   yields      = "yields" ~alnum
+  rem         = "rem" ~alnum
 
   
   space   += "//" (~"\n" any)* ("\n" | end)  --comment
