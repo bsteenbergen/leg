@@ -11,6 +11,8 @@
     "test": "test"
   },
   "scripts": {
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build",
     "test": "c8 node_modules/.bin/mocha"
   },
   "repository": {
