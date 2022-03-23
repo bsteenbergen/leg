@@ -1,3 +1,0 @@
-task combineStrings(str str1, str str2) yields combinedString:
-	str combinedString = str1 + str2
-end 
