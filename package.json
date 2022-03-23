@@ -1,5 +1,4 @@
 {
-  "homepage": "https://username.github.io/mum",
   "name": "mum",
   "version": "1.0.0",
   "description": "Compiler for mum",
@@ -11,8 +10,6 @@
     "test": "test"
   },
   "scripts": {
-    "predeploy": "npm run build",
-    "deploy": "gh-pages -d build",
     "test": "c8 node_modules/.bin/mocha"
   },
   "repository": {
