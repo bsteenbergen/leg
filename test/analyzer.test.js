@@ -91,7 +91,7 @@ const semanticErrors = [
   ["redeclared id", "num x = 1 num x = 1", /Identifier x already declared/],
   ["assign bad type", "num x=1 x=true", /Cannot assign a boolean to a int/],
   [
-    "assign bad array type",
+    "assign bad list type",
     "num x=1;x=[true]",
     /Cannot assign a \[boolean\] to a int/,
   ],
@@ -108,12 +108,12 @@ const semanticErrors = [
   ], // ?
   [
     "return nothing from non-void",
-    "function f(): int {return;}",
+    "task f() yields int: return",
     /should be returned here/,
   ],
   [
     "return type mismatch",
-    "function f(): int {return false;}",
+    "task f() yields int: return false",
     /boolean to a int/,
   ],
   ["non-boolean short if test", "if 1 {}", /Expected a boolean/],
