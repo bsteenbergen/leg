@@ -1,5 +1,5 @@
 ---
-title: Learn the programming lanuage mum
+title: Learn to program in mum
 feature_text: |
 ## mum
 feature_image: "mum_logo.png"
