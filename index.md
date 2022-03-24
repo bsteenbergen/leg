@@ -1,12 +1,14 @@
 ---
-title: About mum
+title: Learn the programming lanuage mum
 feature_text: |
 ## mum
 feature_image: "mum_logo.png"
 excerpt: "mum is a general purpose programming language intended for beginner to intermediate programmers"
 ---
 
-{% include button.html text="Fork it" icon="github" link="https://github.com/daviddarnes/alembic" color="#0366d6" %}
+mum is a general purpose programming language intended for beginner to intermediate programmers
+
+{% include button.html text="Fork it" icon="github" link="https://github.com/bsteenbergen/mum" color="#0366d6" %}
 
 ## Background
 
