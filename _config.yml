@@ -14,6 +14,7 @@ exclude:
   - README.md
   - CODE_OF_CONDUCT.md
   - CONTRIBUTING.md
+  - screenshot.png
   - LICENSE
   - CNAME
   - Gemfile
@@ -89,12 +90,12 @@ defaults:
 # 7. Site settings
 encoding: utf-8 # Make sure the encoding is right
 lang: en-GB # Set the site language
-title: "Mum" # Site name or title, also used in jekyll-seo-tag
+title: "mum" # Site name or title, also used in jekyll-seo-tag
 logo: "mum_logo.png" # Site logo, also used in jekyll-seo-tag
-description: "mum is a general purpose programming language intended for beginner to intermediate programmers" # Site description and default description, also used in jekyll-seo-tag
-url: "https://elenasmartinez.github.io/mum-site/" # Site url, also used in jekyll-seo-tag
+description: "mum is a general purpose programming language intended for beginner to intermediate programmers"
+url: "https://bsteenbergen.github.io/mum/"
 baseurl: ""
-repo: "https://github.com/elenasmartinez/mum-site"
+repo: "https://github.com/bsteenbergen/mum"
 # disqus: "alembic-1" # Blog post comments, uncomment the option and set the site ID from your Disqus account
 # date_format: "%-d %B %Y" # Blog post date formatting using placeholder formatting
 # google_analytics: ""
@@ -119,7 +120,7 @@ navigation_header:
   - title: Home
     url: /
   - title: Elements
-    url: /elements/
+    url: /
   - title: Blog
     url: /blog/
   - title: Categories
