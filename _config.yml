@@ -36,8 +36,8 @@ plugins:
 
 # 3. Gem settings
 paginate: 2 # jekyll-paginate > items per page
-jekyll-mentions: https://twitter.com # jekyll-mentions > service used when @replying
 paginate_path: blog/page:num # jekyll-paginate > blog page
+jekyll-mentions: https://twitter.com # jekyll-mentions > service used when @replying
 twitter:
   username: DavidDarnes # jekyll-seo-tag > Owners twitter username
 author: DavidDarnes # jekyll-seo-tag > default author
@@ -118,7 +118,7 @@ favicons: # Favicons are also used in the manifest file. Syntax is 'size: path'
 # 9. Site navigation
 navigation_header:
   - title: Home
-    url: /
+    url: "https://bsteenbergen.github.io/mum/"
   - title: About us
     url: "https://elenasmartinez.github.io/mum-site/"
   - title: Fork mum
