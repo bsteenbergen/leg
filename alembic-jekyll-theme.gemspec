@@ -8,7 +8,7 @@ Gem::Specification.new do |spec|
 
   spec.summary       = %q{A Jekyll boilerplate theme designed to be a starting point for any Jekyll website.}
   spec.description   = "A Jekyll boilerplate theme designed to be a starting point for any Jekyll website. Rather than starting from scratch, this boilerplate is designed to get the ball rolling immediately."
-  spec.homepage      = "https://elenasmartinez.github.io/mum-site/"
+  spec.homepage      = "https://alembic.darn.es"
   spec.license       = "MIT"
 
   spec.metadata["plugin_type"] = "theme"

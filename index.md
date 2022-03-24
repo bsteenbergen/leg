@@ -2,14 +2,11 @@
 title: About mum
 feature_text: |
 ## mum
-# A Jekyll boilerplate theme designed to be a starting point for any Jekyll website
 feature_image: "mum_logo.png"
 excerpt: "mum is a general purpose programming language intended for beginner to intermediate programmers"
 ---
 
-mum is a general purpose programming language intended for beginner to intermediate programmers
-
-{% include button.html text="Fork it" icon="github" link="https://github.com/bsteenbergen/mum" color="#0366d6" %}
+{% include button.html text="Fork it" icon="github" link="https://github.com/daviddarnes/alembic" color="#0366d6" %}
 
 ## Background
 
