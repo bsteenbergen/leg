@@ -25,9 +25,10 @@ export class PrintStatement {
   }
 }
 
+// need to add type ?? since we do 'let x: int = 5'
 export class VariableDeclaration {
-  constructor(type, modifier, variable, initializer) {
-    Object.assign(this, { type, modifier, variable, initializer })
+  constructor(modifier, variable, initializer) {
+    Object.assign(this, { modifier, variable, initializer })
   }
 }
 
