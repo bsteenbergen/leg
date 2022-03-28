@@ -1,8 +1,7 @@
 // STANDARD LIBRARY
 //
-// Carlos comes with a lot of predefined entities. Some are constants, some
-// are types, and some are functions. Each are defined in this module, and
-// exported in a single object
+// Mum comes with a few predefined entities. Some are constants and some are functions. 
+// Each are defined in this module, and exported in a single object
 
 import { Type, FunctionDeclaration } from "./core.js"
 
