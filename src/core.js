@@ -31,11 +31,11 @@ export class VariableDeclaration {
   }
 }
 
-export class Variable {
-  constructor(name, readOnly) {
-    Object.assign(this, { name, readOnly })
-  }
-}
+// export class Variable {
+//   constructor(name, readOnly) {
+//     Object.assign(this, { name, readOnly })
+//   }
+// }
 
 /*
  * we aren't sure if we need to do 'returnExp' or 'returnVar'

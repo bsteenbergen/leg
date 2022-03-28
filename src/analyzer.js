@@ -33,7 +33,6 @@ Object.assign(List.prototype, {
     )
   },
   isAssignableTo(target) {
-    // Arrays are INVARIANT in Carlos!
     return this.isEquivalentTo(target)
   },
 })
@@ -70,7 +69,7 @@ function checkType(e, types, expectation) {
   check(types.includes(e.type), `Expected ${expectation}`)
 }
 
-function checkNumeric(e) {
+function checkNumber(e) {
   checkType(e, [Type.NUM], "a number")
 }
 
@@ -92,8 +91,8 @@ function checkIsAType(e) {
 //   check(e.type.constructor === OptionalType, "Optional expected", e)
 // }
 
-function checkArray(e) {
-  check(e.type.constructor === List, "Array expected", e)
+function checkList(e) {
+  check(e.type.constructor === List, "List expected", e)
 }
 
 function checkHaveSameType(e1, e2) {
@@ -263,7 +262,7 @@ class Context {
     checkIsAType(p.type)
     this.add(p.name.lexeme, p)
   }
-  List(t) {
+  ListType(t) {
     this.analyze(t.baseType)
     if (t.baseType instanceof Token) t.baseType = t.baseType.value
   }
@@ -279,11 +278,11 @@ class Context {
   }
   Increment(s) {
     this.analyze(s.variable)
-    checkInteger(s.variable)
+    checkNumber(s.variable)
   }
   Decrement(s) {
     this.analyze(s.variable)
-    checkInteger(s.variable)
+    checkNumber(s.variable)
   }
   Assignment(s) {
     this.analyze(s.source)
@@ -308,7 +307,7 @@ class Context {
     this.analyze(s.test)
     checkBoolean(s.test)
     this.newChildContext().analyze(s.consequent)
-    if (s.alternate.constructor === Array) {
+    if (s.alternate.constructor === List) {
       // It's a block of statements, make a new context
       this.newChildContext().analyze(s.alternate)
     } else if (s.alternate) {
@@ -323,7 +322,7 @@ class Context {
   }
   ForStatement(s) {
     this.analyze(s.collection)
-    checkArray(s.collection)
+    checkList(s.collection)
     s.iterator = new VariableDeclaration(s.iterator.lexeme, true)
     s.iterator.type = s.collection.type.baseType
     const bodyContext = this.newChildContext({ inLoop: true })
@@ -374,17 +373,17 @@ class Context {
     //   e.type = new OptionalType(e.operand.type?.value ?? e.operand.type)
     // }
   SubscriptExpression(e) {
-    this.analyze(e.array)
-    e.type = e.array.type.baseType
+    this.analyze(e.list)
+    e.type = e.list.type.baseType
     this.analyze(e.index)
-    checkInteger(e.index)
+    checkNumber(e.index)
   }
-  ArrayExpression(a) {
-    this.analyze(a.elements)
-    checkAllHaveSameType(a.elements)
-    a.type = new List(a.elements[0].type)
+  ListExpression(l) {
+    this.analyze(l.elements)
+    checkAllHaveSameType(l.elements)
+    l.type = new List(l.elements[0].type)
   }
-  EmptyArray(e) {
+  EmptyList(e) {
     this.analyze(e.baseType)
     e.type = new List(e.baseType?.value ?? e.baseType)
   }
@@ -413,13 +412,12 @@ class Context {
       t.value = this.lookup(t.lexeme)
       t.type = t.value.type
     }
-    if (t.category === "Int") [t.value, t.type] = [BigInt(t.lexeme), Type.INT]
-    if (t.category === "Float") [t.value, t.type] = [Number(t.lexeme), Type.FLOAT]
+    if (t.category === "Num") [t.value, t.type] = [Number(t.lexeme), Type.NUM]
     if (t.category === "Str") [t.value, t.type] = [t.lexeme, Type.STRING]
-    if (t.category === "Bool") [t.value, t.type] = [t.lexeme === "true", Type.BOOLEAN]
+    if (t.category === "Bool") [t.value, t.type] = [t.lexeme === "true", Type.BOOL]
   }
-  Array(a) {
-    a.forEach(item => this.analyze(item))
+  List(l) {
+    l.forEach(item => this.analyze(item))
   }
 }
 
