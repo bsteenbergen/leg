@@ -7,7 +7,7 @@ import {
   Token,
   error,
 } from "./core.js"
-//import * as stdlib from "./stdlib.js"
+import * as stdlib from "./stdlib.js"
 
 Object.assign(Type.prototype, {
   // Equivalence: when are two types the same
@@ -25,11 +25,11 @@ Object.assign(Type.prototype, {
 })
 
 
-Object.assign(ArrayType.prototype, {
+Object.assign(List.prototype, {
   isEquivalentTo(target) {
     // [T] equivalent to [U] only when T is equivalent to U.
     return (
-      target.constructor === ArrayType && this.baseType.isEquivalentTo(target.baseType)
+      target.constructor === List && this.baseType.isEquivalentTo(target.baseType)
     )
   },
   isAssignableTo(target) {
@@ -38,10 +38,10 @@ Object.assign(ArrayType.prototype, {
   },
 })
 
-Object.assign(FunctionType.prototype, {
+Object.assign(FunctionDeclaration.prototype, {
   isEquivalentTo(target) {
     return (
-      target.constructor === FunctionType &&
+      target.constructor === FunctionDeclaration &&
       this.returnType.isEquivalentTo(target.returnType) &&
       this.paramTypes.length === target.paramTypes.length &&
       this.paramTypes.every((t, i) => target.paramTypes[i].isEquivalentTo(t))
@@ -50,7 +50,7 @@ Object.assign(FunctionType.prototype, {
   isAssignableTo(target) {
     // Functions are covariant on return types, contravariant on parameters.
     return (
-      target.constructor === FunctionType &&
+      target.constructor === FunctionDeclaration &&
       this.returnType.isAssignableTo(target.returnType) &&
       this.paramTypes.length === target.paramTypes.length &&
       this.paramTypes.every((t, i) => target.paramTypes[i].isAssignableTo(t))
@@ -93,7 +93,7 @@ function checkIsAType(e) {
 // }
 
 function checkArray(e) {
-  check(e.type.constructor === ArrayType, "Array expected", e)
+  check(e.type.constructor === List, "Array expected", e)
 }
 
 function checkHaveSameType(e1, e2) {
@@ -147,7 +147,7 @@ function checkInFunction(context) {
 
 // removed `e.constructor === StructType` because we don't have Structs yet
 function checkCallable(e) {
-  check( e.type.constructor == FunctionType, "Call of non-function or non-constructor")
+  check( e.type.constructor == FunctionDeclaration, "Call of non-function or non-constructor")
 }
 
 function checkReturnsNothing(f) {
@@ -218,9 +218,10 @@ class Context {
   }
 
   // we need to type check HERE not in Variable
+  // do we do d.type then?
   VariableDeclaration(d) {
     this.analyze(d.initializer)
-    d.variable.value = new Variable(d.variable.lexeme, d.modifier.lexeme === "const")
+    d.variable.value = new VariableDeclaration(d.variable.lexeme, d.modifier.lexeme === "const")
     d.variable.value.type = d.initializer.type
     this.add(d.variable.lexeme, d.variable.value)
   }
@@ -248,7 +249,7 @@ class Context {
     // because it is possible to declare a function inside a loop!
     const childContext = this.newChildContext({ inLoop: false, function: d.fun.value })
     childContext.analyze(d.fun.value.parameters)
-    d.fun.value.type = new FunctionType(
+    d.fun.value.type = new FunctionDeclaration(
       d.fun.value.parameters.map(p => p.type),
       d.fun.value.returnType
     )
@@ -262,11 +263,11 @@ class Context {
     checkIsAType(p.type)
     this.add(p.name.lexeme, p)
   }
-  ArrayType(t) {
+  List(t) {
     this.analyze(t.baseType)
     if (t.baseType instanceof Token) t.baseType = t.baseType.value
   }
-  FunctionType(t) {
+  FunctionDeclaration(t) {
     this.analyze(t.paramTypes)
     t.paramTypes = t.paramTypes.map(p => (p instanceof Token ? p.value : p))
     this.analyze(t.returnType)
@@ -323,7 +324,7 @@ class Context {
   ForStatement(s) {
     this.analyze(s.collection)
     checkArray(s.collection)
-    s.iterator = new Variable(s.iterator.lexeme, true)
+    s.iterator = new VariableDeclaration(s.iterator.lexeme, true)
     s.iterator.type = s.collection.type.baseType
     const bodyContext = this.newChildContext({ inLoop: true })
     bodyContext.add(s.iterator.name, s.iterator)
@@ -381,11 +382,11 @@ class Context {
   ArrayExpression(a) {
     this.analyze(a.elements)
     checkAllHaveSameType(a.elements)
-    a.type = new ArrayType(a.elements[0].type)
+    a.type = new List(a.elements[0].type)
   }
   EmptyArray(e) {
     this.analyze(e.baseType)
-    e.type = new ArrayType(e.baseType?.value ?? e.baseType)
+    e.type = new List(e.baseType?.value ?? e.baseType)
   }
   MemberExpression(e) {
     this.analyze(e.object)
@@ -422,4 +423,11 @@ class Context {
   }
 }
 
-export default function analyze() {}
+export default function analyze(node) {
+  const initialContext = new Context({})
+  for (const [name, type] of Object.entries(stdlib.contents)) {
+    initialContext.add(name, type)
+  }
+  initialContext.analyze(node)
+  return node
+}

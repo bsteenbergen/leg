@@ -26,8 +26,14 @@ export class PrintStatement {
 }
 
 export class VariableDeclaration {
-  constructor(modifier, variable, initializer) {
-    Object.assign(this, { modifier, variable, initializer })
+  constructor(type, modifier, variable, initializer) {
+    Object.assign(this, { type, modifier, variable, initializer })
+  }
+}
+
+export class Variable {
+  constructor(name, readOnly) {
+    Object.assign(this, { name, readOnly })
   }
 }
 
