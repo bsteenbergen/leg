@@ -6,13 +6,13 @@
 
 import { Type, FunctionDeclaration } from "./core.js"
 
-function makeFunction(name, type) {
-  return Object.assign(new FunctionDeclaration(name), { type })
+function makeFunction(name) {
+  return Object.assign(new FunctionDeclaration(name))
 }
 export const contents = Object.freeze({
   num: Type.NUM,
   bool: Type.BOOL,
   string: Type.STRING,
-  mumble: makeFunction("mumble", new FunctionDeclaration("mumble", [Type.ANY], Type.VOID))
+  mumble: makeFunction("mumble", new FunctionDeclaration("mumble", [Type.ANY]))
   // probs need more but starting w this
 })
