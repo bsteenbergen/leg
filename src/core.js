@@ -26,8 +26,16 @@ export class PrintStatement {
 }
 
 export class VariableDeclaration {
-  constructor(modifier, variable, initializer) {
-    Object.assign(this, { modifier, variable, initializer })
+  // example: num n = 12
+  constructor(varType, name, initializer) {
+    Object.assign(this, { varType, name, initializer })
+  }
+}
+
+export class Variable {
+  // Generated when processing a variable declaration
+  constructor(varType, name) {
+    Object.assign(this, { varType, name })
   }
 }
 
@@ -47,10 +55,8 @@ export class Param {
   }
 }
 
-
-
 export class ExpParens {
-  constructor(exp){
+  constructor(exp) {
     Object.assign(this, { exp })
   }
 }
@@ -59,31 +65,33 @@ export class ExpParens {
 // "arr" "<" Type "," num ">"    --arrtype
 // in mum.ohm means fixed len for arr
 //export class MumArray {
-  // Example: ["Halle", "Brittany", "Kira", "Elena", "Ray"]
- // constructor(elements) {
-  //  this.elements = elements
- // }
+// Example: ["Halle", "Brittany", "Kira", "Elena", "Ray"]
+// constructor(elements) {
+//  this.elements = elements
+// }
 //}
 
 export class Type {
   // Type of all basic type int, float, string, etc. and superclass of others
+  static NUM = new Type("num")
+
   constructor(description) {
     Object.assign(this, { description })
   }
- }
- 
+}
+
 export class Type_maptype extends Type {
- constructor(keyType, valueType) {
-   super(`[${keyType.description}, ${valueType.description}]`)
-   Object.assign(this, { keyType, valueType })
- }
+  constructor(keyType, valueType) {
+    super(`[${keyType.description}, ${valueType.description}]`)
+    Object.assign(this, { keyType, valueType })
+  }
 }
 
 // rename to ArrayType and update ast.js?
 
 export class List {
   constructor(elements) {
-    Object.assign(this, {elements })
+    Object.assign(this, { elements })
   }
 }
 
@@ -92,7 +100,6 @@ export class Dictionary {
     this.expressions = expressions
   }
 }
-
 
 export class Binding {
   constructor(key, value) {
@@ -128,7 +135,6 @@ export class BinaryExpression {
     Object.assign(this, { left, op, right })
   }
 }
-
 
 export class Loop {
   constructor(initExp, body) {
@@ -193,9 +199,9 @@ Program.prototype[util.inspect.custom] = function () {
       if (tags.has(e)) return `#${tags.get(e)}`
       if (e?.constructor === Token) {
         return `(${e.category},"${e.lexeme}"${
-       //   e.value ? "," + view(e.value) : ""
-       ""
-       })`
+          //   e.value ? "," + view(e.value) : ""
+          ""
+        })`
       }
       if (Array.isArray(e)) return `[${e.map(view)}]`
       return util.inspect(e)
