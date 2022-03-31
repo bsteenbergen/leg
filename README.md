@@ -10,6 +10,8 @@ Inspired by Matsumoto’s comments on writing programming languages for humans a
 
 mum is a general purpose programming language intended for beginner to intermediate programmers.
 
+**[Check out our mum website](https://bsteenbergen.github.io/mum/)**! 
+
 ## Authors
 
 - [Elena Martinez](https://github.com/elenasmartinez)
