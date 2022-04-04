@@ -1,19 +1,10 @@
-// Core classes and objects
-//
-// This module defines classes for the AST nodes. Only the constructors are
-// defined here. Semantic analysis methods, optimization methods, and code
-// generation are handled by other modules. This keeps the compiler organized
-// by phase.
-
 import util from "util"
 
 export class Program {
-  constructor(statements) {
-    this.statements = statements
-  }
-}
-
-export class Suite {
+  /*  Example: 
+      str x = "hi" @ var decl
+      print x @ print statement
+  */
   constructor(statements) {
     this.statements = statements
   }
@@ -21,130 +12,19 @@ export class Suite {
 
 export class PrintStatement {
   constructor(argument) {
-    Object.assign(this, { argument })
+    this.argument = argument
   }
 }
 
 export class VariableDeclaration {
-  // example: num n = 12
-  constructor(varType, name, initializer) {
-    Object.assign(this, { varType, name, initializer })
+  constructor(type, name, initializer) {
+    Object.assign(this, { type, name, initializer })
   }
 }
 
-export class Variable {
-  // Generated when processing a variable declaration
-  constructor(varType, name) {
-    Object.assign(this, { varType, name })
-  }
-}
-
-/*
- * we aren't sure if we need to do 'returnExp' or 'returnVar'
- * since we 'yield Exp'
- */
-export class FunctionDeclaration {
-  constructor(funName, params, returnExp, body) {
-    Object.assign(this, { funName, params, returnExp, body })
-  }
-}
-
-export class Param {
-  constructor(name, type) {
-    Object.assign(this, { name, type })
-  }
-}
-
-export class ExpParens {
-  constructor(exp) {
-    Object.assign(this, { exp })
-  }
-}
-
-// Assuming 'num' in
-// "arr" "<" Type "," num ">"    --arrtype
-// in mum.ohm means fixed len for arr
-//export class MumArray {
-// Example: ["Halle", "Brittany", "Kira", "Elena", "Ray"]
-// constructor(elements) {
-//  this.elements = elements
-// }
-//}
-
-export class Type {
-  // Type of all basic type int, float, string, etc. and superclass of others
-  static NUM = new Type("num")
-
-  constructor(description) {
-    Object.assign(this, { description })
-  }
-}
-
-export class Type_maptype extends Type {
-  constructor(keyType, valueType) {
-    super(`[${keyType.description}, ${valueType.description}]`)
-    Object.assign(this, { keyType, valueType })
-  }
-}
-
-// rename to ArrayType and update ast.js?
-
-export class List {
-  constructor(elements) {
-    Object.assign(this, { elements })
-  }
-}
-
-export class Dictionary {
-  constructor(expressions) {
-    this.expressions = expressions
-  }
-}
-
-export class Binding {
-  constructor(key, value) {
-    Object.assign(this, { key, value })
-  }
-}
-
-export class Assign {
-  constructor(target, source) {
-    Object.assign(this, { target, source })
-  }
-}
-export class IfShort {
-  constructor(tests, consequent) {
-    Object.assign(this, { tests, consequent })
-  }
-}
-
-export class IfLong {
-  constructor(tests, consequent, alternate) {
-    Object.assign(this, { tests, consequent, alternate })
-  }
-}
-
-export class Call {
-  constructor(callee, args) {
-    Object.assign(this, { callee, args })
-  }
-}
-
-export class BinaryExpression {
-  constructor(left, op, right) {
-    Object.assign(this, { left, op, right })
-  }
-}
-
-export class Loop {
-  constructor(initExp, body) {
-    Object.assign(this, { initExp, body })
-  }
-}
-
-export class Control {
-  constructor(expression) {
-    this.expression = expression
+export class TypeName {
+  constructor(typeName) {
+    this.typeName = typeName
   }
 }
 
@@ -166,9 +46,9 @@ export class Token {
 
 // Throw an error message that takes advantage of Ohm's messaging
 export function error(message, token) {
-  //if (token) {
-  //  throw new Error(`${token.source.getLineAndColumnMessage()}${message}`)
-  //}
+  if (token) {
+    throw new Error(`${token.source.getLineAndColumnMessage()}${message}`)
+  }
   throw new Error(message)
 }
 
