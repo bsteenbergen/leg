@@ -5,13 +5,20 @@ import * as core from "../src/core.js"
 
 // Programs that are semantically correct
 const semanticChecks = [
-  // ["print string", 'print "hi"'],
-  // ["print float", "print -3.4"],
+  ["print string", 'mumble "hi"'],
+  ["print float", "mumble -3.4"],
+  ["print bools", "mumble true"],
   ["variable declaration", "int x = 3"],
+  [
+    "function declaration",
+    `#my_func str_1 str_2:
+      mumble str_1
+    #`,
+  ],
 ]
 
 const semanticErrors = [
-  ["print undeclared identifier", "print hi", /Malformed print statement/],
+  ["print undeclared identifier", "mumble hi", /Malformed print statement/],
 ]
 
 describe("The analyzer", () => {

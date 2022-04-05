@@ -36,12 +36,14 @@ class Context {
     return new Context({ ...this, parent: this, locals: new Map(), ...props })
   }
   analyze(node) {
-    // console.log("analyze(node)")
     return this[node.constructor.name](node)
   }
   Program(p) {
-    // console.log(p.statements[0])
     this.analyze(p.statements)
+  }
+  PrintStatement(d) {
+    let argument = d.argument.lexeme
+    // ...
   }
   VariableDeclaration(d) {
     let type = d.type.typeName.lexeme
@@ -49,6 +51,14 @@ class Context {
     let initilizer = d.initializer.lexeme
 
     // IDRK what to do here?
+  }
+
+  FunctionDeclaration(d) {
+    let funcName = d.funcName.lexeme // This still has the #. Should we keep it?
+    let parameters = d.parameters
+    let suite = d.statements
+    // ...
+    // Do we call core again?
   }
 
   Array(a) {

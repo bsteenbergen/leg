@@ -1,23 +1,33 @@
 mum {
     Program = Stmt+
     
-    Stmt = print (float | int | str | id) --print
-    	| VarDecl 
+    Stmt = Print
+    	| VarDecl
+        | FunDecl 
+        
+    Print = print Exp
 
     VarDecl = Type id "=" Exp 
-
-    Exp = id | int | float | str 
-        
-    Type = "int" | "float" | "str"
+    FunDecl = funcName (ListOf<id, "">) ":" Suite
     
-    keyword = print
-    id      = ~keyword letter alnum*
+    Suite   = Stmt* "#"
+
+    Exp = id | float | int | str | bool
+        
+    Type = "int" | "float" | "str" | "bool"
+    
+    keyword = print | true | false 
+    id      = ~keyword letter+ "_"? id? alnum*
 
     str = "\"" char* "\""
     int = ("-")? digit+
     float = ("-")? digit+ "." digit+ (("E" | "e") ("+" | "-")? digit+)?
+    bool = true | false
 
-    print = "print" ~alnum
+    print = "mumble" ~alnum
+    true = "true" ~alnum
+    false = "false" ~alnum
+    funcName = "#" id ~alnum
         
     char = ~"\"" ~"\n" any 
     space += "@" (~"\n" any)* --comment 

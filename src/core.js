@@ -29,6 +29,18 @@ export class Variable {
   }
 }
 
+export class FunctionDeclaration {
+  constructor(funcName, parameters, statements) {
+    Object.assign(this, { funcName, parameters, statements })
+  }
+}
+
+export class Suite {
+  constructor(statements) {
+    this.statements = statements
+  }
+}
+
 export class Type {
   static INT = new Type("int")
   static FLOAT = new Type("float")

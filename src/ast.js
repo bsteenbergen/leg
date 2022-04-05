@@ -24,7 +24,7 @@ const astBuilder = grammar.createSemantics().addOperation("ast", {
   Program(statements) {
     return new core.Program(statements.ast())
   },
-  Stmt_print(_print, argument) {
+  Print(_print, argument) {
     return new core.PrintStatement(argument.ast())
   },
   VarDecl(type, varName, _eq, initializer) {
@@ -34,10 +34,23 @@ const astBuilder = grammar.createSemantics().addOperation("ast", {
       initializer.ast()
     )
   },
+  FunDecl(funcName, parameters, _colon, suite) {
+    return new core.FunctionDeclaration(
+      funcName.ast(),
+      parameters.asIteration().ast(),
+      suite.ast()
+    )
+  },
+  Suite(body, _end) {
+    return new core.Suite(body.ast())
+  },
   Type(typeName) {
     return new core.TypeName(typeName.ast())
   },
-  id(_first, _rest) {
+  id(_first, _second, _third, _rest) {
+    return new core.Token("Id", this.source)
+  },
+  funcName(_hash, _id) {
     return new core.Token("Id", this.source)
   },
   str(_openQuote, _chars, _closeQuote) {
