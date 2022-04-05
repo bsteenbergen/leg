@@ -17,14 +17,23 @@ const printVarExpected = `   1 | Program statements=[#2,#4]
    4 | PrintStatement argument=(Id,"x")`
 
 const funcDecl = `
-#my_func str_1 str_2:
+#my_func:
   mumble str_1
 #`
 
 const funcDeclExpected = `   1 | Program statements=[#2]
-   2 | FunctionDeclaration funcName=(Id,"#my_func") parameters=[(Id,"str_1"),(Id,"str_2")] statements=#3
+   2 | FunctionDeclaration funcName=(Id,"#my_func") suite=#3
    3 | Suite statements=[#4]
    4 | PrintStatement argument=(Id,"str_1")`
+
+const funCalls = `
+@ function calls 
+bl #set_values
+b #print_values`
+
+const funCallExpected = `   1 | Program statements=[#2,#3]
+   2 | FunctionCall link=(Sym,"bl") funcName=(Id,"#set_values")
+   3 | FunctionCall link=(Sym,"b") funcName=(Id,"#print_values")`
 
 // console.log(util.format(ast(funcDecl)))
 
@@ -37,6 +46,9 @@ describe("The AST generator produces a correct AST for ", () => {
     }),
     it("function declarations", () => {
       assert.deepStrictEqual(util.format(ast(funcDecl)), funcDeclExpected)
+    }),
+    it("function calls", () => {
+      assert.deepStrictEqual(util.format(ast(funCalls)), funCallExpected)
     })
   // it("produces a correct AST with maps", () => {
   //   assert.deepStrictEqual(util.format(ast(mapSrc)), mapExpected)

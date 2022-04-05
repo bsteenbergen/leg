@@ -4,11 +4,13 @@ mum {
     Stmt = Print
     	| VarDecl
         | FunDecl 
+        | FunCall
         
     Print = print Exp
 
     VarDecl = Type id "=" Exp 
-    FunDecl = funcName (ListOf<id, "">) ":" Suite
+    FunDecl = funcName ":" Suite
+    FunCall = branch funcName | branchLink funcName
     
     Suite   = Stmt* "#"
 
@@ -16,7 +18,7 @@ mum {
         
     Type = "int" | "float" | "str" | "bool"
     
-    keyword = print | true | false 
+    keyword = print | true | false | branch | branchLink
     id      = ~keyword letter+ "_"? id? alnum*
 
     str = "\"" char* "\""
@@ -28,7 +30,9 @@ mum {
     true = "true" ~alnum
     false = "false" ~alnum
     funcName = "#" id ~alnum
+    branch = "b" ~alnum 
+    branchLink = "bl" ~alnum
         
     char = ~"\"" ~"\n" any 
-    space += "@" (~"\n" any)* --comment 
+    space += "@" (~"\n" any)* --comment
 }

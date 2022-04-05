@@ -1,16 +1,18 @@
 // SEMANTIC ANALYZER
-import { Variable } from "./core.js"
+import { Variable, Function } from "./core.js"
 
 import * as stdlib from "./stdlib.js"
 
 class Context {
   constructor({
     parent = null,
+    functions = new Map(),
     locals = new Map(),
     inLoop = false,
     function: f = null,
   }) {
-    Object.assign(this, { parent, locals, inLoop, function: f })
+    console.log("NEW CONTEXT")
+    Object.assign(this, { parent, functions, locals, inLoop, function: f })
   }
   sees(name) {
     // Search "outward" through enclosing scopes
@@ -51,20 +53,41 @@ class Context {
     let initilizer = d.initializer.lexeme
 
     // IDRK what to do here?
+    /// Now I do -> create a var and add to locals!
   }
 
   FunctionDeclaration(d) {
     let funcName = d.funcName.lexeme // This still has the #. Should we keep it?
-    let parameters = d.parameters
     let suite = d.statements
-    // ...
-    // Do we call core again?
+    let func = new Function(funcName, suite)
+    // Make sure function has not already been declared.
+    console.log(this.functions)
+
+    if (this.functions.has(funcName)) {
+      console.log("ERROR --> FUNC ALREADY DEFINED ")
+      error(`Function ${funcName} already declared.`)
+    }
+    // If it has not, add the function being created to the Context's functions.
+    this.functions[funcName] = func
+  }
+
+  FunctionCall(d) {
+    // console.log("in fun call")
+    // console.log(this.functions)
+    // Check to make sure function has already been declared.
+    // console.log(this.locals)
   }
 
   Array(a) {
     a.forEach((e) => analyze(e))
   }
 }
+
+// -----------------------
+// Validation Functions
+// -----------------------
+
+// FOR FUNCTION CALLS
 
 export default function analyze(node) {
   const initialContext = new Context({})

@@ -29,9 +29,22 @@ export class Variable {
   }
 }
 
+export class Function {
+  // Generated when processing a function declaration
+  constructor(funcName, suite) {
+    Object.assign(this, { funcName, suite })
+  }
+}
+
 export class FunctionDeclaration {
-  constructor(funcName, parameters, statements) {
-    Object.assign(this, { funcName, parameters, statements })
+  constructor(funcName, suite) {
+    Object.assign(this, { funcName, suite })
+  }
+}
+
+export class FunctionCall {
+  constructor(link, funcName) {
+    Object.assign(this, { link, funcName })
   }
 }
 

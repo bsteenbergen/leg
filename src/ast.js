@@ -34,12 +34,11 @@ const astBuilder = grammar.createSemantics().addOperation("ast", {
       initializer.ast()
     )
   },
-  FunDecl(funcName, parameters, _colon, suite) {
-    return new core.FunctionDeclaration(
-      funcName.ast(),
-      parameters.asIteration().ast(),
-      suite.ast()
-    )
+  FunDecl(funcName, _colon, suite) {
+    return new core.FunctionDeclaration(funcName.ast(), suite.ast())
+  },
+  FunCall(link, funcName) {
+    return new core.FunctionCall(link.ast(), funcName.ast())
   },
   Suite(body, _end) {
     return new core.Suite(body.ast())

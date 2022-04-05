@@ -11,14 +11,36 @@ const semanticChecks = [
   ["variable declaration", "int x = 3"],
   [
     "function declaration",
-    `#my_func str_1 str_2:
+    `#my_func:
       mumble str_1
     #`,
+  ],
+  [
+    "function calls",
+    `
+      @ function declaration
+      #my_func:
+        mumble str_1
+      #
+      @ function call 
+      b #print_values`,
   ],
 ]
 
 const semanticErrors = [
-  ["print undeclared identifier", "mumble hi", /Malformed print statement/],
+  [
+    "redeclare function",
+    `
+    #my_func:
+      mumble "hello"
+    #
+    #my_func:
+      int x = 0
+    #   
+    `,
+    /Malformed print statement/,
+  ],
+  // ["print undeclared identifier", "mumble hi", /Malformed print statement/],
 ]
 
 describe("The analyzer", () => {
@@ -27,9 +49,9 @@ describe("The analyzer", () => {
       assert.ok(analyze(ast(source)))
     })
   }
-  // for (const [scenario, source, errorMessagePattern] of semanticErrors) {
-  //   it(`throws on ${scenario}`, () => {
-  //     assert.throws(() => analyze(ast(source)), errorMessagePattern)
-  //   })
-  // }
+  for (const [scenario, source, errorMessagePattern] of semanticErrors) {
+    it(`throws on ${scenario}`, () => {
+      assert.throws(() => analyze(ast(source)), errorMessagePattern)
+    })
+  }
 })
