@@ -2,9 +2,9 @@ mum {
     Program = Stmt+
     
     Stmt = print (float | int | str | id)		  --print
-    	| TypeName id "=" (float | int | str | id)     --vardecl
+    	| Type id "=" (float | int | str | id)     --vardecl
         
-    TypeName = "int" | "float" | "str"
+    Type = "int" | "float" | "str"
     
     id = letter alnum*
 

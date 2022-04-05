@@ -33,8 +33,8 @@ const astBuilder = grammar.createSemantics().addOperation("ast", {
       initializer.ast()
     )
   },
-  TypeName(typeName) {
-    return new core.TypeName(typeName.ast())
+  Type(typeName) {
+    return new core.Type(typeName.ast())
   },
   id(_first, _rest) {
     return new core.Token("Id", this.source)

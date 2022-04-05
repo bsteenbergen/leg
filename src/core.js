@@ -22,6 +22,19 @@ export class VariableDeclaration {
   }
 }
 
+export class Variable {
+  // Generated when processing a variable declaration
+  constructor(type, name) {
+    Object.assign(this, { type, name })
+  }
+}
+
+export class Type {
+  static INT = new Type("int")
+  static FLOAT = new Type("float")
+  static STRING = new Type("str")
+}
+
 export class TypeName {
   constructor(typeName) {
     this.typeName = typeName
