@@ -37,24 +37,20 @@ class Context {
   }
   analyze(node) {
     // console.log("analyze(node)")
-    console.log("Node constructor name is", node.constructor.name)
     return this[node.constructor.name](node)
   }
   Program(p) {
-    console.log(p.statements[0])
+    // console.log(p.statements[0])
     this.analyze(p.statements)
   }
   VariableDeclaration(d) {
-    // int x = 3
-    console.log("hi")
-    // this.analyze(d.initializer)
-    // d.variable.value = new Variable(
-    //   d.variable.lexeme,
-    //   d.modifier.lexeme === "const"
-    // )
-    // d.variable.value.type = d.initializer.type
-    // this.add(d.variable.lexeme, d.variable.value)
+    let type = d.type.typeName.lexeme
+    let name = d.name.lexeme
+    let initilizer = d.initializer.lexeme
+
+    // IDRK what to do here?
   }
+
   Array(a) {
     a.forEach((e) => analyze(e))
   }

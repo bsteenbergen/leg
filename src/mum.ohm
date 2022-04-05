@@ -1,12 +1,17 @@
 mum {
     Program = Stmt+
     
-    Stmt = print (float | int | str | id)		  --print
-    	| Type id "=" (float | int | str | id)     --vardecl
+    Stmt = print (float | int | str | id) --print
+    	| VarDecl 
+
+    VarDecl = Type id "=" Exp 
+
+    Exp = id | int | float | str 
         
     Type = "int" | "float" | "str"
     
-    id = letter alnum*
+    keyword = print
+    id      = ~keyword letter alnum*
 
     str = "\"" char* "\""
     int = ("-")? digit+

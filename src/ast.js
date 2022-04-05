@@ -14,6 +14,7 @@ import { equal } from "assert"
 import fs from "fs"
 import { Suite } from "mocha"
 import ohm from "ohm-js"
+import { type } from "os"
 import { takeCoverage } from "v8"
 import * as core from "./core.js"
 
@@ -26,15 +27,15 @@ const astBuilder = grammar.createSemantics().addOperation("ast", {
   Stmt_print(_print, argument) {
     return new core.PrintStatement(argument.ast())
   },
-  Stmt_vardecl(typeName, id, _eq, initializer) {
+  VarDecl(type, varName, _eq, initializer) {
     return new core.VariableDeclaration(
-      typeName.ast(),
-      id.ast(),
+      type.ast(),
+      varName.ast(),
       initializer.ast()
     )
   },
   Type(typeName) {
-    return new core.Type(typeName.ast())
+    return new core.TypeName(typeName.ast())
   },
   id(_first, _rest) {
     return new core.Token("Id", this.source)

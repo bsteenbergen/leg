@@ -33,6 +33,9 @@ export class Type {
   static INT = new Type("int")
   static FLOAT = new Type("float")
   static STRING = new Type("str")
+  constructor(typeName) {
+    Object.assign(this, { typeName })
+  }
 }
 
 export class TypeName {
