@@ -19,7 +19,7 @@ const semanticChecks = [
     "function calls",
     `
       @ function declaration
-      #my_func:
+      #print_values:
         mumble str_1
       #
       @ function call 
@@ -40,6 +40,18 @@ const semanticErrors = [
     `,
     /Error: Function #my_func already declared/,
   ],
+  [
+    "function that has not yet been declared",
+    `
+      @ function declaration
+      #print_values:
+        mumble str_1
+      #
+      @ function call 
+      bl #my_func`,
+    /Error: Function #my_func has not yet been declared/,
+  ],
+
   // ["print undeclared identifier", "mumble hi", /Malformed print statement/],
 ]
 

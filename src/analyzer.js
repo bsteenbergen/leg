@@ -18,9 +18,7 @@ class Context {
     return this.locals.has(name) || this.parent?.sees(name)
   }
   add(name, entity) {
-    // No shadowing! Prevent addition if id anywhere in scope chain! This is
-    // a Carlos thing. Many other languages allow shadowing, and in these,
-    // we would only have to check that name is not in this.locals
+    // No shadowing!
     if (this.sees(name)) error(`Identifier ${name} already declared`)
     this.locals.set(name, entity)
   }
@@ -60,19 +58,25 @@ class Context {
     let suite = d.statements
     let func = new Function(funcName, suite)
     // Make sure function has not already been declared.
-    // console.log(this.functions)
-    // console.log(funcName)
-    // console.log(this.functions.has(funcName))
-
     if (this.functions.has(funcName)) {
-      // console.log("ERROR --> FUNC ALREADY DEFINED ")
-      error(`Function ${funcName} already declared.`)
+      // If it has, throw!
+      error(`Function ${funcName} already declared`)
     }
     // If it has not, add the function being created to the Context's functions.
     this.functions.set(funcName, func)
   }
 
   FunctionCall(d) {
+    // Is the call a branch or a branch link?
+    let link = d.link.lexeme === "bl" ? true : false
+    let funcName = d.funcName.lexeme
+    // Make sure the function has been declared.
+    if (!this.functions.has(funcName)) {
+      // If it has, throw!
+      error(`Function ${funcName} has not yet been declared`)
+    }
+    // console.log(funcName)
+
     // console.log("in fun call")
     // console.log(this.functions)
     // Check to make sure function has already been declared.
