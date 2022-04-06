@@ -1,19 +1,75 @@
 mum {
     Program = Stmt+
     
-    Stmt = print (float | int | str | id)		  --print
-    	| TypeName id "=" (float | int | str | id)     --vardecl
+    Stmt = Print
+    	| VarDecl
+        | FunDecl 
+        | FunCall
+        | IfStmt
+        | LoopStmt
+        | Exp9 "=" Exp           --assign
         
-    TypeName = "int" | "float" | "str"
+    Print = print Exp
+
+    VarDecl = Type id "=" Exp 
+    FunDecl = funcName ":" Suite
+    FunCall = branch funcName | branchLink funcName
+    IfStmt  = if Exp ":" Suite
+    LoopStmt= loop ":" Suite if Exp "->" loop          --while
+    		//| loop id in Exp ":" Suite "->" loop              --for
     
-    id = letter alnum*
+    Suite   = Stmt* "#"
+
+    //Exp = id | float | int | str | bool
+        
+    Type = "int" | "float" | "str" | "bool"
+    
+  Exp         = Exp1 "?" Exp1 ":" Exp                         --conditional
+              | Exp1
+  Exp1        = Exp1 "??" Exp2                                --unwrapelse
+              | Exp2
+  Exp2        = Exp3 ("||" Exp3)+                             --or
+              | Exp3 ("&&" Exp3)+                             --and
+              | Exp3
+  Exp3        = Exp4 ("|" Exp4)+                              --bitor
+              | Exp4 ("^" Exp4)+                              --bitxor
+              | Exp4 ("&" Exp4)+                              --bitand
+              | Exp4
+  Exp4        = Exp5 ("<="|"<"|"=="|"!="|">="|">") Exp5       --compare
+              | Exp5
+  Exp5        = Exp5 ("<<" | ">>") Exp6                       --shift
+              | Exp6
+  Exp6        = Exp6 ("+" | "-") Exp7                         --add
+              | Exp7
+  Exp7        = Exp7 ("*"| "/" | "%") Exp8                    --multiply
+              | Exp8
+  Exp8        = Exp9 "**" Exp8                                --power
+              | Exp9
+              | ("#" | "-" | "!") Exp9                        --unary
+  Exp9        = bool
+              | float
+              | int
+              | str
+              | id                                            --id
+    
+    keyword = print | true | false | branch | branchLink | if
+    id      = ~keyword letter+ "_"? id? alnum*
 
     str = "\"" char* "\""
     int = ("-")? digit+
     float = ("-")? digit+ "." digit+ (("E" | "e") ("+" | "-")? digit+)?
+    bool = true | false
 
-    print = "print" ~alnum
+    print = "mumble" ~alnum
+    true = "true" ~alnum
+    false = "false" ~alnum
+    funcName = "#" id ~alnum
+    branch = "b" ~alnum 
+    branchLink = "bl" ~alnum
+    if = "if" ~alnum
+    in = "in" ~alnum
+    loop = "loop" ~alnum
         
     char = ~"\"" ~"\n" any 
-    space += "@" (~"\n" any)* --comment 
+    space += "@" (~"\n" any)* --comment
 }

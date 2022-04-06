@@ -28,6 +28,42 @@ export class TypeName {
   }
 }
 
+export class IfStatement {
+  /*  Example: 
+      if x > 2:
+        mumble 2
+      #
+  */
+  constructor(test, alternate) {
+    Object.assign(this, { test, alternate })
+  }
+}
+
+export class WhileStatement {
+  /*  Example: 
+        loop:
+          x = x + 1
+        #if x < 3 -> loop
+  */
+  constructor(body, test) {
+    Object.assign(this, { body, test })
+  }
+}
+
+export class BinaryExpression {
+  // Example: 3 & 22
+  constructor(op, left, right) {
+    Object.assign(this, { op, left, right })
+  }
+}
+
+export class UnaryExpression {
+  // Example: -55
+  constructor(op, operand) {
+    Object.assign(this, { op, operand })
+  }
+}
+
 // Token objects are wrappers around the Nodes produced by Ohm. We use
 // them here just for simple things like numbers and identifiers. The
 // Ohm node will go in the "source" property.
