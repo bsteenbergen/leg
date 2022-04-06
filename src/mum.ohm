@@ -5,7 +5,9 @@ mum {
     	| VarDecl
         | FunDecl 
         | FunCall
-        | Instruction
+        | IfStmt
+        | LoopStmt
+        | Exp9 "=" Exp           --assign
         
     Print = print Exp
 
@@ -23,6 +25,45 @@ mum {
     Type = "int" | "float" | "str" | "bool"
     
     keyword = print | true | false | branch | branchLink | cmp
+    IfStmt  = if Exp ":" Suite
+    LoopStmt= loop ":" Suite if Exp "->" loop          --while
+    		//| loop id in Exp ":" Suite "->" loop              --for
+    
+    Suite   = Stmt* "#"
+
+    //Exp = id | float | int | str | bool
+        
+    Type = "int" | "float" | "str" | "bool"
+    
+  Exp         = Exp1 "?" Exp1 ":" Exp                         --conditional
+              | Exp1
+  Exp1        = Exp1 "??" Exp2                                --unwrapelse
+              | Exp2
+  Exp2        = Exp3 ("||" Exp3)+                             --or
+              | Exp3 ("&&" Exp3)+                             --and
+              | Exp3
+  Exp3        = Exp4 ("|" Exp4)+                              --bitor
+              | Exp4 ("^" Exp4)+                              --bitxor
+              | Exp4 ("&" Exp4)+                              --bitand
+              | Exp4
+  Exp4        = Exp5 ("<="|"<"|"=="|"!="|">="|">") Exp5       --compare
+              | Exp5
+  Exp5        = Exp5 ("<<" | ">>") Exp6                       --shift
+              | Exp6
+  Exp6        = Exp6 ("+" | "-") Exp7                         --add
+              | Exp7
+  Exp7        = Exp7 ("*"| "/" | "%") Exp8                    --multiply
+              | Exp8
+  Exp8        = Exp9 "**" Exp8                                --power
+              | Exp9
+              | ("#" | "-" | "!") Exp9                        --unary
+  Exp9        = bool
+              | float
+              | int
+              | str
+              | id                                            --id
+    
+    keyword = print | true | false | branch | branchLink | if
     id      = ~keyword letter+ "_"? id? alnum*
 
     str = "\"" char* "\""
@@ -37,7 +78,10 @@ mum {
     branch = "b" ~alnum 
     branchLink = "bl" ~alnum
     cmp = "cmp" ~alnum
+    if = "if" ~alnum
+    in = "in" ~alnum
+    loop = "loop" ~alnum
         
     char = ~"\"" ~"\n" any 
-    space += "@" (~"\n" any)* --comment 
+    space += "@" (~"\n" any)* --comment
 }
