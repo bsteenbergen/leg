@@ -38,7 +38,7 @@ const semanticErrors = [
       int x = 0
     #   
     `,
-    /Malformed print statement/,
+    /Error: Function #my_func already declared/,
   ],
   // ["print undeclared identifier", "mumble hi", /Malformed print statement/],
 ]

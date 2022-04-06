@@ -1,5 +1,5 @@
 // SEMANTIC ANALYZER
-import { Variable, Function } from "./core.js"
+import { Variable, Function, error } from "./core.js"
 
 import * as stdlib from "./stdlib.js"
 
@@ -11,7 +11,6 @@ class Context {
     inLoop = false,
     function: f = null,
   }) {
-    console.log("NEW CONTEXT")
     Object.assign(this, { parent, functions, locals, inLoop, function: f })
   }
   sees(name) {
@@ -61,14 +60,16 @@ class Context {
     let suite = d.statements
     let func = new Function(funcName, suite)
     // Make sure function has not already been declared.
-    console.log(this.functions)
+    // console.log(this.functions)
+    // console.log(funcName)
+    // console.log(this.functions.has(funcName))
 
     if (this.functions.has(funcName)) {
-      console.log("ERROR --> FUNC ALREADY DEFINED ")
+      // console.log("ERROR --> FUNC ALREADY DEFINED ")
       error(`Function ${funcName} already declared.`)
     }
     // If it has not, add the function being created to the Context's functions.
-    this.functions[funcName] = func
+    this.functions.set(funcName, func)
   }
 
   FunctionCall(d) {
@@ -79,7 +80,7 @@ class Context {
   }
 
   Array(a) {
-    a.forEach((e) => analyze(e))
+    a.forEach((e) => this.analyze(e))
   }
 }
 
