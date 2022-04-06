@@ -20,7 +20,6 @@ const funcDecl = `
 #my_func:
   mumble str_1
 #`
-
 const funcDeclExpected = `   1 | Program statements=[#2]
    2 | FunctionDeclaration funcName=(Id,"#my_func") suite=#3
    3 | Suite statements=[#4]
@@ -30,12 +29,16 @@ const funCalls = `
 @ function calls 
 bl #set_values
 b #print_values`
-
 const funCallExpected = `   1 | Program statements=[#2,#3]
    2 | FunctionCall link=(Sym,"bl") funcName=(Id,"#set_values")
    3 | FunctionCall link=(Sym,"b") funcName=(Id,"#print_values")`
 
-// console.log(util.format(ast(funcDecl)))
+const cmp = `
+cmp var_1 var_2`
+const cmpExpected = `   1 | Program statements=[#2]
+   2 | CompareInstruction args=[(Id,"var_1"),(Id,"var_2")]`
+
+// console.log(util.format(ast(cmp)))
 
 describe("The AST generator produces a correct AST for ", () => {
   it("print statements", () => {
@@ -49,6 +52,9 @@ describe("The AST generator produces a correct AST for ", () => {
     }),
     it("function calls", () => {
       assert.deepStrictEqual(util.format(ast(funCalls)), funCallExpected)
+    }),
+    it("compare instruction", () => {
+      assert.deepStrictEqual(util.format(ast(cmp)), cmpExpected)
     })
   // it("produces a correct AST with maps", () => {
   //   assert.deepStrictEqual(util.format(ast(mapSrc)), mapExpected)

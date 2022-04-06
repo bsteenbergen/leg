@@ -25,6 +25,13 @@ const semanticChecks = [
       @ function call 
       b #print_values`,
   ],
+  [
+    "cmp instruction",
+    `
+    str three = "3"
+    cmp 3 three
+    `,
+  ],
 ]
 
 const semanticErrors = [
@@ -50,6 +57,27 @@ const semanticErrors = [
       @ function call 
       bl #my_func`,
     /Error: Function #my_func has not yet been declared/,
+  ],
+  [
+    "variable that has not yet been declared",
+    `
+    str x = "hi"
+    str x = "hello" 
+    `,
+    /Error: Variable x already declared/,
+  ],
+  [
+    "cmp instruction with undeclared var",
+    `
+    str three = "3"
+    cmp 3 four
+    `,
+    /Error: Variable four is undeclared/,
+  ],
+  [
+    "cmp instruction with wrong number of args",
+    "cmp 1 2 3",
+    /Error: cmp instruction must have exactly two arguments/,
   ],
 
   // ["print undeclared identifier", "mumble hi", /Malformed print statement/],

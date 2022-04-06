@@ -5,6 +5,7 @@ mum {
     	| VarDecl
         | FunDecl 
         | FunCall
+        | Instruction
         
     Print = print Exp
 
@@ -12,13 +13,16 @@ mum {
     FunDecl = funcName ":" Suite
     FunCall = branch funcName | branchLink funcName
     
+    Instruction = cmp (ListOf<Exp, "">) --cmp
+
+        
     Suite   = Stmt* "#"
 
     Exp = id | float | int | str | bool
         
     Type = "int" | "float" | "str" | "bool"
     
-    keyword = print | true | false | branch | branchLink
+    keyword = print | true | false | branch | branchLink | cmp
     id      = ~keyword letter+ "_"? id? alnum*
 
     str = "\"" char* "\""
@@ -32,7 +36,8 @@ mum {
     funcName = "#" id ~alnum
     branch = "b" ~alnum 
     branchLink = "bl" ~alnum
+    cmp = "cmp" ~alnum
         
     char = ~"\"" ~"\n" any 
-    space += "@" (~"\n" any)* --comment
+    space += "@" (~"\n" any)* --comment 
 }

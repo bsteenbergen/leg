@@ -24,8 +24,8 @@ export class VariableDeclaration {
 
 export class Variable {
   // Generated when processing a variable declaration
-  constructor(type, name) {
-    Object.assign(this, { type, name })
+  constructor(type, name, value) {
+    Object.assign(this, { type, name, value })
   }
 }
 
@@ -45,6 +45,12 @@ export class FunctionDeclaration {
 export class FunctionCall {
   constructor(link, funcName) {
     Object.assign(this, { link, funcName })
+  }
+}
+
+export class CompareInstruction {
+  constructor(args) {
+    Object.assign(this, { args })
   }
 }
 

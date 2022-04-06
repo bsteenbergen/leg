@@ -7,23 +7,23 @@ class Context {
   constructor({
     parent = null,
     functions = new Map(),
-    locals = new Map(),
+    variables = new Map(),
     inLoop = false,
     function: f = null,
   }) {
-    Object.assign(this, { parent, functions, locals, inLoop, function: f })
+    Object.assign(this, { parent, functions, variables, inLoop, function: f })
   }
   sees(name) {
     // Search "outward" through enclosing scopes
-    return this.locals.has(name) || this.parent?.sees(name)
+    return this.variables.has(name) || this.parent?.sees(name)
   }
   add(name, entity) {
     // No shadowing!
     if (this.sees(name)) error(`Identifier ${name} already declared`)
-    this.locals.set(name, entity)
+    this.variables.set(name, entity)
   }
   lookup(name) {
-    const entity = this.locals.get(name)
+    const entity = this.variables.get(name)
     if (entity) {
       return entity
     } else if (this.parent) {
@@ -32,7 +32,12 @@ class Context {
     error(`Identifier ${name} not declared`)
   }
   newChildContext(props) {
-    return new Context({ ...this, parent: this, locals: new Map(), ...props })
+    return new Context({
+      ...this,
+      parent: this,
+      variables: new Map(),
+      ...props,
+    })
   }
   analyze(node) {
     return this[node.constructor.name](node)
@@ -48,9 +53,14 @@ class Context {
     let type = d.type.typeName.lexeme
     let name = d.name.lexeme
     let initilizer = d.initializer.lexeme
-
-    // IDRK what to do here?
-    /// Now I do -> create a var and add to locals!
+    let v = new Variable(type, name, initilizer)
+    // Make sure variable has not already been declared.
+    if (this.variables.has(name)) {
+      // If it has, throw!
+      error(`Variable ${name} already declared`)
+    }
+    // If it has not, add the variable being created to the Context's variables.
+    this.variables.set(name, v)
   }
 
   FunctionDeclaration(d) {
@@ -75,12 +85,17 @@ class Context {
       // If it has, throw!
       error(`Function ${funcName} has not yet been declared`)
     }
-    // console.log(funcName)
+  }
 
-    // console.log("in fun call")
-    // console.log(this.functions)
-    // Check to make sure function has already been declared.
-    // console.log(this.locals)
+  CompareInstruction(d) {
+    if (d.args.length !== 2) {
+      error(`cmp instruction must have exactly two arguments.`)
+    }
+    d.args.forEach((arg) => {
+      if (arg.category === "Id" && !this.variables.has(arg.description)) {
+        error(`Variable ${arg.description} is undeclared`)
+      }
+    })
   }
 
   Array(a) {
