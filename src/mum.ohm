@@ -5,6 +5,7 @@ mum {
     	| VarDecl
         | FunDecl 
         | FunCall
+        | Instruction
         | IfStmt
         | LoopStmt
         | Exp9 "=" Exp           --assign
@@ -19,21 +20,14 @@ mum {
 
         
     Suite   = Stmt* "#"
-
-    Exp = id | float | int | str | bool
         
     Type = "int" | "float" | "str" | "bool"
     
-    keyword = print | true | false | branch | branchLink | cmp
+    keyword = print | true | false | branch | branchLink | cmp | if
     IfStmt  = if Exp ":" Suite
     LoopStmt= loop ":" Suite if Exp "->" loop          --while
     		//| loop id in Exp ":" Suite "->" loop              --for
-    
-    Suite   = Stmt* "#"
-
-    //Exp = id | float | int | str | bool
         
-    Type = "int" | "float" | "str" | "bool"
     
   Exp         = Exp1 "?" Exp1 ":" Exp                         --conditional
               | Exp1
@@ -46,7 +40,7 @@ mum {
               | Exp4 ("^" Exp4)+                              --bitxor
               | Exp4 ("&" Exp4)+                              --bitand
               | Exp4
-  Exp4        = Exp5 ("<="|"<"|"=="|"!="|">="|">") Exp5       --compare
+  Exp4        = Exp5 relop Exp5       --cmp
               | Exp5
   Exp5        = Exp5 ("<<" | ">>") Exp6                       --shift
               | Exp6
@@ -63,13 +57,13 @@ mum {
               | str
               | id                                            --id
     
-    keyword = print | true | false | branch | branchLink | if
-    id      = ~keyword letter+ "_"? id? alnum*
+   id     = ~keyword letter+ "_"? id? alnum*
 
     str = "\"" char* "\""
     int = ("-")? digit+
     float = ("-")? digit+ "." digit+ (("E" | "e") ("+" | "-")? digit+)?
     bool = true | false
+    relop = ("<="|"<"|"=="|"!="|">="|">") 
 
     print = "mumble" ~alnum
     true = "true" ~alnum

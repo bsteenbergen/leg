@@ -35,6 +35,7 @@ const funCallExpected = `   1 | Program statements=[#2,#3]
 
 const cmp = `
 cmp var_1 var_2`
+
 const cmpExpected = `   1 | Program statements=[#2]
    2 | CompareInstruction args=[(Id,"var_1"),(Id,"var_2")]`
 
