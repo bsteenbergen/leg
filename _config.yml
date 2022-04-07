@@ -73,7 +73,7 @@ defaults:
 encoding: utf-8 # Make sure the encoding is right
 lang: en-GB # Set the site language
 title: "leg" # Site name or title, also used in jekyll-seo-tag
-logo: "leg_logo_1.png" # Site logo, also used in jekyll-seo-tag
+logo: "leg_logo_2.png" # Site logo, also used in jekyll-seo-tag
 description: "mum is a general purpose programming language intended for beginner to intermediate programmers"
 url: "https://bsteenbergen.github.io/mum/"
 baseurl: ""
