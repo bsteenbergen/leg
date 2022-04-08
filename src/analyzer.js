@@ -59,6 +59,12 @@ class Context {
       // If it has, throw!
       error(`Variable ${name} already declared`)
     }
+    // Make sure variable is being initialized to the correct type.
+    if (d.initializer.category.toLowerCase() !== type.toLowerCase()) {
+      error(
+        `Initializer ${d.initializer.lexeme} does not match the type of variable ${name}`
+      )
+    }
     // If it has not, add the variable being created to the Context's variables.
     this.variables.set(name, v)
   }

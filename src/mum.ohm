@@ -7,7 +7,8 @@ mum {
         | FunCall
         | IfStmt
         | LoopStmt
-        | Exp9 "=" Exp           --assign
+        | Instruction
+        | Exp         
         
     Print = print Exp
 
@@ -16,60 +17,46 @@ mum {
     FunCall = branch funcName | branchLink funcName
     
     Instruction = cmp (ListOf<Exp, "">) --cmp
-
-        
+    
     Suite   = Stmt* "#"
-
-    Exp = id | float | int | str | bool
         
     Type = "int" | "float" | "str" | "bool"
     
-    keyword = print | true | false | branch | branchLink | cmp
     IfStmt  = if Exp ":" Suite
     LoopStmt= loop ":" Suite if Exp "->" loop          --while
     		//| loop id in Exp ":" Suite "->" loop              --for
     
-    Suite   = Stmt* "#"
-
     //Exp = id | float | int | str | bool
-        
-    Type = "int" | "float" | "str" | "bool"
+            
+    Exp     = Exp "||" Exp0           --or
+            | Exp "&&" Exp0           --and
+            | Exp0
+    Exp0    = Exp0 relop Exp1                  --binary
+            | Exp1 
+    Exp1    = Exp1 logicop Exp2                --binary      
+            | Exp2
+    Exp2    = Exp2 ("+" | "-") Exp3            --binary
+            | Exp3
+    Exp3    = Exp3 ("*" | "/") Exp4            --binary
+            | Exp5 "%" Exp5                    --modulo
+            | Exp4
+    Exp4    = Exp5 "^" Exp4                   --binary
+            | Exp5      
+    Exp5    = bool
+            | float
+            | int
+            | str
+            | id                                            --id
     
-  Exp         = Exp1 "?" Exp1 ":" Exp                         --conditional
-              | Exp1
-  Exp1        = Exp1 "??" Exp2                                --unwrapelse
-              | Exp2
-  Exp2        = Exp3 ("||" Exp3)+                             --or
-              | Exp3 ("&&" Exp3)+                             --and
-              | Exp3
-  Exp3        = Exp4 ("|" Exp4)+                              --bitor
-              | Exp4 ("^" Exp4)+                              --bitxor
-              | Exp4 ("&" Exp4)+                              --bitand
-              | Exp4
-  Exp4        = Exp5 ("<="|"<"|"=="|"!="|">="|">") Exp5       --compare
-              | Exp5
-  Exp5        = Exp5 ("<<" | ">>") Exp6                       --shift
-              | Exp6
-  Exp6        = Exp6 ("+" | "-") Exp7                         --add
-              | Exp7
-  Exp7        = Exp7 ("*"| "/" | "%") Exp8                    --multiply
-              | Exp8
-  Exp8        = Exp9 "**" Exp8                                --power
-              | Exp9
-              | ("#" | "-" | "!") Exp9                        --unary
-  Exp9        = bool
-              | float
-              | int
-              | str
-              | id                                            --id
-    
-    keyword = print | true | false | branch | branchLink | if
+    keyword = print | true | false | branch | branchLink | if | cmp
     id      = ~keyword letter+ "_"? id? alnum*
 
     str = "\"" char* "\""
     int = ("-")? digit+
     float = ("-")? digit+ "." digit+ (("E" | "e") ("+" | "-")? digit+)?
     bool = true | false
+    logicop = ("!&" | "!|" | "!")
+    relop   = ("<=" | "<" | "!=" | "==" | ">=" | ">")
 
     print = "mumble" ~alnum
     true = "true" ~alnum
@@ -78,9 +65,9 @@ mum {
     branch = "b" ~alnum 
     branchLink = "bl" ~alnum
     cmp = "cmp" ~alnum
-    if = "if" ~alnum
+    if = "#if" ~alnum
     in = "in" ~alnum
-    loop = "loop" ~alnum
+    loop = "#loop" ~alnum
         
     char = ~"\"" ~"\n" any 
     space += "@" (~"\n" any)* --comment

@@ -79,6 +79,11 @@ const semanticErrors = [
     "cmp 1 2 3",
     /Error: cmp instruction must have exactly two arguments/,
   ],
+  [
+    "variable initilized with wrong type",
+    "str x = 19",
+    /Error: Initializer 19 does not match the type of variable x/,
+  ],
 
   // ["print undeclared identifier", "mumble hi", /Malformed print statement/],
 ]

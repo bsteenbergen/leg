@@ -43,6 +43,30 @@ const astBuilder = grammar.createSemantics().addOperation("ast", {
   Instruction_cmp(_cmp, args) {
     return new core.CompareInstruction(args.asIteration().ast())
   },
+  Exp_or(left, op, right) {
+    return new core.BinaryExpression(left.ast(), op.sourceString, right.ast())
+  },
+  Exp_and(left, op, right) {
+    return new core.BinaryExpression(left.ast(), op.sourceString, right.ast())
+  },
+  Exp0_binary(left, op, right) {
+    return new core.BinaryExpression(left.ast(), op.sourceString, right.ast())
+  },
+  Exp1_binary(left, op, right) {
+    return new core.BinaryExpression(left.ast(), op.sourceString, right.ast())
+  },
+  Exp2_binary(left, op, right) {
+    return new core.BinaryExpression(left.ast(), op.sourceString, right.ast())
+  },
+  Exp3_binary(left, op, right) {
+    return new core.BinaryExpression(left.ast(), op.sourceString, right.ast())
+  },
+  Exp3_modulo(left, op, right) {
+    return new core.BinaryExpression(left.ast(), op.sourceString, right.ast())
+  },
+  Exp4_binary(left, op, right) {
+    return new core.BinaryExpression(left.ast(), op.sourceString, right.ast())
+  },
   Suite(body, _end) {
     return new core.Suite(body.ast())
   },
