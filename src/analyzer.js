@@ -46,8 +46,10 @@ class Context {
     this.analyze(p.statements)
   }
   PrintStatement(d) {
-    let argument = d.argument.lexeme
-    // ...
+    // If printing variable, check if it has been declared.
+    if (d.argument.category === "Id") {
+      error(`Print statement argument "${d.argument.lexeme}" is uninitialized.`)
+    }
   }
   VariableDeclaration(d) {
     let type = d.type.typeName.lexeme

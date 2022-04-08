@@ -84,8 +84,11 @@ const semanticErrors = [
     "str x = 19",
     /Error: Initializer 19 does not match the type of variable x/,
   ],
-
-  // ["print undeclared identifier", "mumble hi", /Malformed print statement/],
+  [
+    "print undeclared identifier",
+    "mumble hi",
+    /Error: Print statement argument "hi" is uninitialized/,
+  ],
 ]
 
 describe("The analyzer", () => {

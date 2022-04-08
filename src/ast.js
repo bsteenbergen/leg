@@ -82,6 +82,9 @@ const astBuilder = grammar.createSemantics().addOperation("ast", {
   str(_openQuote, _chars, _closeQuote) {
     return new core.Token("Str", this.source)
   },
+  bool(_falsity) {
+    return new core.Token("Bool", this.source)
+  },
   int(_negative, _digits) {
     return new core.Token("Int", this.source)
   },
