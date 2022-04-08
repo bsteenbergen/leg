@@ -22,6 +22,12 @@ export class VariableDeclaration {
   }
 }
 
+export class VariableAssignment {
+  constructor(name, initializer) {
+    Object.assign(this, { name, initializer })
+  }
+}
+
 export class Variable {
   // Generated when processing a variable declaration
   constructor(type, name, value) {

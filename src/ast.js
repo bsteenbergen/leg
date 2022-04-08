@@ -34,6 +34,9 @@ const astBuilder = grammar.createSemantics().addOperation("ast", {
       initializer.ast()
     )
   },
+  VarAssign(varName, _eq, initializer) {
+    return new core.VariableAssignment(varName.ast(), initializer.ast())
+  },
   FunDecl(funcName, _colon, suite) {
     return new core.FunctionDeclaration(funcName.ast(), suite.ast())
   },

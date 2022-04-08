@@ -32,6 +32,13 @@ const semanticChecks = [
     cmp 3 three
     `,
   ],
+  [
+    "increment variable",
+    `
+    float x = 1.0
+    x = x + 0.2
+    `,
+  ],
 ]
 
 const semanticErrors = [
@@ -88,6 +95,13 @@ const semanticErrors = [
     "print undeclared identifier",
     "mumble hi",
     /Error: Print statement argument "hi" is uninitialized/,
+  ],
+  [
+    "increment untilitialized variable",
+    `
+    x = x + 0.2
+    `,
+    /Error: Must initialize variables before asignment/,
   ],
 ]
 

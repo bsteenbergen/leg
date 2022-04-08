@@ -3,7 +3,8 @@ mum {
     
     Stmt = Print
     	| VarDecl
-        | FunDecl 
+        | FunDecl
+        | VarAssign 
         | FunCall
         | IfStmt
         | LoopStmt
@@ -13,6 +14,7 @@ mum {
     Print = print Exp
 
     VarDecl = Type id "=" Exp 
+    VarAssign = id "=" Exp
     FunDecl = funcName ":" Suite
     FunCall = branch funcName | branchLink funcName
     

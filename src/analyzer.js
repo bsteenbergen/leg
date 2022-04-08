@@ -70,6 +70,15 @@ class Context {
     // If it has not, add the variable being created to the Context's variables.
     this.variables.set(name, v)
   }
+  VariableAssignment(d) {
+    // Ensure LHS has already been initialized.
+    let name = d.name.lexeme
+    if (!this.variables.has(name)) {
+      // If it has, throw!
+      error(`Must initialize variables before asignment`)
+    }
+    // TODO: TYPE CHECKING HERE
+  }
 
   FunctionDeclaration(d) {
     let funcName = d.funcName.lexeme // This still has the #. Should we keep it?

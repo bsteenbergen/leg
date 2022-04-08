@@ -7,6 +7,16 @@ mumble 14`
 const simplePrintExpected = `   1 | Program statements=[#2]
    2 | PrintStatement argument=(Int,"14")`
 
+const vars = `
+  int x = 5
+  x = x + 1
+`
+const varsExpected = `   1 | Program statements=[#2,#4]
+   2 | VariableDeclaration type=#3 name=(Id,"x") initializer=(Int,"5")
+   3 | TypeName typeName=(Sym,"int")
+   4 | VariableDeclaration type=(Id,"x") name=#5 initializer=undefined
+   5 | BinaryExpression left=(Id,"x") op='+' right=(Int,"1")`
+
 const printVar = `
 str x = "hi" @ var decl
 mumble x @ print statement
@@ -57,7 +67,7 @@ const mathExpected = `   1 | Program statements=[#2,#4,#6,#7,#8]
    9 | TypeName typeName=(Sym,"int")
   10 | BinaryExpression left=(Int,"3") op='%' right=(Int,"4")`
 
-// console.log(util.format(ast(math)))
+// console.log(util.format(ast(vars)))
 
 describe("The AST generator produces a correct AST for ", () => {
   it("print statements", () => {
@@ -77,6 +87,9 @@ describe("The AST generator produces a correct AST for ", () => {
     }),
     it("binary operations", () => {
       assert.deepStrictEqual(util.format(ast(math)), mathExpected)
+    }),
+    it("variable declaration and reassignment", () => {
+      assert.deepStrictEqual(util.format(ast(vars)), varsExpected)
     })
   // it("produces a correct AST with maps", () => {
   //   assert.deepStrictEqual(util.format(ast(mapSrc)), mapExpected)
