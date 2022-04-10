@@ -11,10 +11,11 @@ const vars = `
   int x = 5
   x = x + 1
 `
+
 const varsExpected = `   1 | Program statements=[#2,#4]
    2 | VariableDeclaration type=#3 name=(Id,"x") initializer=(Int,"5")
    3 | TypeName typeName=(Sym,"int")
-   4 | VariableDeclaration type=(Id,"x") name=#5 initializer=undefined
+   4 | VariableAssignment name=(Id,"x") initializer=#5
    5 | BinaryExpression left=(Id,"x") op='+' right=(Int,"1")`
 
 const printVar = `
@@ -67,7 +68,17 @@ const mathExpected = `   1 | Program statements=[#2,#4,#6,#7,#8]
    9 | TypeName typeName=(Sym,"int")
   10 | BinaryExpression left=(Int,"3") op='%' right=(Int,"4")`
 
-// console.log(util.format(ast(vars)))
+const ifStmt = `#if x < 1 :
+  x = x + 1
+#`
+const ifStmtExpected = `   1 | Program statements=[#2]
+   2 | IfStatement condition=#3 suite=#4
+   3 | BinaryExpression left=(Id,"x") op='<' right=(Int,"1")
+   4 | Suite statements=[#5]
+   5 | VariableAssignment name=(Id,"x") initializer=#6
+   6 | BinaryExpression left=(Id,"x") op='+' right=(Int,"1")`
+
+// console.log(util.format(ast(ifStmt)))
 
 describe("The AST generator produces a correct AST for ", () => {
   it("print statements", () => {
@@ -90,6 +101,9 @@ describe("The AST generator produces a correct AST for ", () => {
     }),
     it("variable declaration and reassignment", () => {
       assert.deepStrictEqual(util.format(ast(vars)), varsExpected)
+    }),
+    it("if statements", () => {
+      assert.deepStrictEqual(util.format(ast(ifStmt)), ifStmtExpected)
     })
   // it("produces a correct AST with maps", () => {
   //   assert.deepStrictEqual(util.format(ast(mapSrc)), mapExpected)

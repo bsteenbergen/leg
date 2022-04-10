@@ -39,6 +39,23 @@ const semanticChecks = [
     x = x + 0.2
     `,
   ],
+  [
+    "if statement with binary expression condition",
+    `
+    #if x < 1 :
+      x = x + 1
+    #
+    `,
+  ],
+  [
+    "if statement with bool var condition ",
+    `
+    bool my_var = true
+    #if my_var :
+      int x = 10
+    #
+    `,
+  ],
 ]
 
 const semanticErrors = [
@@ -102,6 +119,34 @@ const semanticErrors = [
     x = x + 0.2
     `,
     /Error: Must initialize variables before asignment/,
+  ],
+  [
+    "if statement condition that is neither a bool nor an id",
+    `
+    #if 14:
+      mumble "hi"
+    #
+    `,
+    /Error: If statement condition must evaluate to a boolean/,
+  ],
+  [
+    "if statement condition is an id that does not represent a boolean",
+    `
+    float my_var = 14.5
+    #if my_var:
+      mumble "hi"
+    #
+    `,
+    /Error: If statement condition must evaluate to a boolean/,
+  ],
+  [
+    "if statement condition uninitialized id",
+    `
+    #if my_var:
+      mumble "hi"
+    #
+    `,
+    /Error: Must initialize variables before use in conditional expression/,
   ],
 ]
 

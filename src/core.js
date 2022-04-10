@@ -54,6 +54,12 @@ export class FunctionCall {
   }
 }
 
+export class IfStatement {
+  constructor(condition, suite) {
+    Object.assign(this, { condition, suite })
+  }
+}
+
 export class CompareInstruction {
   constructor(args) {
     Object.assign(this, { args })
@@ -78,17 +84,6 @@ export class Type {
 export class TypeName {
   constructor(typeName) {
     this.typeName = typeName
-  }
-}
-
-export class IfStatement {
-  /*  Example: 
-      if x > 2:
-        mumble 2
-      #
-  */
-  constructor(test, alternate) {
-    Object.assign(this, { test, alternate })
   }
 }
 

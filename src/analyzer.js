@@ -1,5 +1,5 @@
 // SEMANTIC ANALYZER
-import { Variable, Function, error } from "./core.js"
+import { Variable, Function, error, BinaryExpression } from "./core.js"
 
 import * as stdlib from "./stdlib.js"
 
@@ -79,7 +79,6 @@ class Context {
     }
     // TODO: TYPE CHECKING HERE
   }
-
   FunctionDeclaration(d) {
     let funcName = d.funcName.lexeme // This still has the #. Should we keep it?
     let suite = d.statements
@@ -92,7 +91,6 @@ class Context {
     // If it has not, add the function being created to the Context's functions.
     this.functions.set(funcName, func)
   }
-
   FunctionCall(d) {
     // Is the call a branch or a branch link?
     let link = d.link.lexeme === "bl" ? true : false
@@ -102,6 +100,27 @@ class Context {
       // If it has, throw!
       error(`Function ${funcName} has not yet been declared`)
     }
+  }
+  IfStatement(d) {
+    // The condition must evaluate to a boolean.
+    // If the condition is a token, make sure it is an id or a boolean.
+    if (!["Id", "Bool", undefined].includes(d.condition.category)) {
+      error(`If statement condition must evaluate to a boolean`)
+    }
+    // If the token is an id ...
+    if (d.condition.category == "Id") {
+      // ... make sure the variable has been declared ...
+      if (!this.variables.has(d.condition.description)) {
+        error(`Must initialize variables before use in conditional expression`)
+      }
+      // ... and make sure the var is of type bool ...
+      const condition_type = this.variables.get(d.condition.description).type
+      if (condition_type !== "bool") {
+        error(`If statement condition must evaluate to a boolean`)
+      }
+    }
+
+    // make sure it's type is boolean.
   }
 
   CompareInstruction(d) {
