@@ -2,7 +2,7 @@
 title: Learn to program using leg
 feature_text: |
 ## mum
-feature_image: "leg_logo_1.png"
+feature_image: "leg_logo_1.jpeg"
 excerpt: "mum is a general purpose programming language intended for beginner to intermediate programmers"
 ---
 
