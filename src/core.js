@@ -49,8 +49,8 @@ export class FunctionDeclaration {
 }
 
 export class FunctionCall {
-  constructor(link, funcName) {
-    Object.assign(this, { link, funcName })
+  constructor(link, funcName, condition) {
+    Object.assign(this, { link, funcName, condition })
   }
 }
 

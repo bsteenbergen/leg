@@ -11,7 +11,6 @@ const vars = `
   int x = 5
   x = x + 1
 `
-
 const varsExpected = `   1 | Program statements=[#2,#4]
    2 | VariableDeclaration type=#3 name=(Id,"x") initializer=(Int,"5")
    3 | TypeName typeName=(Sym,"int")
@@ -41,8 +40,8 @@ const funCalls = `
 bl #set_values
 b #print_values`
 const funCallExpected = `   1 | Program statements=[#2,#3]
-   2 | FunctionCall link=(Sym,"bl") funcName=(Id,"#set_values")
-   3 | FunctionCall link=(Sym,"b") funcName=(Id,"#print_values")`
+   2 | FunctionCall link=(Sym,"bl") funcName=(Id,"#set_values") condition=[]
+   3 | FunctionCall link=(Sym,"b") funcName=(Id,"#print_values") condition=[]`
 
 const cmp = `
 cmp var_1 var_2`
@@ -78,7 +77,31 @@ const ifStmtExpected = `   1 | Program statements=[#2]
    5 | VariableAssignment name=(Id,"x") initializer=#6
    6 | BinaryExpression left=(Id,"x") op='+' right=(Int,"1")`
 
-// console.log(util.format(ast(ifStmt)))
+const whileLoop = `
+#loop:
+  mumble "hi"
+  b #loop x < 10 @ "loop only if x < 10
+#`
+const whileExpected = `   1 | Program statements=[#2]
+   2 | FunctionDeclaration funcName=(Id,"#loop") suite=#3
+   3 | Suite statements=[#4,#5]
+   4 | PrintStatement argument=(Str,""hi"")
+   5 | FunctionCall link=(Sym,"b") funcName=(Id,"#loop") condition=[#6]
+   6 | BinaryExpression left=(Id,"x") op='<' right=(Int,"10")`
+
+const complexRelop = `let x = c < d < e`
+const complexRelopExpected = `   1 | Program statements=[(Id,"let"),#2]
+   2 | VariableAssignment name=(Id,"x") initializer=#3
+   3 | BinaryExpression left=#4 op='<' right=(Id,"e")
+   4 | BinaryExpression left=(Id,"c") op='<' right=(Id,"d")`
+
+const initVarAsRelopResult = `bool i = 9 > 10`
+const initVarAsRelopResultExpected = `   1 | Program statements=[#2]
+   2 | VariableDeclaration type=#3 name=(Id,"i") initializer=#4
+   3 | TypeName typeName=(Sym,"bool")
+   4 | BinaryExpression left=(Int,"9") op='>' right=(Int,"10")`
+
+// console.log(util.format(ast(initVarAsRelopResult)))
 
 describe("The AST generator produces a correct AST for ", () => {
   it("print statements", () => {
@@ -104,6 +127,21 @@ describe("The AST generator produces a correct AST for ", () => {
     }),
     it("if statements", () => {
       assert.deepStrictEqual(util.format(ast(ifStmt)), ifStmtExpected)
+    }),
+    it("while loop", () => {
+      assert.deepStrictEqual(util.format(ast(whileLoop)), whileExpected)
+    }),
+    it("complex/nested relop", () => {
+      assert.deepStrictEqual(
+        util.format(ast(complexRelop)),
+        complexRelopExpected
+      )
+    }),
+    it("initialize variable to result of binary expression", () => {
+      assert.deepStrictEqual(
+        util.format(ast(initVarAsRelopResult)),
+        initVarAsRelopResultExpected
+      )
     })
   // it("produces a correct AST with maps", () => {
   //   assert.deepStrictEqual(util.format(ast(mapSrc)), mapExpected)

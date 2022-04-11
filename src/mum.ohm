@@ -2,22 +2,20 @@ mum {
     Program = Stmt+
     
     Stmt = Print
-        | VarAssign 
     	| VarDecl
         | FunDecl
+        | VarAssign 
         | FunCall
         | IfStmt
-        | LoopStmt
         | Instruction
         | Exp         
         
     Print = print Exp
+
     VarDecl = Type id "=" Exp 
     VarAssign = id "=" Exp
     FunDecl = funcName ":" Suite
-    FunCall = branch funcName | branchLink funcName
-    IfStmt  = if Exp ":" Suite
-
+    FunCall = (branch | branchLink) funcName (Exp)?
     
     Instruction = cmp (ListOf<Exp, "">) --cmp
     
@@ -25,8 +23,7 @@ mum {
         
     Type = "int" | "float" | "str" | "bool"
     
-    LoopStmt= loop ":" Suite if Exp "->" loop          --while
-    		//| loop id in Exp ":" Suite "->" loop              --for
+    IfStmt  = if Exp ":" Suite
     
     //Exp = id | float | int | str | bool
             

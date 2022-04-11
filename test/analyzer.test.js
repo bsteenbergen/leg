@@ -5,13 +5,21 @@ import * as core from "../src/core.js"
 
 // Programs that are semantically correct
 const semanticChecks = [
+  [
+    "initialize variable to variable",
+    `
+    str s = "hi"
+    str s2 = s`,
+  ],
   ["print string", 'mumble "hi"'],
   ["print float", "mumble -3.4"],
   ["print bools", "mumble true"],
   ["variable declaration", "int x = 3"],
   [
     "function declaration",
-    `#my_func:
+    `
+    int str_1 = 9
+    #my_func:
       mumble str_1
     #`,
   ],
@@ -20,6 +28,7 @@ const semanticChecks = [
     `
       @ function declaration
       #print_values:
+        int str_1 = 9
         mumble str_1
       #
       @ function call 
@@ -48,12 +57,45 @@ const semanticChecks = [
     `,
   ],
   [
-    "if statement with bool var condition ",
+    "if statement with bool var condition (id)",
     `
     bool my_var = true
     #if my_var :
       int x = 10
     #
+    `,
+  ],
+  [
+    "if statement with bool var condition (true)",
+    `
+    #if true :
+      int x = 10
+    #
+    `,
+  ],
+  [
+    "if statement with bool var condition (relop)",
+    `
+    int my_var = 9
+    #if my_var == 9 :
+      int x = 10
+    #
+    `,
+  ],
+  [
+    "while loop",
+    `
+    #loop:
+	    mumble "hi"
+      b #loop x < 10 @ "loop only if x < 10
+    #
+    `,
+  ],
+  [
+    "intialize variable as result of binary expression",
+    `
+    int j = 10
+    bool i = 9 > j
     `,
   ],
 ]
@@ -72,10 +114,18 @@ const semanticErrors = [
     /Error: Function #my_func already declared/,
   ],
   [
+    "initialize to uninitialized variable",
+    `
+    int j = k
+    `,
+    /Error: Initializer k has not been initalized./,
+  ],
+  [
     "function that has not yet been declared",
     `
       @ function declaration
       #print_values:
+        str str_1 = "hello"
         mumble str_1
       #
       @ function call 
@@ -106,7 +156,7 @@ const semanticErrors = [
   [
     "variable initilized with wrong type",
     "str x = 19",
-    /Error: Initializer 19 does not match the type of variable x/,
+    /Error: Initializer type does not match variable type/,
   ],
   [
     "print undeclared identifier",
@@ -148,6 +198,16 @@ const semanticErrors = [
     `,
     /Error: Must initialize variables before use in conditional expression/,
   ],
+  // [
+  //   "while loop with nonsensical condition",
+  //   `
+  //   #loop:
+  //     mumble "hi"
+  //     b #loop x < true @
+  //   #
+  //   `,
+  //   /Error: Must initialize variables before use in conditional expression/,
+  // ],
 ]
 
 describe("The analyzer", () => {

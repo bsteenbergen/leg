@@ -40,8 +40,8 @@ const astBuilder = grammar.createSemantics().addOperation("ast", {
   FunDecl(funcName, _colon, suite) {
     return new core.FunctionDeclaration(funcName.ast(), suite.ast())
   },
-  FunCall(link, funcName) {
-    return new core.FunctionCall(link.ast(), funcName.ast())
+  FunCall(link, funcName, condition) {
+    return new core.FunctionCall(link.ast(), funcName.ast(), condition.ast())
   },
   IfStmt(_if, condition, _colon, suite) {
     return new core.IfStatement(condition.ast(), suite.ast())

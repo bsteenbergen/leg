@@ -1,5 +1,5 @@
 // SEMANTIC ANALYZER
-import { Variable, Function, error, BinaryExpression } from "./core.js"
+import { Variable, Function, error, BinaryExpression, Token } from "./core.js"
 
 import * as stdlib from "./stdlib.js"
 
@@ -47,7 +47,10 @@ class Context {
   }
   PrintStatement(d) {
     // If printing variable, check if it has been declared.
-    if (d.argument.category === "Id") {
+    if (
+      d.argument.category === "Id" &&
+      !this.variables.has(d.argument.lexeme)
+    ) {
       error(`Print statement argument "${d.argument.lexeme}" is uninitialized.`)
     }
   }
@@ -62,12 +65,19 @@ class Context {
       error(`Variable ${name} already declared`)
     }
     // Make sure variable is being initialized to the correct type.
-    if (d.initializer.category.toLowerCase() !== type.toLowerCase()) {
-      error(
-        `Initializer ${d.initializer.lexeme} does not match the type of variable ${name}`
-      )
+    if (d.initializer.constructor === Token) {
+      // If initialized to id, make sure id has been declared.
+      if (d.initializer.category === "Id") {
+        if (!this.variables.has(d.initializer.lexeme)) {
+          error(`Initializer ${d.initializer.lexeme} has not been initalized.`)
+        }
+      }
+      if (["Int", "Float", "Bool"].includes(d.initializer.category)) {
+        if (d.initializer.category.toLowerCase() !== type.toLowerCase()) {
+          error(`Initializer type does not match variable type`)
+        }
+      }
     }
-    // If it has not, add the variable being created to the Context's variables.
     this.variables.set(name, v)
   }
   VariableAssignment(d) {
@@ -81,7 +91,7 @@ class Context {
   }
   FunctionDeclaration(d) {
     let funcName = d.funcName.lexeme // This still has the #. Should we keep it?
-    let suite = d.statements
+    let suite = d.suite
     let func = new Function(funcName, suite)
     // Make sure function has not already been declared.
     if (this.functions.has(funcName)) {
@@ -90,7 +100,16 @@ class Context {
     }
     // If it has not, add the function being created to the Context's functions.
     this.functions.set(funcName, func)
+    // Create new child context
+    const childContext = this.newChildContext({
+      functions: this.functions,
+      variables: this.variables,
+      inLoop: false,
+      function: func,
+    })
+    childContext.analyze(suite.statements)
   }
+
   FunctionCall(d) {
     // Is the call a branch or a branch link?
     let link = d.link.lexeme === "bl" ? true : false
@@ -100,7 +119,17 @@ class Context {
       // If it has, throw!
       error(`Function ${funcName} has not yet been declared`)
     }
+    // Check if there is a condition being attatched to the function call.
+    if (d.condition.length !== 0) {
+      d.condition.forEach((c) => {
+        // If we have a binary operator.
+        if (c.left !== undefined && c.right !== undefined) {
+          let be = new BinaryExpression(c.left, c.op, c.right)
+        }
+      })
+    }
   }
+
   IfStatement(d) {
     // The condition must evaluate to a boolean.
     // If the condition is a token, make sure it is an id or a boolean.
@@ -119,8 +148,7 @@ class Context {
         error(`If statement condition must evaluate to a boolean`)
       }
     }
-
-    // make sure it's type is boolean.
+    // TODO: check for binary expressions
   }
 
   CompareInstruction(d) {
