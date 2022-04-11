@@ -121,6 +121,13 @@ const semanticErrors = [
     /Error: Initializer k has not been initalized./,
   ],
   [
+    "initialize non-bool var to result of boolean expression",
+    `
+    int j = 19 < 9
+    `,
+    /Error: Variable j is being initalized to result of binary expression but is not type bool/,
+  ],
+  [
     "function that has not yet been declared",
     `
       @ function declaration

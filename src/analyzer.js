@@ -54,6 +54,11 @@ class Context {
       error(`Print statement argument "${d.argument.lexeme}" is uninitialized.`)
     }
   }
+
+  BinaryExpression(d) {
+    console.log("BinaryExpression from analyzer")
+  }
+
   VariableDeclaration(d) {
     let type = d.type.typeName.lexeme
     let name = d.name.lexeme
@@ -76,6 +81,16 @@ class Context {
         if (d.initializer.category.toLowerCase() !== type.toLowerCase()) {
           error(`Initializer type does not match variable type`)
         }
+      }
+    }
+    // If we initialize our variable to the result of a binary expression ...
+    if (d.initializer.constructor === BinaryExpression) {
+      // Ensure that the variable type is a bool (b/c the result of a binary
+      // expression cannot be anything else.)
+      if (type !== "bool") {
+        error(
+          `Variable ${name} is being initalized to result of binary expression but is not type bool`
+        )
       }
     }
     this.variables.set(name, v)
