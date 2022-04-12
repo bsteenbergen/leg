@@ -32,7 +32,7 @@ leg {
             | Exp0
     Exp0    = Exp0 relop Exp1                  --binary
             | Exp1 
-    Exp1    = Exp1 logicop Exp2                --binary      
+    Exp1    = logicop Exp2                --unary     
             | Exp2
     Exp2    = Exp2 ("+" | "-") Exp3            --binary
             | Exp3

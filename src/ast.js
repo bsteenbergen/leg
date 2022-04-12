@@ -64,8 +64,8 @@ const astBuilder = grammar.createSemantics().addOperation("ast", {
   Exp0_binary(left, op, right) {
     return new core.BinaryExpression(left.ast(), op.sourceString, right.ast())
   },
-  Exp1_binary(left, op, right) {
-    return new core.BinaryExpression(left.ast(), op.sourceString, right.ast())
+  Exp1_unary(op, right) {
+    return new core.UnaryExpression(op.sourceString, right.ast())
   },
   Exp2_binary(left, op, right) {
     return new core.BinaryExpression(left.ast(), op.sourceString, right.ast())

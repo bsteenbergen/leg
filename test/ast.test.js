@@ -113,7 +113,16 @@ const initVarAsRelopResultExpected = `   1 | Program statements=[#2]
    3 | TypeName typeName=(Sym,"bool")
    4 | BinaryExpression left=(Int,"9") op='>' right=(Int,"10")`
 
-// console.log(util.format(ast(addInstruction)))
+const miscTests = `
+  bool x = 1 > -1 || false
+  bool y = "a" == "b" && 10 <= 9
+  prt !x
+  prt 9 * 10
+  prt -3.4 ^ 2
+  prt 1238.129308 % 2.1
+`
+
+console.log(util.format(ast(miscTests)))
 
 describe("The AST generator produces a correct AST for ", () => {
   it("print statements", () => {
