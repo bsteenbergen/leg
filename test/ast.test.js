@@ -113,16 +113,32 @@ const initVarAsRelopResultExpected = `   1 | Program statements=[#2]
    3 | TypeName typeName=(Sym,"bool")
    4 | BinaryExpression left=(Int,"9") op='>' right=(Int,"10")`
 
-const miscTests = `
-  bool x = 1 > -1 || false
-  bool y = "a" == "b" && 10 <= 9
-  prt !x
-  prt 9 * 10
-  prt -3.4 ^ 2
-  prt 1238.129308 % 2.1
-`
+const miscTests = `bool x = 1 > -1 || false
+bool y = "a" == "b" && 10 <= 9
+prt !x
+prt 9 * 10
+prt -3.4 ^ 2
+prt 1238.129308 % 2.1`
+const miscTestsExpected = `   1 | Program statements=[#2,#6,#11,#13,#15,#17]
+   2 | VariableDeclaration type=#3 name=(Id,"x") initializer=#4
+   3 | TypeName typeName=(Sym,"bool")
+   4 | BinaryExpression left=#5 op='||' right=(Bool,"false")
+   5 | BinaryExpression left=(Int,"1") op='>' right=(Int,"-1")
+   6 | VariableDeclaration type=#7 name=(Id,"y") initializer=#8
+   7 | TypeName typeName=(Sym,"bool")
+   8 | BinaryExpression left=#9 op='&&' right=#10
+   9 | BinaryExpression left=(Str,""a"") op='==' right=(Str,""b"")
+  10 | BinaryExpression left=(Int,"10") op='<=' right=(Int,"9")
+  11 | PrintStatement argument=#12
+  12 | UnaryExpression op='!' operand=(Id,"x")
+  13 | PrintStatement argument=#14
+  14 | BinaryExpression left=(Int,"9") op='*' right=(Int,"10")
+  15 | PrintStatement argument=#16
+  16 | BinaryExpression left=(Float,"-3.4") op='^' right=(Int,"2")
+  17 | PrintStatement argument=#18
+  18 | BinaryExpression left=(Float,"1238.129308") op='%' right=(Float,"2.1")`
 
-console.log(util.format(ast(miscTests)))
+// console.log(util.format(ast(miscTests)))
 
 describe("The AST generator produces a correct AST for ", () => {
   it("print statements", () => {
@@ -172,8 +188,8 @@ describe("The AST generator produces a correct AST for ", () => {
         util.format(ast(multiTypeLists)),
         multiTypeListsExpected
       )
+    }),
+    it("misc tests", () => {
+      assert.deepStrictEqual(util.format(ast(miscTests)), miscTestsExpected)
     })
-  // it("produces a correct AST with maps", () => {
-  //   assert.deepStrictEqual(util.format(ast(mapSrc)), mapExpected)
-  // })
 })
