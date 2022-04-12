@@ -105,17 +105,6 @@ export class TypeName {
   }
 }
 
-export class WhileStatement {
-  /*  Example: 
-        loop:
-          x = x + 1
-        #if x < 3 -> loop
-  */
-  constructor(body, test) {
-    Object.assign(this, { body, test })
-  }
-}
-
 export class BinaryExpression {
   // Example: 3 & 22
   constructor(left, op, right) {
@@ -148,9 +137,9 @@ export class Token {
 
 // Throw an error message that takes advantage of Ohm's messaging
 export function error(message, token) {
-  if (token) {
-    throw new Error(`${token.source.getLineAndColumnMessage()}${message}`)
-  }
+  // if (token) {
+  //   throw new Error(`${token.source.getLineAndColumnMessage()}${message}`)
+  // }
   throw new Error(message)
 }
 

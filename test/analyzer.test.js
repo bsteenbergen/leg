@@ -22,6 +22,7 @@ const semanticChecks = [
     int str_1 = 9
     #my_func:
       prt str_1
+      int str_2 = 10
     #`,
   ],
   [

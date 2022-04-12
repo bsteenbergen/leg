@@ -12,23 +12,14 @@ class Context {
   }) {
     Object.assign(this, { parent, functions, variables, function: f })
   }
-  sees(name) {
-    // Search "outward" through enclosing scopes
-    return this.variables.has(name) || this.parent?.sees(name)
-  }
+  // sees(name) {
+  // Search "outward" through enclosing scopes
+  //   return this.variables.has(name) // || this.parent?.sees(name)
+  // }
   add(name, entity) {
     // No shadowing!
-    if (this.sees(name)) error(`Identifier ${name} already declared`)
+    // if (this.sees(name)) error(`Identifier ${name} already declared`)
     this.variables.set(name, entity)
-  }
-  lookup(name) {
-    const entity = this.variables.get(name)
-    if (entity) {
-      return entity
-    } else if (this.parent) {
-      return this.parent.lookup(name)
-    }
-    error(`Identifier ${name} not declared`)
   }
   newChildContext(props) {
     return new Context({
