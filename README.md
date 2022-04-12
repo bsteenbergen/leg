@@ -10,7 +10,7 @@ Inspired by Matsumoto’s comments on writing programming languages for humans a
 
 mum is a general purpose programming language intended for beginner to intermediate programmers.
 
-**[Check out our mum website](https://bsteenbergen.github.io/mum/)**! 
+**[Check out our mum website](https://bsteenbergen.github.io/mum/)**!
 
 ## Authors
 
@@ -107,7 +107,7 @@ function sayHi() {
     <td>
       <pre style="margin-left: 0; width:100%">
 task sayHi():
-  mumble("Hi!")
+  prt "Hi!"
     </td>
   </tr>
 </table>
@@ -172,7 +172,7 @@ For example:
     <td>
       <pre style="margin-left: 0; width:100%">
   num iter = 0 loop iter += 2 until iter == 10: 
-    mumble("Hello!)
+    prt("Hello!)
     </td>
   </tr>
 </table>

@@ -49,6 +49,9 @@ const astBuilder = grammar.createSemantics().addOperation("ast", {
   Instruction_cmp(_cmp, args) {
     return new core.CompareInstruction(args.asIteration().ast())
   },
+  Instruction_add(_cmp, args) {
+    return new core.AddInstruction(args.asIteration().ast())
+  },
   Exp_or(left, op, right) {
     return new core.BinaryExpression(left.ast(), op.sourceString, right.ast())
   },
@@ -78,6 +81,9 @@ const astBuilder = grammar.createSemantics().addOperation("ast", {
   },
   Type(typeName) {
     return new core.TypeName(typeName.ast())
+  },
+  List(_open, contents, _close) {
+    return new core.List(contents.asIteration().ast())
   },
   id(_first, _second, _third, _rest) {
     return new core.Token("Id", this.source)

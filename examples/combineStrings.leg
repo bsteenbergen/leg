@@ -1,0 +1,6 @@
+str str_1 = "Hello, "
+str sr_2 = "World!"
+
+#combineStrings:
+    str result = str_1 + str_2
+#

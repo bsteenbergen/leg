@@ -3,7 +3,7 @@ import util from "util"
 import ast from "../src/ast.js"
 
 const simplePrint = `
-mumble 14`
+prt 14`
 const simplePrintExpected = `   1 | Program statements=[#2]
    2 | PrintStatement argument=(Int,"14")`
 
@@ -17,9 +17,21 @@ const varsExpected = `   1 | Program statements=[#2,#4]
    4 | VariableAssignment name=(Id,"x") initializer=#5
    5 | BinaryExpression left=(Id,"x") op='+' right=(Int,"1")`
 
+const listDecl = 'list letters = ["a", "b", "c"]'
+const listDeclExpected = `   1 | Program statements=[#2]
+   2 | VariableDeclaration type=#3 name=(Id,"letters") initializer=#4
+   3 | TypeName typeName=(Sym,"list")
+   4 | List contents=[(Str,""a""),(Str,""b""),(Str,""c"")]`
+
+const multiTypeLists = `list letters = [1, "b", true]`
+const multiTypeListsExpected = `   1 | Program statements=[#2]
+   2 | VariableDeclaration type=#3 name=(Id,"letters") initializer=#4
+   3 | TypeName typeName=(Sym,"list")
+   4 | List contents=[(Int,"1"),(Str,""b""),(Bool,"true")]`
+
 const printVar = `
 str x = "hi" @ var decl
-mumble x @ print statement
+prt x @ print statement
 `
 const printVarExpected = `   1 | Program statements=[#2,#4]
    2 | VariableDeclaration type=#3 name=(Id,"x") initializer=(Str,""hi"")
@@ -28,7 +40,7 @@ const printVarExpected = `   1 | Program statements=[#2,#4]
 
 const funcDecl = `
 #my_func:
-  mumble str_1
+  prt str_1
 #`
 const funcDeclExpected = `   1 | Program statements=[#2]
    2 | FunctionDeclaration funcName=(Id,"#my_func") suite=#3
@@ -79,7 +91,7 @@ const ifStmtExpected = `   1 | Program statements=[#2]
 
 const whileLoop = `
 #loop:
-  mumble "hi"
+  prt "hi"
   b #loop x < 10 @ "loop only if x < 10
 #`
 const whileExpected = `   1 | Program statements=[#2]
@@ -101,7 +113,7 @@ const initVarAsRelopResultExpected = `   1 | Program statements=[#2]
    3 | TypeName typeName=(Sym,"bool")
    4 | BinaryExpression left=(Int,"9") op='>' right=(Int,"10")`
 
-// console.log(util.format(ast(initVarAsRelopResult)))
+// console.log(util.format(ast(//)))
 
 describe("The AST generator produces a correct AST for ", () => {
   it("print statements", () => {
@@ -109,6 +121,9 @@ describe("The AST generator produces a correct AST for ", () => {
   }),
     it("variable declarations", () => {
       assert.deepStrictEqual(util.format(ast(printVar)), printVarExpected)
+    }),
+    it("list declarations", () => {
+      assert.deepStrictEqual(util.format(ast(listDecl)), listDeclExpected)
     }),
     it("function declarations", () => {
       assert.deepStrictEqual(util.format(ast(funcDecl)), funcDeclExpected)
@@ -141,6 +156,12 @@ describe("The AST generator produces a correct AST for ", () => {
       assert.deepStrictEqual(
         util.format(ast(initVarAsRelopResult)),
         initVarAsRelopResultExpected
+      )
+    }),
+    it("multitype list", () => {
+      assert.deepStrictEqual(
+        util.format(ast(multiTypeLists)),
+        multiTypeListsExpected
       )
     })
   // it("produces a correct AST with maps", () => {

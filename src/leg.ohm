@@ -1,4 +1,4 @@
-mum {
+leg {
     Program = Stmt+
     
     Stmt = Print
@@ -17,11 +17,12 @@ mum {
     FunDecl = funcName ":" Suite
     FunCall = (branch | branchLink) funcName (Exp)?
     
-    Instruction = cmp (ListOf<Exp, "">) --cmp
+    Instruction = cmp (ListOf<Exp5, "">) --cmp
+    			| add (ListOf<Exp5, "">) --add
     
     Suite   = Stmt* "#"
         
-    Type = "int" | "float" | "str" | "bool"
+    Type = "int" | "float" | "str" | "bool" | "list"
     
     IfStmt  = if Exp ":" Suite
     
@@ -45,28 +46,33 @@ mum {
             | float
             | int
             | str
+            | List
             | id                                            --id
     
-    keyword = print | true | false | branch | branchLink | if | cmp
+    keyword = print | true | false | int | float | bool | list |  branch | branchLink | if | cmp | add
     id      = ~keyword letter+ "_"? id? alnum*
 
     str = "\"" char* "\""
     int = ("-")? digit+
     float = ("-")? digit+ "." digit+ (("E" | "e") ("+" | "-")? digit+)?
     bool = true | false
+    List = "[" ListOf<Exp, ","> "]"
+    
     logicop = ("!&" | "!|" | "!")
     relop   = ("<=" | "<" | "!=" | "==" | ">=" | ">")
 
-    print = "mumble" ~alnum
+    print = "prt" ~alnum
     true = "true" ~alnum
     false = "false" ~alnum
     funcName = "#" id ~alnum
     branch = "b" ~alnum 
     branchLink = "bl" ~alnum
     cmp = "cmp" ~alnum
+    add = "add" ~alnum
     if = "#if" ~alnum
     in = "in" ~alnum
     loop = "#loop" ~alnum
+    list = "list" ~alnum
         
     char = ~"\"" ~"\n" any 
     space += "@" (~"\n" any)* --comment

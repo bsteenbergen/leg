@@ -66,9 +66,21 @@ export class CompareInstruction {
   }
 }
 
+export class AddInstruction {
+  constructor(args) {
+    Object.assign(this, { args })
+  }
+}
+
 export class Suite {
   constructor(statements) {
     this.statements = statements
+  }
+}
+
+export class List {
+  constructor(contents) {
+    this.contents = contents
   }
 }
 

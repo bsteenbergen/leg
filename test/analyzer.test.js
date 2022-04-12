@@ -11,16 +11,17 @@ const semanticChecks = [
     str s = "hi"
     str s2 = s`,
   ],
-  ["print string", 'mumble "hi"'],
-  ["print float", "mumble -3.4"],
-  ["print bools", "mumble true"],
+  ["print string", 'prt "hi"'],
+  ["print float", "prt -3.4"],
+  ["print bools", "prt true"],
   ["variable declaration", "int x = 3"],
+  ["list declaration", 'list letters = ["a", "b", "c"]'],
   [
     "function declaration",
     `
     int str_1 = 9
     #my_func:
-      mumble str_1
+      prt str_1
     #`,
   ],
   [
@@ -29,7 +30,7 @@ const semanticChecks = [
       @ function declaration
       #print_values:
         int str_1 = 9
-        mumble str_1
+        prt str_1
       #
       @ function call 
       b #print_values`,
@@ -38,7 +39,7 @@ const semanticChecks = [
     "cmp instruction",
     `
     str three = "3"
-    cmp 3 three
+    cmp 3 three result
     `,
   ],
   [
@@ -86,7 +87,7 @@ const semanticChecks = [
     "while loop",
     `
     #loop:
-	    mumble "hi"
+	    prt "hi"
       b #loop x < 10 @ "loop only if x < 10
     #
     `,
@@ -105,7 +106,7 @@ const semanticErrors = [
     "redeclare function",
     `
     #my_func:
-      mumble "hello"
+      prt "hello"
     #
     #my_func:
       int x = 0
@@ -133,7 +134,7 @@ const semanticErrors = [
       @ function declaration
       #print_values:
         str str_1 = "hello"
-        mumble str_1
+        prt str_1
       #
       @ function call 
       bl #my_func`,
@@ -151,14 +152,15 @@ const semanticErrors = [
     "cmp instruction with undeclared var",
     `
     str three = "3"
-    cmp 3 four
+    str result = ""
+    cmp 3 four result
     `,
     /Error: Variable four is undeclared/,
   ],
   [
     "cmp instruction with wrong number of args",
-    "cmp 1 2 3",
-    /Error: cmp instruction must have exactly two arguments/,
+    "cmp 1 2",
+    /Error: cmp instruction must have exactly three arguments/,
   ],
   [
     "variable initilized with wrong type",
@@ -167,7 +169,7 @@ const semanticErrors = [
   ],
   [
     "print undeclared identifier",
-    "mumble hi",
+    "prt hi",
     /Error: Print statement argument "hi" is uninitialized/,
   ],
   [
@@ -181,7 +183,7 @@ const semanticErrors = [
     "if statement condition that is neither a bool nor an id",
     `
     #if 14:
-      mumble "hi"
+      prt "hi"
     #
     `,
     /Error: If statement condition must evaluate to a boolean/,
@@ -191,7 +193,7 @@ const semanticErrors = [
     `
     float my_var = 14.5
     #if my_var:
-      mumble "hi"
+      prt "hi"
     #
     `,
     /Error: If statement condition must evaluate to a boolean/,
@@ -200,7 +202,7 @@ const semanticErrors = [
     "if statement condition uninitialized id",
     `
     #if my_var:
-      mumble "hi"
+      prt "hi"
     #
     `,
     /Error: Must initialize variables before use in conditional expression/,
@@ -209,7 +211,7 @@ const semanticErrors = [
   //   "while loop with nonsensical condition",
   //   `
   //   #loop:
-  //     mumble "hi"
+  //     prt "hi"
   //     b #loop x < true @
   //   #
   //   `,

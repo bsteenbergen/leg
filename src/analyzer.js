@@ -167,10 +167,11 @@ class Context {
   }
 
   CompareInstruction(d) {
-    if (d.args.length !== 2) {
-      error(`cmp instruction must have exactly two arguments.`)
+    if (d.args.length !== 3) {
+      error(`cmp instruction must have exactly three arguments.`)
     }
-    d.args.forEach((arg) => {
+    // If either arg_1 and arg_2 are variables, they must be initialized already.
+    d.args.slice(0, -1).forEach((arg) => {
       if (arg.category === "Id" && !this.variables.has(arg.description)) {
         error(`Variable ${arg.description} is undeclared`)
       }

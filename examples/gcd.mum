@@ -1,9 +1,0 @@
-task gcd(num a, num b) yields num commonDenominator:
-    if a == 0:
-        commonDenominator = b
-    loop until b == 0:
-        if a > b:
-            a = a - b
-        else:
-            b = b - a
-    commonDenominator = a
