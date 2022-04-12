@@ -3,4 +3,6 @@ str sr_2 = "World!"
 
 #combineStrings:
     str result = str_1 + str_2
+    add str_1 str_2 result1
+    result2 = str_1 + str_2
 #

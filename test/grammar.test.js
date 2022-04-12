@@ -44,6 +44,10 @@ const syntaxChecks = [
 // Programs with syntax errors that the parser will detect
 const syntaxErrors = [
   ["malformed print statement", 'prt("hi")'],
+  ["keyword as variable name 1", "bool true = true"],
+  ["keyword as variable name 2", "int #if = 10"],
+  ["symbol as variable name", "int # = 11"],
+  ["space as variable name", "int   = 11"],
   [
     "malformed if statement",
     `

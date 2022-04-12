@@ -168,9 +168,8 @@ class Context {
         error(`Result of comparison ${d.args[2].description} must be a boolean`)
       }
     }
-    // This won't be left undefined forever ... eventually the intializer
-    // should be true or false depending on the result of the
-    // comparison.
+    // Initializer just stores info about the params and the instruction type
+    // since we won't know the result until runtime.
     let v = new Variable("bool", d.args[2].description, undefined)
     this.variables.set(d.args[2].description, v)
   }
@@ -179,10 +178,13 @@ class Context {
     this.ValidateGenericInstruction(d, "add")
     // Check types of arguments
     let arg1Type = this.ValidateArithmeticInstructionArguments(d, "add")
-    // This won't be left undefined forever ... eventually the intializer
-    // should be true or false depending on the result of the
-    // comparison.
-    let v = new Variable(arg1Type, d.args[2].description, undefined)
+    // Initializer just stores info about the params and the instruction type
+    // since we won't know the result until runtime.
+    let v = new Variable(arg1Type, d.args[2].description, [
+      d.args[0],
+      "add",
+      d.args[1],
+    ])
     this.variables.set(d.args[2].description, v)
   }
 
@@ -190,10 +192,13 @@ class Context {
     this.ValidateGenericInstruction(d, "sub")
     // Check types of arguments
     let arg1Type = this.ValidateArithmeticInstructionArguments(d, "sub")
-    // This won't be left undefined forever ... eventually the intializer
-    // should be true or false depending on the result of the
-    // comparison.
-    let v = new Variable(arg1Type, d.args[2].description, undefined)
+    // Initializer just stores info about the params and the instruction type
+    // since we won't know the result until runtime.
+    let v = new Variable(arg1Type, d.args[2].description, [
+      d.args[0],
+      "sub",
+      d.args[1],
+    ])
     this.variables.set(d.args[2].description, v)
   }
 
@@ -251,8 +256,6 @@ class Context {
 // -----------------------
 // Validation Functions
 // -----------------------
-
-// FOR FUNCTION CALLS
 
 export default function analyze(node) {
   const initialContext = new Context({})

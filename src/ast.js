@@ -88,22 +88,22 @@ const astBuilder = grammar.createSemantics().addOperation("ast", {
   List(_open, contents, _close) {
     return new core.List(contents.asIteration().ast())
   },
-  id(_first, _second, _third, _rest) {
+  id(_first, _rest) {
     return new core.Token("Id", this.source)
   },
   funcName(_hash, _id) {
     return new core.Token("Id", this.source)
   },
-  str(_openQuote, _chars, _closeQuote) {
+  strlit(_openQuote, _chars, _closeQuote) {
     return new core.Token("Str", this.source)
   },
-  bool(_falsity) {
+  boollit(_falsity) {
     return new core.Token("Bool", this.source)
   },
-  int(_negative, _digits) {
+  intlit(_negative, _digits) {
     return new core.Token("Int", this.source)
   },
-  float(_negative, _whole, _point, _fraction, _e, _sign, _exponent) {
+  floatlit(_negative, _whole, _point, _fraction, _e, _sign, _exponent) {
     return new core.Token("Float", this.source)
   },
   _terminal() {

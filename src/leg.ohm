@@ -41,41 +41,49 @@ leg {
             | Exp4
     Exp4    = Exp5 "^" Exp4                   --binary
             | Exp5      
-    Exp5    = bool
-            | float
-            | int
-            | str
+    Exp5    = boollit
+            | floatlit
+            | intlit
+            | strlit
             | List
             | id                                            --id
     
-    keyword = print | true | false | int | float | bool 
+    keyword =  print | true | false | int | float | bool | list
             | list |  branch | branchLink | if | cmp 
             | add | sub | else
-    id      = ~keyword letter+ "_"? id? alnum*
 
-    str = "\"" char* "\""
-    int = ("-")? digit+
-    float = ("-")? digit+ "." digit+ (("E" | "e") ("+" | "-")? digit+)?
-    bool = true | false
+    strlit = "\"" char* "\""
+    intlit = ("-")? digit+
+    floatlit = ("-")? digit+ "." digit+ (("E" | "e") ("+" | "-")? digit+)?
+    boollit = true | false
     List = "[" ListOf<Exp, ","> "]"
     
     logicop = ("!&" | "!|" | "!")
     relop   = ("<=" | "<" | "!=" | "==" | ">=" | ">")
 
-    print = "prt" ~alnum
-    true = "true" ~alnum
-    false = "false" ~alnum
-    funcName = "#" id ~alnum
-    branch = "b" ~alnum 
-    branchLink = "bl" ~alnum
-    cmp = "cmp" ~alnum
-    add = "add" ~alnum
-    sub = "sub" ~alnum
-    if = "#if" ~alnum
-    else = "else" ~alnum
-    in = "in" ~alnum
-    loop = "#loop" ~alnum
-    list = "list" ~alnum
+    print = "prt" ~idchar
+    true = "true" ~idchar
+    false = "false" ~idchar
+    funcName = "#" id ~idchar
+    branch = "b" ~idchar 
+    branchLink = "bl" ~idchar
+    cmp = "cmp" ~idchar
+    add = "add" ~idchar
+    sub = "sub" ~idchar
+    if = "#if" ~idchar
+    else = "else" ~idchar
+    in = "in" ~idchar
+    loop = "#loop" ~idchar
+    list = "list" ~idchar
+    str = "str" ~idchar
+    int = "int" ~idchar
+    float = "float" ~idchar
+    bool = "bool" ~idchar
+
+    idchar = "_" | alnum
+    id  = ~keyword letter idchar*
+
+
         
     char = ~"\"" ~"\n" any 
     space += "@" (~"\n" any)* --comment
