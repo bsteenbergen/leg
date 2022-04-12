@@ -21,6 +21,16 @@ const syntaxChecks = [
     #
     `,
   ],
+  [
+    "if else block",
+    `
+    #if !raining:
+      prt "It's not raining!"
+    #else: 
+      prt "Bring an umbrella!"
+    #
+    `,
+  ],
   ["list declaration", 'list letters = ["a", "b", "c"]'],
   ["empty list declaration", "list letters = []"],
   ["reassign list", "letters = [1, 2, 3]"],
@@ -39,6 +49,14 @@ const syntaxErrors = [
     `
     if x > 1:
       prt 3
+    `,
+  ],
+  [
+    "else without an if",
+    `
+    else:
+      prt 3
+    #
     `,
   ],
 ]

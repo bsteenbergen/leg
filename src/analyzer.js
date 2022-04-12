@@ -8,10 +8,9 @@ class Context {
     parent = null,
     functions = new Map(),
     variables = new Map(),
-    inLoop = false,
     function: f = null,
   }) {
-    Object.assign(this, { parent, functions, variables, inLoop, function: f })
+    Object.assign(this, { parent, functions, variables, function: f })
   }
   sees(name) {
     // Search "outward" through enclosing scopes
@@ -115,7 +114,6 @@ class Context {
     const childContext = this.newChildContext({
       functions: this.functions,
       variables: this.variables,
-      inLoop: false,
       function: func,
     })
     childContext.analyze(suite.statements)

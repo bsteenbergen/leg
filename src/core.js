@@ -55,8 +55,8 @@ export class FunctionCall {
 }
 
 export class IfStatement {
-  constructor(condition, suite) {
-    Object.assign(this, { condition, suite })
+  constructor(condition, suite, elseSuite) {
+    Object.assign(this, { condition, suite, elseSuite })
   }
 }
 

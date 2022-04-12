@@ -43,8 +43,8 @@ const astBuilder = grammar.createSemantics().addOperation("ast", {
   FunCall(link, funcName, condition) {
     return new core.FunctionCall(link.ast(), funcName.ast(), condition.ast())
   },
-  IfStmt(_if, condition, _colon, suite) {
-    return new core.IfStatement(condition.ast(), suite.ast())
+  IfStmt(_if, condition, _colon, suite, _else, _colon2, elseSuite) {
+    return new core.IfStatement(condition.ast(), suite.ast(), elseSuite.ast())
   },
   Instruction_cmp(_cmp, args) {
     return new core.CompareInstruction(args.asIteration().ast())

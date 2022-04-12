@@ -25,7 +25,7 @@ leg {
         
     Type = "int" | "float" | "str" | "bool" | "list"
     
-    IfStmt  = if Exp ":" Suite
+    IfStmt  = if Exp ":" Suite (else ":" Suite)?
                 
     Exp     = Exp "||" Exp0           --or
             | Exp "&&" Exp0           --and
@@ -50,7 +50,7 @@ leg {
     
     keyword = print | true | false | int | float | bool 
             | list |  branch | branchLink | if | cmp 
-            | add | sub
+            | add | sub | else
     id      = ~keyword letter+ "_"? id? alnum*
 
     str = "\"" char* "\""
@@ -72,6 +72,7 @@ leg {
     add = "add" ~alnum
     sub = "sub" ~alnum
     if = "#if" ~alnum
+    else = "else" ~alnum
     in = "in" ~alnum
     loop = "#loop" ~alnum
     list = "list" ~alnum

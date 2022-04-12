@@ -83,7 +83,7 @@ const ifStmt = `#if x < 1 :
   x = x + 1
 #`
 const ifStmtExpected = `   1 | Program statements=[#2]
-   2 | IfStatement condition=#3 suite=#4
+   2 | IfStatement condition=#3 suite=#4 elseSuite=[]
    3 | BinaryExpression left=(Id,"x") op='<' right=(Int,"1")
    4 | Suite statements=[#5]
    5 | VariableAssignment name=(Id,"x") initializer=#6
