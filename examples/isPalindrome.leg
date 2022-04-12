@@ -1,0 +1,16 @@
+str to_check = "ABBA"
+bool palidrome = true
+
+#is_palidrome:
+    int left = 0
+    int right = len to_check - 1
+    #loop:
+        #if to_check[left] != to_check[right]:
+            palidrome = false 
+            break all 
+        #
+        left = left + 1 
+        right = right + 1
+        b left >= right @ branch iff left >= right 
+    #
+#

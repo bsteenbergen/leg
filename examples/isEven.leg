@@ -1,0 +1,7 @@
+bool answer = false
+int num = 10
+#is_even:
+    #if num % 2 == 0:
+        answer = true
+    #
+#

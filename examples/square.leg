@@ -1,0 +1,5 @@
+int result = -1
+int number = 23
+#square:
+    result = number ^ 2
+#
