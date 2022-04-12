@@ -1,8 +1,8 @@
 {
-  "name": "mum",
+  "name": "leg",
   "version": "1.0.0",
-  "description": "Compiler for mum",
-  "main": "src/mum.js",
+  "description": "Compiler for leg",
+  "main": "src/leg.js",
   "type": "module",
   "directories": {
     "doc": "docs",

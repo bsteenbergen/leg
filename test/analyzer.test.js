@@ -36,10 +36,30 @@ const semanticChecks = [
       b #print_values`,
   ],
   [
-    "cmp instruction",
+    "valid cmp instruction with undeclared result variable",
     `
     str three = "3"
     cmp 3 three result
+    `,
+  ],
+  [
+    "valid cmp instruction with pre-declared result variable",
+    `
+    str three = "3"
+    bool result = false
+    cmp 3 three result
+    `,
+  ],
+  [
+    "valid add instruction with undeclared result variable",
+    `
+    add 3 5 sum
+    `,
+  ],
+  [
+    "valid add instruction with pre-declared result variable",
+    `
+    add [1, 2, 3] [4, 5, 6] sum
     `,
   ],
   [
@@ -161,6 +181,29 @@ const semanticErrors = [
     "cmp instruction with wrong number of args",
     "cmp 1 2",
     /Error: cmp instruction must have exactly three arguments/,
+  ],
+  [
+    "cmp instruction with non-boolean result variable",
+    `
+    str r = ""
+    cmp 1 2 r
+    `,
+    /Error: Result of comparison r must be a boolean/,
+  ],
+  [
+    "add instruction with wrong number of args",
+    "add 1 2",
+    /Error: add instruction must have exactly three arguments/,
+  ],
+  [
+    "add instruction with args of different types",
+    'add 1.0 "hello" result',
+    /Error: add instruction parameters must be the same type/,
+  ],
+  [
+    "add instruction with uninitialized value to compare",
+    "add 1 my_int result",
+    /Error: Variable my_int is undeclared/,
   ],
   [
     "variable initilized with wrong type",

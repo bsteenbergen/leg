@@ -4,8 +4,8 @@ import fs from "fs/promises"
 import process from "process"
 import compile from "./compiler.js"
 
-const help = `mum compiler
-Syntax: node mum.js <filename> <outputType>
+const help = `leg compiler
+Syntax: node leg.js <filename> <outputType>
 Prints to stdout according to <outputType>, which must be one of:
  ast    the abstract syntax tree
  analyzed  the semantically analyzed representation

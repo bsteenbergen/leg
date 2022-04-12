@@ -18,7 +18,7 @@ import { type } from "os"
 import { takeCoverage } from "v8"
 import * as core from "./core.js"
 
-const grammar = ohm.grammar(fs.readFileSync("src/mum.ohm"))
+const grammar = ohm.grammar(fs.readFileSync("./src/leg.ohm"))
 
 const astBuilder = grammar.createSemantics().addOperation("ast", {
   Program(statements) {

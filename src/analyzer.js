@@ -55,10 +55,6 @@ class Context {
     }
   }
 
-  BinaryExpression(d) {
-    console.log("BinaryExpression from analyzer")
-  }
-
   VariableDeclaration(d) {
     let type = d.type.typeName.lexeme
     let name = d.name.lexeme
@@ -167,8 +163,48 @@ class Context {
   }
 
   CompareInstruction(d) {
+    this.ValidateGenericInstruction(d, "cmp")
+    // If arg_3 already exists, make sure it's a boolean.
+    if (this.variables.has(d.args[2].description)) {
+      if (this.variables.get(d.args[2].description).type !== "bool") {
+        error(`Result of comparison ${d.args[2].description} must be a boolean`)
+      }
+    }
+    // This won't be left undefined forever ... eventually the intializer
+    // should be true or false depending on the result of the
+    // comparison.
+    let v = new Variable("bool", d.args[2].description, undefined)
+    this.variables.set(d.args[2].description, v)
+  }
+
+  AddInstruction(d) {
+    this.ValidateGenericInstruction(d, "add")
+    // If arg_3 already exists, make sure it's a boolean.
+    if (this.variables.has(d.args[2].description)) {
+      if (this.variables.get(d.args[2].description).type !== "bool") {
+        error(`Result of comparison ${d.args[2].description} must be a boolean`)
+      }
+    }
+    let arg1Type = this.variables.has(d.args[0].description)
+      ? this.variables.get(d.args[0].description).type
+      : d.args[0].category
+    let arg2Type = this.variables.has(d.args[1].description)
+      ? this.variables.get(d.args[1].description).type
+      : d.args[1].category
+    // Types must be the same.
+    if (arg1Type !== arg2Type) {
+      error(`add instruction parameters must be the same type`)
+    }
+    // This won't be left undefined forever ... eventually the intializer
+    // should be true or false depending on the result of the
+    // comparison.
+    let v = new Variable("bool", d.args[2].description, undefined)
+    this.variables.set(d.args[2].description, v)
+  }
+
+  ValidateGenericInstruction(d, instructionName) {
     if (d.args.length !== 3) {
-      error(`cmp instruction must have exactly three arguments.`)
+      error(`${instructionName} instruction must have exactly three arguments.`)
     }
     // If either arg_1 and arg_2 are variables, they must be initialized already.
     d.args.slice(0, -1).forEach((arg) => {

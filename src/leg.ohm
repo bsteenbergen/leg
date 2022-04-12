@@ -18,16 +18,15 @@ leg {
     FunCall = (branch | branchLink) funcName (Exp)?
     
     Instruction = cmp (ListOf<Exp5, "">) --cmp
-    			| add (ListOf<Exp5, "">) --add
+    		| add (ListOf<Exp5, "">) --add
+                | sub (ListOf<Exp5, "">) --sub
     
     Suite   = Stmt* "#"
         
     Type = "int" | "float" | "str" | "bool" | "list"
     
     IfStmt  = if Exp ":" Suite
-    
-    //Exp = id | float | int | str | bool
-            
+                
     Exp     = Exp "||" Exp0           --or
             | Exp "&&" Exp0           --and
             | Exp0
@@ -49,7 +48,9 @@ leg {
             | List
             | id                                            --id
     
-    keyword = print | true | false | int | float | bool | list |  branch | branchLink | if | cmp | add
+    keyword = print | true | false | int | float | bool 
+            | list |  branch | branchLink | if | cmp 
+            | add | sub
     id      = ~keyword letter+ "_"? id? alnum*
 
     str = "\"" char* "\""
@@ -69,6 +70,7 @@ leg {
     branchLink = "bl" ~alnum
     cmp = "cmp" ~alnum
     add = "add" ~alnum
+    sub = "sub" ~alnum
     if = "#if" ~alnum
     in = "in" ~alnum
     loop = "#loop" ~alnum
