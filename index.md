@@ -29,9 +29,7 @@ Here are a few examples of mum functionalities
 
 #### Functions
 
-| ----------------- | ----------------------------- |
-| hello world! | prt "Hello, World!" |
-| Combining Strings| str str_1 = "Hello, "
-str sr_2 = "World!"
-#combineStrings:
-add str_1 str_2 result |
+| Name of functionality | Code                                                                                   |
+| --------------------- | -------------------------------------------------------------------------------------- |
+| Printing              | prt "Hello, World!"                                                                    |
+| Combining Strings     | str str_1 = "Hello, "str sr_2 = "World!"<br>#combineStrings:<br>add str_1 str_2 result |
