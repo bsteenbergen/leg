@@ -52,6 +52,9 @@ const astBuilder = grammar.createSemantics().addOperation("ast", {
   Instruction_add(_cmp, args) {
     return new core.AddInstruction(args.asIteration().ast())
   },
+  Instruction_sub(_cmp, args) {
+    return new core.SubInstruction(args.asIteration().ast())
+  },
   Exp_or(left, op, right) {
     return new core.BinaryExpression(left.ast(), op.sourceString, right.ast())
   },

@@ -8,7 +8,9 @@ const syntaxChecks = [
   ["empty list declaration", "list letters = []"],
   ["reassign list", "letters = [1, 2, 3]"],
   ["add instruction (numbers)", "add 1 3 result"],
-  ["add instruction (strings)", 'add [1, 2, 3] ["cat", "dog"] result'],
+  ["add instruction (lists)", 'add [1, 2, 3] ["cat", "dog"] x'],
+  ["sub instruction (strings)", 'sub "hi" " and shalom" result'],
+  ["sub instruction (floats)", "sub 9.999 -10.0 r"],
 ]
 
 // Programs with syntax errors that the parser will detect

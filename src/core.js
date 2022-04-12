@@ -72,6 +72,12 @@ export class AddInstruction {
   }
 }
 
+export class SubInstruction {
+  constructor(args) {
+    Object.assign(this, { args })
+  }
+}
+
 export class Suite {
   constructor(statements) {
     this.statements = statements

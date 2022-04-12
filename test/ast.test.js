@@ -113,7 +113,7 @@ const initVarAsRelopResultExpected = `   1 | Program statements=[#2]
    3 | TypeName typeName=(Sym,"bool")
    4 | BinaryExpression left=(Int,"9") op='>' right=(Int,"10")`
 
-// console.log(util.format(ast(//)))
+// console.log(util.format(ast(addInstruction)))
 
 describe("The AST generator produces a correct AST for ", () => {
   it("print statements", () => {

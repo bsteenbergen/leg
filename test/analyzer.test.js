@@ -59,7 +59,21 @@ const semanticChecks = [
   [
     "valid add instruction with pre-declared result variable",
     `
+    list sum = []
     add [1, 2, 3] [4, 5, 6] sum
+    `,
+  ],
+  [
+    "valid sub instruction with undeclared result variable",
+    `
+    sub "hello" "goodbye" result
+    `,
+  ],
+  [
+    "valid sub instruction with pre-declared result variable",
+    `
+    list diff = []
+    sub [1, 2, 3] [1, 2, 3, 4, 5, 6] diff
     `,
   ],
   [
@@ -199,6 +213,16 @@ const semanticErrors = [
     "add instruction with args of different types",
     'add 1.0 "hello" result',
     /Error: add instruction parameters must be the same type/,
+  ],
+  [
+    "add instruction with result of incorrect type",
+    `
+    list l1 = ["hello"]
+    list l2 = ["world"]
+    int result = 0
+    add l1 l2 result
+    `,
+    /Error: Result of add instruction must be same type as arguments/,
   ],
   [
     "add instruction with uninitialized value to compare",

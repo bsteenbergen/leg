@@ -179,26 +179,23 @@ class Context {
 
   AddInstruction(d) {
     this.ValidateGenericInstruction(d, "add")
-    // If arg_3 already exists, make sure it's a boolean.
-    if (this.variables.has(d.args[2].description)) {
-      if (this.variables.get(d.args[2].description).type !== "bool") {
-        error(`Result of comparison ${d.args[2].description} must be a boolean`)
-      }
-    }
-    let arg1Type = this.variables.has(d.args[0].description)
-      ? this.variables.get(d.args[0].description).type
-      : d.args[0].category
-    let arg2Type = this.variables.has(d.args[1].description)
-      ? this.variables.get(d.args[1].description).type
-      : d.args[1].category
-    // Types must be the same.
-    if (arg1Type !== arg2Type) {
-      error(`add instruction parameters must be the same type`)
-    }
+    // Check types of arguments
+    let arg1Type = this.ValidateArithmeticInstructionArguments(d, "add")
     // This won't be left undefined forever ... eventually the intializer
     // should be true or false depending on the result of the
     // comparison.
-    let v = new Variable("bool", d.args[2].description, undefined)
+    let v = new Variable(arg1Type, d.args[2].description, undefined)
+    this.variables.set(d.args[2].description, v)
+  }
+
+  SubInstruction(d) {
+    this.ValidateGenericInstruction(d, "sub")
+    // Check types of arguments
+    let arg1Type = this.ValidateArithmeticInstructionArguments(d, "sub")
+    // This won't be left undefined forever ... eventually the intializer
+    // should be true or false depending on the result of the
+    // comparison.
+    let v = new Variable(arg1Type, d.args[2].description, undefined)
     this.variables.set(d.args[2].description, v)
   }
 
@@ -212,6 +209,40 @@ class Context {
         error(`Variable ${arg.description} is undeclared`)
       }
     })
+  }
+
+  ValidateArithmeticInstructionArguments(d, instructionName) {
+    // Set arg1 type.
+    let arg1Type
+    if (this.variables.has(d.args[0].description)) {
+      arg1Type = this.variables.get(d.args[0].description).type
+    } else if (d.args[0].constructor === Token) {
+      arg1Type = d.args[0].category
+    } else {
+      arg1Type = d.args[0].constructor.name.toLowerCase()
+    }
+    // Set arg2 type.
+    let arg2Type
+    if (this.variables.has(d.args[1].description)) {
+      arg2Type = this.variables.get(d.args[1].description).type
+    } else if (d.args[1].constructor === Token) {
+      arg2Type = d.args[1].category
+    } else {
+      arg2Type = d.args[1].constructor.name.toLowerCase()
+    }
+    // Types must be the same.
+    if (arg1Type !== arg2Type) {
+      error(`add instruction parameters must be the same type`)
+    }
+    // If arg_3 already exists, make sure it's the same type as arg_1 and arg_2.
+    if (this.variables.has(d.args[2].description)) {
+      if (this.variables.get(d.args[2].description).type !== arg1Type) {
+        error(
+          `Result of ${instructionName} instruction must be same type as arguments.`
+        )
+      }
+    }
+    return arg1Type
   }
 
   Array(a) {
