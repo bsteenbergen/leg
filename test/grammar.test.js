@@ -4,9 +4,27 @@ import ast from "../src/ast.js"
 // Programs expected to be syntactically correct
 const syntaxChecks = [
   ["simplest syntactically correct program", 'prt "hi"'],
+  [
+    "if statement",
+    `
+    #if x < 1 :
+	    x = x + 1
+    #
+    `,
+  ],
+  [
+    "loop",
+    `
+    #loop:
+	    mumble "hi"
+      b #loop x < 10 @ "loop only if x < 10
+    #
+    `,
+  ],
   ["list declaration", 'list letters = ["a", "b", "c"]'],
   ["empty list declaration", "list letters = []"],
   ["reassign list", "letters = [1, 2, 3]"],
+  ["cmp instruction", "cmp var_1 var_2 result"],
   ["add instruction (numbers)", "add 1 3 result"],
   ["add instruction (lists)", 'add [1, 2, 3] ["cat", "dog"] x'],
   ["sub instruction (strings)", 'sub "hi" " and shalom" result'],
@@ -14,7 +32,16 @@ const syntaxChecks = [
 ]
 
 // Programs with syntax errors that the parser will detect
-const syntaxErrors = []
+const syntaxErrors = [
+  ["malformed print statement", 'prt("hi")'],
+  [
+    "malformed if statement",
+    `
+    if x > 1:
+      prt 3
+    `,
+  ],
+]
 
 describe("The parser", () => {
   for (const [scenario, source] of syntaxChecks) {
