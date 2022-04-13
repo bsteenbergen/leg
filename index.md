@@ -27,7 +27,13 @@ Intended to mimic the notorious ARMSim#, our language, LEG, is a blend of assemb
 
 Here are a few examples of LEG programs
 
-### combineStrings.leg
+### Printing
+
+```
+prt "Hello, World!"
+```
+
+### Combining Strings
 
 ```
 str str_1 = "Hello, "
@@ -38,4 +44,37 @@ str sr_2 = "World!"
 #
 
 prt result
+```
+
+### Checking if Even
+
+```
+bool answer = false
+int num = 10
+#is_even:
+    #if num % 2 == 0:
+        answer = true
+    #
+#
+```
+
+### Checking if Palindrome
+
+```
+str to_check = "ABBA"
+bool palidrome = true
+
+#is_palidrome:
+    int left = 0
+    int right = len to_check - 1
+    #loop:
+        #if to_check[left] != to_check[right]:
+            palidrome = false
+            break all
+        #
+        left = left + 1
+        right = right + 1
+        b left >= right @ branch iff left >= right
+    #
+#
 ```
