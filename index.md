@@ -25,12 +25,17 @@ Intended to mimic the notorious ARMSim#, our language, LEG, is a blend of assemb
 
 ## Examples
 
-Here are a few examples of mum functionalities
+Here are a few examples of LEG programs
 
-#### Functions
+### combineStrings.leg
 
-| Name of functionality | Code                                                                                                |
-| --------------------- | --------------------------------------------------------------------------------------------------- |
-| Printing              | prt "Hello, World!"                                                                                 |
-| Combining Strings     | str str_1 = "Hello, "str sr_2 = "World!"<br>#combineStrings:<br>add str_1 str_2 result              |
-| Checking if Even      | bool answer = false<br>int num = 10<br>#is_even:<br> #if num % 2 == 0:<br> answer = true<br> #<br># |
+```
+str str_1 = "Hello, "
+str sr_2 = "World!"
+
+#combineStrings:
+    add str_1 str_2 result
+#
+
+prt result
+```
