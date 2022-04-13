@@ -1,4 +1,4 @@
-<img src="https://raw.githubusercontent.com/bsteenbergen/mum/main/docs/mum_logo.PNG" width="600" height="200"/>
+<img src="https://raw.githubusercontent.com/bsteenbergen/mum/main/docs/leg_logo_1.jpeg" width="600" height="200"/>
 
 # LEG
 
