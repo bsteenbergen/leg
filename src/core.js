@@ -94,6 +94,7 @@ export class Type {
   static INT = new Type("int")
   static FLOAT = new Type("float")
   static STRING = new Type("str")
+  static BOOL = new Type("bool")
   constructor(typeName) {
     Object.assign(this, { typeName })
   }

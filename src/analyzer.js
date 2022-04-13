@@ -88,8 +88,8 @@ class Context {
       // If it has, throw!
       error(`Must initialize variables before asignment`)
     }
-    // TODO: TYPE CHECKING HERE
   }
+
   FunctionDeclaration(d) {
     let funcName = d.funcName.lexeme // This still has the #. Should we keep it?
     let suite = d.suite
