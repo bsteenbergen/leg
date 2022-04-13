@@ -1,225 +1,107 @@
 <img src="https://raw.githubusercontent.com/bsteenbergen/mum/main/docs/mum_logo.PNG" width="600" height="200"/>
 
-# mum
+# LEG
 
-In “The Philosophy of Ruby: A Conversation with Yukihiro Matsumoto, Part I”, the creator of the Ruby programming language says the following:
+LEG is like assembly language, but better
 
-"Often people, especially computer engineers, focus on the machines. They think, 'By doing this, the machine will run faster. By doing this, the machine will run more effectively. By doing this, the machine will something something something.' They are focusing on machines. But in fact we need to focus on humans, on how humans care about doing programming or operating the application of the machines. We are the masters. They are the slaves."
+## Background
 
-Inspired by Matsumoto’s comments on writing programming languages for humans as opposed to for machines, our team sought to design a language that emphasizes readability, yet still allows users to construct programs quickly. Our language, “mum” (an adjective meaning “quiet” or “silent”), is designed to let users “do the most with the least”, meaning that it allows for efficient programming without the lack of readability inherent in languages that prioritize terse syntax.
+Intended to mimic the notorious ARMSim#, our language, LEG, is a blend of assembly and JavaScript code for a fun time with assembly. Whether you know Assembly or JavaScript, you are guaranteed to enjoy working with it. Assembly can be tedious and frustrating, for those reasons we bring to you a new and improved assembly-esque language, taking the best of both worlds. Assembly language is for the purpose of creating human-readable code that is as close as possible to machine language. LEG will be similar in that sense because it is a higher level language intended to be close to assembly. Now break a LEG!
 
-mum is a general purpose programming language intended for beginner to intermediate programmers.
+## Features
 
-**[Check out our mum website](https://bsteenbergen.github.io/mum/)**!
+- FEATURE 1
+- FEATURE 2
+- FEATURE 3
+- FEATURE 4
+- FEATURE 5
+- FEATURE 6
 
-## Authors
+## Examples
 
-- [Elena Martinez](https://github.com/elenasmartinez)
-- [Brittany Steenbergen](https://github.com/bsteenbergen)
-- [Kira Toal](https://github.com/kirakira0)
-- [Halle Vogelpohl](https://github.com/hallegv)
+Here are a few examples of LEG programs
 
-# Features
+### Printing
 
-- Static Typing
-- Functions
-- Built-In Data Structures
-- Single and Multi-line Comments
-- Flexible Loop Declarations
-- Conditional Statements
+```
+prt "Hello, World!"
+```
 
-# Types and Data Structures
+### Combining Strings
 
-mum's types and built-in data structures are similar to those of Python.
+```
+str str_1 = "Hello, "
+str sr_2 = "World!"
 
-## Types
+#combineStrings:
+    add str_1 str_2 result
+#
 
-| JavaScript | mum  |
-| ---------- | ---- |
-| boolean    | bool |
-| string     | str  |
-| number     | num  |
+prt result
+```
 
-## Data Structures
+### Checking if Even
 
-| JavaScript | mum  |
-| ---------- | ---- |
-| Array      | List |
-| Set        | Set  |
-| Object     | Map  |
+```
+bool answer = false
+int num = 10
+#is_even:
+    #if num % 2 == 0:
+        answer = true
+    #
+#
+```
 
-# Operators and Comparators
+### Checking if Palindrome
 
-## Arithmetic Operators
+```
+str to_check = "ABBA"
+bool palidrome = true
 
-| JavaScript | mum       |
-| ---------- | --------- |
-| x = 2      | x = 2     |
-| x + 2      | x + 2     |
-| x - 2      | x - 2     |
-| x \* 2     | x \* 2    |
-| x / 2      | x / 2     |
-| x % 2      | rem x / 2 |
-| x \*\* 2   | x ^ 2     |
+#is_palidrome:
+    int left = 0
+    int right = len to_check - 1
+    #loop:
+        #if to_check[left] != to_check[right]:
+            palidrome = false
+            break all
+        #
+        left = left + 1
+        right = right + 1
+        b left >= right @ branch iff left >= right
+    #
+#
+```
 
-## Logical Operators
+### Grade Checker
 
-| Operation | JavaScript | mum    |
-| --------- | ---------- | ------ | --- |
-| AND       | &&         | &&     |
-| OR        | `\|\|`     | `\|\|` |
-| NOT       | !          | !      |
-| NAND      |            | !&     |
-| NOR       |            | !      |     |
-
-## Comparators
-
-| JavaScript | mum    |
-| ---------- | ------ |
-| x > 2      | x > 2  |
-| x < 2      | x < 2  |
-| x >= 2     | x >= 2 |
-| x <= 2     | x <= 2 |
-| x == 2     | x == 2 |
-| x != 2     | x != 2 |
-
-# Functions
-
-mum function declarations require the following components:
-
-- The "task" keyword to denote the use of a function
-- The function name
-- Function inputs
-- Optionally, the user may return a value using the "yields keyword"
-  - "yields" must be followed either by an expression, or an identifier, a colon, and a statement
-
-### Void Functions
-
-<table>
-  <th>JavaScript</th><th>mum</th>
-  <tr>
-    <td>
-      <pre style="margin-left: 0; width:100%">
-function sayHi() {
-  console.log(“Hi!”);
-}
-    </td>
-    <td>
-      <pre style="margin-left: 0; width:100%">
-task sayHi():
-  prt "Hi!"
-    </td>
-  </tr>
-</table>
-
-### Non-Void Functions
-
-<table>
-  <th>JavScript</th><th>mum</th>
-  <tr>
-    <td>
-      <pre style="margin-left: 0; width:100%">
-function square(num) {
-  returns num**2;
-}
-    </td>
-    <td>
-      <pre style="margin-left: 0; width:100%">
-task square(num n) yields n^2
-    </td>
-  </tr>
-</table>
-
-### Non-Void Functions With Return Value in Method Signature
-
-<table>
-  <th>JavaScript</th><th>mum</th>
-  <tr>
-    <td>
-      <pre style="margin-left: 0; width:100%">
-function greet(name) {
-  let greeting = "Hello, "
-  let exclamations = ""
-  for (let i = 0; i < len(name); i++) {
-    exclamations += "!"
-  }
-  const fullGreeting = greeting + name + exclamations
-  return fullGreeting
-}
-    </td>
-    <td>
-      <pre style="margin-left: 0; width:100%">
-task greet(str name) yields fullGreeting:
-  str greeting = "Hello, "
-  str exclamations = ""
-  iter = 0 loop iter += 1 until iter = len(name):
-    exclamations += "!"
-  str fullGreeting = greeting + name + exclamations 
-    </td>
-  </tr>
-</table>
-
-# Loops
-
-mum loops can be declared in several different ways. Users may define an iterator, step logic, and a stopping condition to create a loop reminiscent of JavaScript for loops. The syntax is as follows:
-
-[iterator definition] loop [step logic] until [stop condition]
-
-For example:
-
-<table>
-  <tr>
-    <td>
-      <pre style="margin-left: 0; width:100%">
-  num iter = 0 loop iter += 2 until iter == 10: 
-    prt("Hello!)
-    </td>
-  </tr>
-</table>
-  
-If the user does not wish to use an iterator, they may build something more akin to a while loop by declaring a loop with the following syntax:
-
-loop until [stop condition]
-
-For example:
-
-<table>
-  <tr>
-    <td>
-      <pre style="margin-left: 0; width:100%">
-  loop until !sunny: 
-    rainyDays += 1
-    </td>
-  </tr>
-</table>
-
-# Comments
-
-## Single Line Comments
-
-<table>
-<tr>
-  <td>
-    <pre style="margin-left: 0; width:100%">
-  num dollarValue = 50.0 # Here's a single line comment!  
-  </td>
-</tr>
-</table>
-  
-## Multi-Line Comments 
-<table>
-<tr>
-  <td>
-    <pre style="margin-left: 0; width:100%">
-  task getAbsoluteValue(num n):
-    #* 
-    And here is a multi-line comment, for when you have a lot to say 
-    but want to keep your code looking clean!
-    *#
-    if n >= 0:
-        yield n
+```
+int percent = 87
+#letter_grade:
+    if percent >= 90:
+        prt "You got an A, amazing job."
+        break all
+    if percent >= 80 and percent < 90:
+        prt "You got an B, good job."
+        break all
+    if percent >= 70 and percent <80:
+        prt "You got a C, try a little harder next time."
+        break all
+    if percent >= 60 and percent <70:
+        prt "You got a D, good luck next time."
+        break all
     else:
-        yield -n 
-    </td>
-</tr>
-</table>
+        prt "You failed."
+#
+```
+
+### Squaring a Number
+
+```
+
+int result = -1
+int number = 23
+#square:
+    result = number ^ 2
+#
+```
