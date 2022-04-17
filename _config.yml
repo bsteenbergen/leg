@@ -77,7 +77,7 @@ logo: "leg_logo_2.png" # Site logo, also used in jekyll-seo-tag
 description: "mum is a general purpose programming language intended for beginner to intermediate programmers"
 url: "https://bsteenbergen.github.io/mum/"
 baseurl: ""
-repo: "https://github.com/bsteenbergen/mum"
+repo: "https://github.commum/bsteenbergen/"
 # disqus: "alembic-1" # Blog post comments, uncomment the option and set the site ID from your Disqus account
 # date_format: "%-d %B %Y" # Blog post date formatting using placeholder formatting
 # google_analytics: ""
@@ -100,11 +100,11 @@ favicons: # Favicons are also used in the manifest file. Syntax is 'size: path'
 # 9. Site navigation
 navigation_header:
   - title: Home
-    url: "https://bsteenbergen.github.io/mum/"
+    url: "https://bsteenbergen.github.io/leg/"
   - title: About us
     url: "https://elenasmartinez.github.io/mum-site/"
   - title: Fork LEG
-    url: "https://bsteenbergen.github.io/mum/"
+    url: "https://github.com/bsteenbergen/leg"
 
 navigation_footer:
   - title: Created by Kira, Brittany, Elena, Halle
