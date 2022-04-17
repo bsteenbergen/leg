@@ -10,12 +10,11 @@ Intended to mimic the notorious ARMSim#, our language, LEG, is a blend of assemb
 
 ## Features
 
-- FEATURE 1
-- FEATURE 2
-- FEATURE 3
-- FEATURE 4
-- FEATURE 5
-- FEATURE 6
+- assembly-like, built-in "instructions" (i.e. ADD, SUB, CMP)
+- if and else statements
+- binary and unary operations
+- standard arithmetic
+- no local variables (all variables are locally scoped)
 
 ## Examples
 
