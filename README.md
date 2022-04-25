@@ -4,7 +4,7 @@
 
 LEG is like assembly language, but better
 
-Check out our Leg Website here: https://bsteenbergen.github.io/leg/ 
+Check out our LEG Website here: https://bsteenbergen.github.io/leg/ 
 
 ## Background
 
