@@ -16,7 +16,7 @@ Intended to mimic the notorious ARMSim#, our language, LEG, is a blend of assemb
 - if and else statements
 - binary and unary operations
 - standard arithmetic
-- no local variables (all variables are locally scoped)
+- no local variables (all variables are globally scoped)
 
 ## Examples
 
