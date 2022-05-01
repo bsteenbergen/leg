@@ -27,10 +27,7 @@ class Context {
   }
   PrintStatement(d) {
     // If printing variable, check if it has been declared.
-    if (
-      d.argument.category === "Id" &&
-      !this.variables.has(d.argument.lexeme)
-    ) {
+    if (d.argument.category === "Id" && !this.variables.has(d.argument.lexeme)) {
       error(`Print statement argument "${d.argument.lexeme}" is uninitialized.`)
     }
   }
@@ -161,11 +158,7 @@ class Context {
     let arg1Type = this.ValidateArithmeticInstructionArguments(d, "add")
     // Initializer just stores info about the params and the instruction type
     // since we won't know the result until runtime.
-    let v = new Variable(arg1Type, d.args[0].description, [
-      d.args[1],
-      "add",
-      d.args[2],
-    ])
+    let v = new Variable(arg1Type, d.args[0].description, [d.args[1], "add", d.args[2]])
     this.variables.set(d.args[0].description, v)
   }
 
@@ -174,11 +167,7 @@ class Context {
     let arg1Type = this.ValidateArithmeticInstructionArguments(d, "sub")
     // Initializer just stores info about the params and the instruction type
     // since we won't know the result until runtime.
-    let v = new Variable(arg1Type, d.args[0].description, [
-      d.args[1],
-      "sub",
-      d.args[2],
-    ])
+    let v = new Variable(arg1Type, d.args[0].description, [d.args[1], "sub", d.args[2]])
     this.variables.set(d.args[0].description, v)
   }
 
@@ -222,9 +211,7 @@ class Context {
     // If arg_1 already exists, make sure it's the same type as arg_2 and arg_3.
     if (this.variables.has(d.args[0].description)) {
       if (this.variables.get(d.args[0].description).type !== arg2Type) {
-        error(
-          `Result of ${instructionName} instruction must be same type as arguments.`
-        )
+        error(`Result of ${instructionName} instruction must be same type as arguments.`)
       }
     }
     return arg2Type

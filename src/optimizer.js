@@ -16,6 +16,35 @@ const optimizers = {
     d.initializer = optimize(d.initializer)
     return d
   },
+  VariableAssignment(s) {
+    s.source = optimize(s.name)
+    s.target = optimize(s.initializer)
+    if (s.source === s.target) {
+      return []
+    }
+    return s
+  },
+  Variable(v) {
+    if (
+      // Three parameter instruction on two Numbers.
+      Array.isArray(v.value) &&
+      v.value.length === 3 &&
+      [v.value[0], v.value[2]].every((element) => {
+        return element.constructor === Number
+      })
+    ) {
+      switch (v.value[1]) {
+        case "add":
+          return new core.Variable(core.Type.INT, v.name, v.value[0] + v.value[2])
+          break
+        case "sub":
+          return new core.Variable(core.Type.INT, v.name, v.value[0] - v.value[2])
+          break
+        default: // cmp
+          return new core.Variable(core.Type.INT, v.name, v.value[0] === v.value[2])
+      }
+    }
+  },
   BinaryExpression(e) {
     e.op = optimize(e.op)
     e.left = optimize(e.left)
@@ -36,8 +65,7 @@ const optimizers = {
         else if (e.op === ">") return e.left > e.right
       } else if (e.left === 0 && e.op === "+") return e.right
       else if (e.left === 1 && e.op === "*") return e.right
-      else if (e.left === 0 && e.op === "-")
-        return new core.UnaryExpression("-", e.right)
+      else if (e.left === 0 && e.op === "-") return new core.UnaryExpression("-", e.right)
       else if (e.left === 1 && e.op === "^") return 1
       else if (e.left === 0 && ["*", "/"].includes(e.op)) return 0
     }
