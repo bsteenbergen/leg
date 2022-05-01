@@ -44,6 +44,15 @@ const tests = [
     new core.Variable(core.Type.INT, "result", false),
   ],
   [
+    "folds result of add instruction on two strings",
+    new core.Variable(
+      core.Type.INT,
+      "result",
+      new core.BinaryExpression("Hello and ", "+", "goodbye.")
+    ),
+    new core.Variable(core.Type.INT, "result", "Hello and goodbye."),
+  ],
+  [
     "passes through nonoptimizable constructs",
     ...Array(2).fill([
       new core.Program([

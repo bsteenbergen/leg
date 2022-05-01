@@ -31,31 +31,55 @@ const optimizers = {
     }
   },
   BinaryExpression(e) {
+    // FOR SOME TYPES (LIKE NUMBER ADDING AND STRING CONCAT), HANDLING IS THE SAME
+    // SO CONSIDER THE OUTER IF BE CHECKING OPERATOR
+    // AND INNER IFS BE CHECKING TYPES
     e.op = optimize(e.op)
     e.left = optimize(e.left)
     e.right = optimize(e.right)
-    // Arithmetic operations and relational operators.
-    if ([Number, BigInt].includes(e.left.constructor)) {
-      if ([Number, BigInt].includes(e.right.constructor)) {
-        if (e.op === "+") return e.left + e.right
-        else if (e.op === "-") return e.left - e.right
-        else if (e.op === "*") return e.left * e.right
-        else if (e.op === "/") return e.left / e.right
-        else if (e.op === "^") return e.left ** e.right
-        else if (e.op === "<") return e.left < e.right
-        else if (e.op === "<=") return e.left <= e.right
-        else if (e.op === "==") return e.left === e.right
-        else if (e.op === "!=") return e.left !== e.right
-        else if (e.op === ">=") return e.left >= e.right
-        else if (e.op === ">") return e.left > e.right
-      } else if (e.left === 0 && e.op === "+") return e.right
-      else if (e.left === 1 && e.op === "*") return e.right
-      else if (e.left === 0 && e.op === "-") return new core.UnaryExpression("-", e.right)
-      else if (e.left === 1 && e.op === "^") return 1
-      else if (e.left === 0 && ["*", "/"].includes(e.op)) return 0
-    }
-    // Now think about handling floats and other types
 
+    // SHARED CASES ACROSS NUM, BIGINT, AND STRING.
+    if (
+      [Number, BigInt, String].includes(e.left.constructor) &&
+      e.left.constructor === e.right.constructor
+    ) {
+      switch (e.op) {
+        case "+":
+          return e.left + e.right
+        case "-":
+          return e.left - e.right
+        case "==":
+          return e.left === e.right
+        case "!=":
+          return e.left !== e.right
+        default:
+          break
+      }
+    }
+    // CASES APPLICABLE ONLY TO NUMBER AND BIGINT.
+    if (
+      [Number, BigInt].includes(e.left.constructor) &&
+      e.left.constructor === e.right.constructor
+    ) {
+      switch (e.op) {
+        case "*":
+          return e.left * e.right
+        case "/":
+          return e.left / e.right
+        case "^":
+          return e.left ** e.right
+        case "<":
+          return e.left < e.right
+        case "<=":
+          return e.left <= e.right
+        case ">":
+          return e.left > e.right
+        case ">=":
+          return e.left >= e.right
+        default:
+          return
+      }
+    }
     return e
   },
   UnaryExpression(e) {
