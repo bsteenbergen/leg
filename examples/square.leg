@@ -1,5 +1,5 @@
-int result = -1
-int number = 23
+decl int result -1
+decl int number 23
 #square:
-    result = number ^ 2
+    asgn result number ^ 2
 #

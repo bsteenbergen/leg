@@ -1,8 +1,8 @@
-str str_1 = "Hello, "
-str sr_2 = "World!"
+decl str str_1 "Hello, "
+decl str sr_2 "World!"
 
 #combineStrings:
-    add str_1 str_2 result
+    add result str_1 str_2
 #
 
 prt result
