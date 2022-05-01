@@ -30,17 +30,17 @@ const tests = [
   ["optimizes **0", new core.BinaryExpression(x, "^", 0), 1],
   [
     "folds result of add instruction on two integers",
-    new core.Variable(core.Type.INT, "result", [10, "add", 20]),
-    new core.Variable(core.Type.INT, "result", 30),
+    new core.Variable(core.Type.INT, "result", new core.BinaryExpression(10, "+", 30)),
+    new core.Variable(core.Type.INT, "result", 40),
   ],
   [
     "folds result of sub instruction on two integers",
-    new core.Variable(core.Type.INT, "result", [10, "sub", 20]),
-    new core.Variable(core.Type.INT, "result", -10),
+    new core.Variable(core.Type.INT, "result", new core.BinaryExpression(10, "-", 30)),
+    new core.Variable(core.Type.INT, "result", -20),
   ],
   [
     "folds result of cmp instruction on two integers",
-    new core.Variable(core.Type.INT, "result", [10, "cmp", 20]),
+    new core.Variable(core.Type.INT, "result", new core.BinaryExpression(10, "==", 30)),
     new core.Variable(core.Type.INT, "result", false),
   ],
   [

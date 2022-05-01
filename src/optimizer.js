@@ -25,24 +25,9 @@ const optimizers = {
     return s
   },
   Variable(v) {
-    if (
-      // Three parameter instruction on two Numbers.
-      Array.isArray(v.value) &&
-      v.value.length === 3 &&
-      [v.value[0], v.value[2]].every((element) => {
-        return element.constructor === Number
-      })
-    ) {
-      switch (v.value[1]) {
-        case "add":
-          return new core.Variable(core.Type.INT, v.name, v.value[0] + v.value[2])
-          break
-        case "sub":
-          return new core.Variable(core.Type.INT, v.name, v.value[0] - v.value[2])
-          break
-        default: // cmp
-          return new core.Variable(core.Type.INT, v.name, v.value[0] === v.value[2])
-      }
+    if (v.value.constructor === core.BinaryExpression) {
+      const varValue = optimize(v.value)
+      return new core.Variable(v.type, v.name, varValue)
     }
   },
   BinaryExpression(e) {

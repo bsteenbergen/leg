@@ -101,6 +101,12 @@ export class Type {
   }
 }
 
+export class Instruction {
+  static ADD = new Instruction("add")
+  static SUB = new Instruction("sub")
+  static CMP = new Instruction("cmp")
+}
+
 export class TypeName {
   constructor(typeName) {
     this.typeName = typeName

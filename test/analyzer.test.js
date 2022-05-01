@@ -197,7 +197,7 @@ const semanticErrors = [
   [
     "cmp instruction with wrong number of args",
     "cmp 1 2",
-    /Error: cmp instruction must have exactly 3 arguments/,
+    /Error: Instruction must have exactly 3 arguments/,
   ],
   [
     "cmp instruction with non-boolean result variable",
@@ -210,7 +210,7 @@ const semanticErrors = [
   [
     "add instruction with wrong number of args",
     "add 1 2",
-    /Error: add instruction must have exactly 3 arguments/,
+    /Error: Instruction must have exactly 3 arguments/,
   ],
   [
     "add instruction with args of different types",
@@ -225,7 +225,7 @@ const semanticErrors = [
     decl int result 0
     add result l1 l2
     `,
-    /Error: Result of add instruction must be same type as arguments/,
+    /Error: Result of instruction must be same type as arguments/,
   ],
   [
     "add instruction with uninitialized value to compare",

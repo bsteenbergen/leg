@@ -1,5 +1,12 @@
 // SEMANTIC ANALYZER
-import { Variable, Function, error, BinaryExpression, Token } from "./core.js"
+import {
+  Variable,
+  Function,
+  error,
+  BinaryExpression,
+  Token,
+  Instruction,
+} from "./core.js"
 
 import * as stdlib from "./stdlib.js"
 
@@ -139,7 +146,7 @@ class Context {
   }
 
   CompareInstruction(d) {
-    this.ValidateInstructionParameterLength(d, "cmp", 3)
+    this.ValidateInstructionParameterLength(d, 3)
     // If arg_1 already exists, make sure it's a boolean.
     if (this.variables.has(d.args[0].description)) {
       if (this.variables.get(d.args[0].description).type !== "bool") {
@@ -148,34 +155,44 @@ class Context {
     }
     // Initializer just stores info about the params and the instruction type
     // since we won't know the result until runtime.
-    let v = new Variable("bool", d.args[0].description, undefined)
+    let v = new Variable(
+      "bool",
+      d.args[0].description,
+      new BinaryExpression(d.args[1], "===", d.args[2])
+    )
     this.variables.set(d.args[0].description, v)
   }
 
   AddInstruction(d) {
-    this.ValidateInstructionParameterLength(d, "add", 3)
+    this.ValidateInstructionParameterLength(d, 3)
     // Check types of arguments
-    let arg1Type = this.ValidateArithmeticInstructionArguments(d, "add")
+    let arg1Type = this.ValidateArithmeticInstructionArguments(d, Instruction.ADD)
     // Initializer just stores info about the params and the instruction type
     // since we won't know the result until runtime.
-    let v = new Variable(arg1Type, d.args[0].description, [d.args[1], "add", d.args[2]])
+    let v = new Variable(
+      arg1Type,
+      d.args[0].description,
+      new BinaryExpression(d.args[1], "+", d.args[2])
+    )
     this.variables.set(d.args[0].description, v)
   }
 
   SubInstruction(d) {
-    this.ValidateInstructionParameterLength(d, "sub", 3) // Check length of instruction
-    let arg1Type = this.ValidateArithmeticInstructionArguments(d, "sub")
+    this.ValidateInstructionParameterLength(d, 3) // Check length of instruction
+    let arg1Type = this.ValidateArithmeticInstructionArguments(d, Instruction.SUB)
     // Initializer just stores info about the params and the instruction type
     // since we won't know the result until runtime.
-    let v = new Variable(arg1Type, d.args[0].description, [d.args[1], "sub", d.args[2]])
+    let v = new Variable(
+      arg1Type,
+      d.args[0].description,
+      new BinaryExpression(d.args[1], "-", d.args[2])
+    )
     this.variables.set(d.args[0].description, v)
   }
 
-  ValidateInstructionParameterLength(d, instructionName, expectedLength) {
+  ValidateInstructionParameterLength(d, expectedLength) {
     if (d.args.length !== expectedLength) {
-      error(
-        `${instructionName} instruction must have exactly ${expectedLength} arguments.`
-      )
+      error(`Instruction must have exactly ${expectedLength} arguments.`)
     }
     // If either arg_2 or arg_3 are variables, they must be initialized already.
     d.args.slice(1, expectedLength).forEach((arg) => {
@@ -211,7 +228,7 @@ class Context {
     // If arg_1 already exists, make sure it's the same type as arg_2 and arg_3.
     if (this.variables.has(d.args[0].description)) {
       if (this.variables.get(d.args[0].description).type !== arg2Type) {
-        error(`Result of ${instructionName} instruction must be same type as arguments.`)
+        error(`Result of instruction must be same type as arguments.`)
       }
     }
     return arg2Type
