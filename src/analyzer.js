@@ -4,21 +4,11 @@ import { Variable, Function, error, BinaryExpression, Token } from "./core.js"
 import * as stdlib from "./stdlib.js"
 
 class Context {
-  constructor({
-    parent = null,
-    functions = new Map(),
-    variables = new Map(),
-    function: f = null,
-  }) {
-    Object.assign(this, { parent, functions, variables, function: f })
+  constructor({ parent = null, functions = new Map(), variables = new Map() }) {
+    Object.assign(this, { parent, functions, variables })
   }
-  // sees(name) {
-  // Search "outward" through enclosing scopes
-  //   return this.variables.has(name) // || this.parent?.sees(name)
-  // }
   add(name, entity) {
-    // No shadowing!
-    // if (this.sees(name)) error(`Identifier ${name} already declared`)
+    // Do not allow shadowing.
     this.variables.set(name, entity)
   }
   newChildContext(props) {
@@ -152,53 +142,54 @@ class Context {
   }
 
   CompareInstruction(d) {
-    this.ValidateGenericInstruction(d, "cmp")
-    // If arg_3 already exists, make sure it's a boolean.
-    if (this.variables.has(d.args[2].description)) {
-      if (this.variables.get(d.args[2].description).type !== "bool") {
-        error(`Result of comparison ${d.args[2].description} must be a boolean`)
+    this.ValidateInstructionParameterLength(d, "cmp", 3)
+    // If arg_1 already exists, make sure it's a boolean.
+    if (this.variables.has(d.args[0].description)) {
+      if (this.variables.get(d.args[0].description).type !== "bool") {
+        error(`Result of comparison ${d.args[0].description} must be a boolean`)
       }
     }
     // Initializer just stores info about the params and the instruction type
     // since we won't know the result until runtime.
-    let v = new Variable("bool", d.args[2].description, undefined)
-    this.variables.set(d.args[2].description, v)
+    let v = new Variable("bool", d.args[0].description, undefined)
+    this.variables.set(d.args[0].description, v)
   }
 
   AddInstruction(d) {
-    this.ValidateGenericInstruction(d, "add")
+    this.ValidateInstructionParameterLength(d, "add", 3)
     // Check types of arguments
     let arg1Type = this.ValidateArithmeticInstructionArguments(d, "add")
     // Initializer just stores info about the params and the instruction type
     // since we won't know the result until runtime.
-    let v = new Variable(arg1Type, d.args[2].description, [
-      d.args[0],
-      "add",
+    let v = new Variable(arg1Type, d.args[0].description, [
       d.args[1],
+      "add",
+      d.args[2],
     ])
-    this.variables.set(d.args[2].description, v)
+    this.variables.set(d.args[0].description, v)
   }
 
   SubInstruction(d) {
-    this.ValidateGenericInstruction(d, "sub")
-    // Check types of arguments
+    this.ValidateInstructionParameterLength(d, "sub", 3) // Check length of instruction
     let arg1Type = this.ValidateArithmeticInstructionArguments(d, "sub")
     // Initializer just stores info about the params and the instruction type
     // since we won't know the result until runtime.
-    let v = new Variable(arg1Type, d.args[2].description, [
-      d.args[0],
-      "sub",
+    let v = new Variable(arg1Type, d.args[0].description, [
       d.args[1],
+      "sub",
+      d.args[2],
     ])
-    this.variables.set(d.args[2].description, v)
+    this.variables.set(d.args[0].description, v)
   }
 
-  ValidateGenericInstruction(d, instructionName) {
-    if (d.args.length !== 3) {
-      error(`${instructionName} instruction must have exactly three arguments.`)
+  ValidateInstructionParameterLength(d, instructionName, expectedLength) {
+    if (d.args.length !== expectedLength) {
+      error(
+        `${instructionName} instruction must have exactly ${expectedLength} arguments.`
+      )
     }
-    // If either arg_1 and arg_2 are variables, they must be initialized already.
-    d.args.slice(0, -1).forEach((arg) => {
+    // If either arg_2 or arg_3 are variables, they must be initialized already.
+    d.args.slice(1, expectedLength).forEach((arg) => {
       if (arg.category === "Id" && !this.variables.has(arg.description)) {
         error(`Variable ${arg.description} is undeclared`)
       }
@@ -206,15 +197,6 @@ class Context {
   }
 
   ValidateArithmeticInstructionArguments(d, instructionName) {
-    // Set arg1 type.
-    let arg1Type
-    if (this.variables.has(d.args[0].description)) {
-      arg1Type = this.variables.get(d.args[0].description).type
-    } else if (d.args[0].constructor === Token) {
-      arg1Type = d.args[0].category
-    } else {
-      arg1Type = d.args[0].constructor.name.toLowerCase()
-    }
     // Set arg2 type.
     let arg2Type
     if (this.variables.has(d.args[1].description)) {
@@ -224,19 +206,28 @@ class Context {
     } else {
       arg2Type = d.args[1].constructor.name.toLowerCase()
     }
+    // Set arg2 type.
+    let arg3Type
+    if (this.variables.has(d.args[2].description)) {
+      arg3Type = this.variables.get(d.args[2].description).type
+    } else if (d.args[2].constructor === Token) {
+      arg3Type = d.args[2].category
+    } else {
+      arg3Type = d.args[2].constructor.name.toLowerCase()
+    }
     // Types must be the same.
-    if (arg1Type !== arg2Type) {
+    if (arg2Type !== arg3Type) {
       error(`add instruction parameters must be the same type`)
     }
-    // If arg_3 already exists, make sure it's the same type as arg_1 and arg_2.
-    if (this.variables.has(d.args[2].description)) {
-      if (this.variables.get(d.args[2].description).type !== arg1Type) {
+    // If arg_1 already exists, make sure it's the same type as arg_2 and arg_3.
+    if (this.variables.has(d.args[0].description)) {
+      if (this.variables.get(d.args[0].description).type !== arg2Type) {
         error(
           `Result of ${instructionName} instruction must be same type as arguments.`
         )
       }
     }
-    return arg1Type
+    return arg2Type
   }
 
   Array(a) {

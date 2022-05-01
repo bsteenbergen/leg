@@ -8,21 +8,21 @@ const semanticChecks = [
   [
     "initialize variable to variable",
     `
-    str s = "hi"
-    str s2 = s`,
+    decl str s "hi"
+    decl str s2 s`,
   ],
   ["print string", 'prt "hi"'],
   ["print float", "prt -3.4"],
   ["print bools", "prt true"],
-  ["variable declaration", "int x = 3"],
-  ["list declaration", 'list letters = ["a", "b", "c"]'],
+  ["variable declaration", "decl int x 3"],
+  ["list declaration", 'decl list letters ["a", "b", "c"]'],
   [
     "function declaration",
     `
-    int str_1 = 9
+    decl int int_1 9
     #my_func:
-      prt str_1
-      int str_2 = 10
+      prt int_1
+      decl int int_2 10
     #`,
   ],
   [
@@ -30,8 +30,8 @@ const semanticChecks = [
     `
       @ function declaration
       #print_values:
-        int str_1 = 9
-        prt str_1
+        decl int i_1 9
+        prt i_1
       #
       @ function call 
       b #print_values`,
@@ -39,65 +39,67 @@ const semanticChecks = [
   [
     "valid cmp instruction with undeclared result variable",
     `
-    str three = "3"
-    cmp 3 three result
+    decl str three "3"
+    cmp result 3 three
     `,
   ],
   [
     "valid cmp instruction with pre-declared result variable",
     `
-    str three = "3"
-    bool result = false
-    cmp 3 three result
+    decl str three "3"
+    decl bool result false
+    cmp result 3 three
     `,
   ],
   [
     "valid add instruction with undeclared result variable",
     `
-    add 3 5 sum
+    add sum 3 5
     `,
   ],
   [
     "valid add instruction with pre-declared result variable",
     `
-    list sum = []
-    add [1, 2, 3] [4, 5, 6] sum
+    decl list sum []
+    add sum [1, 2, 3] [4, 5, 6]
     `,
   ],
   [
     "valid sub instruction with undeclared result variable",
     `
-    sub "hello" "goodbye" result
+    sub result "hello" "goodbye" 
     `,
   ],
   [
     "valid sub instruction with pre-declared result variable",
     `
-    list diff = []
-    sub [1, 2, 3] [1, 2, 3, 4, 5, 6] diff
+    decl list diff []
+    sub diff [1, 2, 3] [1, 2, 3, 4, 5, 6]
     `,
   ],
   [
     "increment variable",
     `
-    float x = 1.0
-    x = x + 0.2
+    decl float x 1.0
+    asgn x x + 0.2
     `,
   ],
   [
     "if statement with binary expression condition",
     `
+    decl int x 0
     #if x < 1 :
-      x = x + 1
+      prt x
+      asgn x x + 1
     #
     `,
   ],
   [
     "if statement with bool var condition (id)",
     `
-    bool my_var = true
+    decl bool my_var true
     #if my_var :
-      int x = 10
+      decl int x 10
     #
     `,
   ],
@@ -105,16 +107,16 @@ const semanticChecks = [
     "if statement with bool var condition (true)",
     `
     #if true :
-      int x = 10
+      decl int x 10
     #
     `,
   ],
   [
     "if statement with bool var condition (relop)",
     `
-    int my_var = 9
+    decl int my_var 9
     #if my_var == 9 :
-      int x = 10
+      prt 9
     #
     `,
   ],
@@ -130,8 +132,8 @@ const semanticChecks = [
   [
     "intialize variable as result of binary expression",
     `
-    int j = 10
-    bool i = 9 > j
+    decl int j 10
+    decl bool i 9 > j
     `,
   ],
 ]
@@ -144,7 +146,7 @@ const semanticErrors = [
       prt "hello"
     #
     #my_func:
-      int x = 0
+      decl int x 0
     #   
     `,
     /Error: Function #my_func already declared/,
@@ -152,14 +154,14 @@ const semanticErrors = [
   [
     "initialize to uninitialized variable",
     `
-    int j = k
+    decl int j k
     `,
     /Error: Initializer k has not been initalized./,
   ],
   [
     "initialize non-bool var to result of boolean expression",
     `
-    int j = 19 < 9
+    decl int j 19 < 9
     `,
     /Error: Variable j is being initalized to result of binary expression but is not type bool/,
   ],
@@ -168,7 +170,7 @@ const semanticErrors = [
     `
       @ function declaration
       #print_values:
-        str str_1 = "hello"
+        decl str str_1 "hello"
         prt str_1
       #
       @ function call 
@@ -176,63 +178,63 @@ const semanticErrors = [
     /Error: Function #my_func has not yet been declared/,
   ],
   [
-    "variable that has not yet been declared",
+    "variable that has already been declared",
     `
-    str x = "hi"
-    str x = "hello" 
+    decl str x "hi"
+    decl str x "hello" 
     `,
     /Error: Variable x already declared/,
   ],
   [
     "cmp instruction with undeclared var",
     `
-    str three = "3"
-    str result = ""
-    cmp 3 four result
+    decl str three "3"
+    decl bool result false
+    cmp result 3 four
     `,
     /Error: Variable four is undeclared/,
   ],
   [
     "cmp instruction with wrong number of args",
     "cmp 1 2",
-    /Error: cmp instruction must have exactly three arguments/,
+    /Error: cmp instruction must have exactly 3 arguments/,
   ],
   [
     "cmp instruction with non-boolean result variable",
     `
-    str r = ""
-    cmp 1 2 r
+    decl str r ""
+    cmp r 1 2
     `,
     /Error: Result of comparison r must be a boolean/,
   ],
   [
     "add instruction with wrong number of args",
     "add 1 2",
-    /Error: add instruction must have exactly three arguments/,
+    /Error: add instruction must have exactly 3 arguments/,
   ],
   [
     "add instruction with args of different types",
-    'add 1.0 "hello" result',
+    'add result 1.0 "hello"',
     /Error: add instruction parameters must be the same type/,
   ],
   [
     "add instruction with result of incorrect type",
     `
-    list l1 = ["hello"]
-    list l2 = ["world"]
-    int result = 0
-    add l1 l2 result
+    decl list l1 ["hello"]
+    decl list l2 ["world"]
+    decl int result 0
+    add result l1 l2
     `,
     /Error: Result of add instruction must be same type as arguments/,
   ],
   [
     "add instruction with uninitialized value to compare",
-    "add 1 my_int result",
+    "add result 1 my_int",
     /Error: Variable my_int is undeclared/,
   ],
   [
     "variable initilized with wrong type",
-    "str x = 19",
+    "decl str x 19",
     /Error: Initializer type does not match variable type/,
   ],
   [
@@ -243,7 +245,7 @@ const semanticErrors = [
   [
     "increment untilitialized variable",
     `
-    x = x + 0.2
+    asgn x x + 0.2
     `,
     /Error: Must initialize variables before asignment/,
   ],
@@ -259,7 +261,7 @@ const semanticErrors = [
   [
     "if statement condition is an id that does not represent a boolean",
     `
-    float my_var = 14.5
+    decl float my_var 14.5
     #if my_var:
       prt "hi"
     #

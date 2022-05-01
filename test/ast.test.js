@@ -2,41 +2,32 @@ import assert from "assert"
 import util from "util"
 import ast from "../src/ast.js"
 
-const simplePrint = `
-prt 14`
-const simplePrintExpected = `   1 | Program statements=[#2]
-   2 | PrintStatement argument=(Int,"14")`
+const prt = `
+  prt 14
+  prt 10001111
+  decl str x "hi" @ var decl
+  prt x @ print statement`
+const prtExp = `   1 | Program statements=[#2,#3,#4,#6]
+   2 | PrintStatement argument=(Int,"14")
+   3 | PrintStatement argument=(Int,"10001111")
+   4 | VariableDeclaration type=#5 name=(Id,"x") initializer=(Str,""hi"")
+   5 | TypeName typeName=(Sym,"str")
+   6 | PrintStatement argument=(Id,"x")`
 
-const vars = `
-  int x = 5
-  x = x + 1
-`
-const varsExpected = `   1 | Program statements=[#2,#4]
-   2 | VariableDeclaration type=#3 name=(Id,"x") initializer=(Int,"5")
-   3 | TypeName typeName=(Sym,"int")
-   4 | VariableAssignment name=(Id,"x") initializer=#5
-   5 | BinaryExpression left=(Id,"x") op='+' right=(Int,"1")`
-
-const listDecl = 'list letters = ["a", "b", "c"]'
-const listDeclExpected = `   1 | Program statements=[#2]
-   2 | VariableDeclaration type=#3 name=(Id,"letters") initializer=#4
-   3 | TypeName typeName=(Sym,"list")
-   4 | List contents=[(Str,""a""),(Str,""b""),(Str,""c"")]`
-
-const multiTypeLists = `list letters = [1, "b", true]`
-const multiTypeListsExpected = `   1 | Program statements=[#2]
-   2 | VariableDeclaration type=#3 name=(Id,"letters") initializer=#4
-   3 | TypeName typeName=(Sym,"list")
-   4 | List contents=[(Int,"1"),(Str,""b""),(Bool,"true")]`
-
-const printVar = `
-str x = "hi" @ var decl
-prt x @ print statement
-`
-const printVarExpected = `   1 | Program statements=[#2,#4]
-   2 | VariableDeclaration type=#3 name=(Id,"x") initializer=(Str,""hi"")
-   3 | TypeName typeName=(Sym,"str")
-   4 | PrintStatement argument=(Id,"x")`
+const varDeclAndAsgn = `
+  decl bin b1 00110101b
+  asgn b1 10101111b
+  decl list collection []
+  asgn collection [1, "b", true]`
+const varDeclAndAsgnExp = `   1 | Program statements=[#2,#4,#5,#8]
+   2 | VariableDeclaration type=#3 name=(Id,"b1") initializer=(Bin,"00110101b")
+   3 | TypeName typeName=(Sym,"bin")
+   4 | VariableAssignment name=(Id,"b1") initializer=(Bin,"10101111b")
+   5 | VariableDeclaration type=#6 name=(Id,"collection") initializer=#7
+   6 | TypeName typeName=(Sym,"list")
+   7 | List contents=[]
+   8 | VariableAssignment name=(Id,"collection") initializer=#9
+   9 | List contents=[(Int,"1"),(Str,""b""),(Bool,"true")]`
 
 const funcDecl = `
 #my_func:
@@ -61,60 +52,61 @@ const cmpExpected = `   1 | Program statements=[#2]
    2 | CompareInstruction args=[(Id,"var_1"),(Id,"var_2")]`
 
 const math = `
-  int a = 3
-  int c = 4
-  a - c 
-  2 + 4
-  int a = 3 % 4
-`
-
-const mathExpected = `   1 | Program statements=[#2,#4,#6,#7,#8]
+  decl int a 3
+  decl int c 4
+  prt a - c 
+  prt 2 + 4
+  decl int bb 3 % 4`
+const mathExpected = `   1 | Program statements=[#2,#4,#6,#8,#10]
    2 | VariableDeclaration type=#3 name=(Id,"a") initializer=(Int,"3")
    3 | TypeName typeName=(Sym,"int")
    4 | VariableDeclaration type=#5 name=(Id,"c") initializer=(Int,"4")
    5 | TypeName typeName=(Sym,"int")
-   6 | BinaryExpression left=(Id,"a") op='-' right=(Id,"c")
-   7 | BinaryExpression left=(Int,"2") op='+' right=(Int,"4")
-   8 | VariableDeclaration type=#9 name=(Id,"a") initializer=#10
-   9 | TypeName typeName=(Sym,"int")
-  10 | BinaryExpression left=(Int,"3") op='%' right=(Int,"4")`
+   6 | PrintStatement argument=#7
+   7 | BinaryExpression left=(Id,"a") op='-' right=(Id,"c")
+   8 | PrintStatement argument=#9
+   9 | BinaryExpression left=(Int,"2") op='+' right=(Int,"4")
+  10 | VariableDeclaration type=#11 name=(Id,"bb") initializer=#12
+  11 | TypeName typeName=(Sym,"int")
+  12 | BinaryExpression left=(Int,"3") op='%' right=(Int,"4")`
 
-const ifStmt = `#if x < 1 :
-  x = x + 1
-#`
-const ifStmtExpected = `   1 | Program statements=[#2]
-   2 | IfStatement condition=#3 suite=#4 elseSuite=[]
-   3 | BinaryExpression left=(Id,"x") op='<' right=(Int,"1")
-   4 | Suite statements=[#5]
-   5 | VariableAssignment name=(Id,"x") initializer=#6
-   6 | BinaryExpression left=(Id,"x") op='+' right=(Int,"1")`
-
-const whileLoop = `
+const ifAndLoop = `
 #loop:
-  prt "hi"
-  b #loop x < 10 @ "loop only if x < 10
+  prt x
+  #if x > 5 :
+    asgn x x + 1
+  #
+  b #loop x < 10 @ loop only if x < 10
 #`
-const whileExpected = `   1 | Program statements=[#2]
+const ifAndLoopExp = `   1 | Program statements=[#2]
    2 | FunctionDeclaration funcName=(Id,"#loop") suite=#3
-   3 | Suite statements=[#4,#5]
-   4 | PrintStatement argument=(Str,""hi"")
-   5 | FunctionCall link=(Sym,"b") funcName=(Id,"#loop") condition=[#6]
-   6 | BinaryExpression left=(Id,"x") op='<' right=(Int,"10")`
+   3 | Suite statements=[#4,#5,#10]
+   4 | PrintStatement argument=(Id,"x")
+   5 | IfStatement condition=#6 suite=#7 elseSuite=[]
+   6 | BinaryExpression left=(Id,"x") op='>' right=(Int,"5")
+   7 | Suite statements=[#8]
+   8 | VariableAssignment name=(Id,"x") initializer=#9
+   9 | BinaryExpression left=(Id,"x") op='+' right=(Int,"1")
+  10 | FunctionCall link=(Sym,"b") funcName=(Id,"#loop") condition=[#11]
+  11 | BinaryExpression left=(Id,"x") op='<' right=(Int,"10")`
 
-const complexRelop = `let x = c < d < e`
-const complexRelopExpected = `   1 | Program statements=[(Id,"let"),#2]
+const complexRelop = `asgn x c < d < e`
+const complexRelopExpected = `   1 | Program statements=[#2]
    2 | VariableAssignment name=(Id,"x") initializer=#3
    3 | BinaryExpression left=#4 op='<' right=(Id,"e")
    4 | BinaryExpression left=(Id,"c") op='<' right=(Id,"d")`
 
-const initVarAsRelopResult = `bool i = 9 > 10`
-const initVarAsRelopResultExpected = `   1 | Program statements=[#2]
-   2 | VariableDeclaration type=#3 name=(Id,"i") initializer=#4
-   3 | TypeName typeName=(Sym,"bool")
-   4 | BinaryExpression left=(Int,"9") op='>' right=(Int,"10")`
+const instructions = `
+  add sent "hi" " and bye"
+  sub r10 1001b 1100b
+  cmp result f1 f2`
+const instructionsExp = `   1 | Program statements=[#2,#3,#4]
+   2 | AddInstruction args=[(Id,"sent"),(Str,""hi""),(Str,"" and bye"")]
+   3 | SubInstruction args=[(Id,"r10"),(Bin,"1001b"),(Bin,"1100b")]
+   4 | CompareInstruction args=[(Id,"result"),(Id,"f1"),(Id,"f2")]`
 
-const miscTests = `bool x = 1 > -1 || false
-bool y = "a" == "b" && 10 <= 9
+const miscTests = `decl bool x 1 > -1 || false
+decl bool y "a" == "b" && 10 <= 9
 prt !x
 prt 9 * 10
 prt -3.4 ^ 2
@@ -142,13 +134,13 @@ const miscTestsExpected = `   1 | Program statements=[#2,#6,#11,#13,#15,#17]
 
 describe("The AST generator produces a correct AST for ", () => {
   it("print statements", () => {
-    assert.deepStrictEqual(util.format(ast(simplePrint)), simplePrintExpected)
+    assert.deepStrictEqual(util.format(ast(prt)), prtExp)
   }),
-    it("variable declarations", () => {
-      assert.deepStrictEqual(util.format(ast(printVar)), printVarExpected)
-    }),
-    it("list declarations", () => {
-      assert.deepStrictEqual(util.format(ast(listDecl)), listDeclExpected)
+    it("variable declarations and reassignments", () => {
+      assert.deepStrictEqual(
+        util.format(ast(varDeclAndAsgn)),
+        varDeclAndAsgnExp
+      )
     }),
     it("function declarations", () => {
       assert.deepStrictEqual(util.format(ast(funcDecl)), funcDeclExpected)
@@ -162,34 +154,25 @@ describe("The AST generator produces a correct AST for ", () => {
     it("binary operations", () => {
       assert.deepStrictEqual(util.format(ast(math)), mathExpected)
     }),
-    it("variable declaration and reassignment", () => {
-      assert.deepStrictEqual(util.format(ast(vars)), varsExpected)
+    it("if statements and while loops", () => {
+      assert.deepStrictEqual(util.format(ast(ifAndLoop)), ifAndLoopExp)
     }),
-    it("if statements", () => {
-      assert.deepStrictEqual(util.format(ast(ifStmt)), ifStmtExpected)
-    }),
-    it("while loop", () => {
-      assert.deepStrictEqual(util.format(ast(whileLoop)), whileExpected)
-    }),
-    it("complex/nested relop", () => {
+    it("initialize variable as result of complex/nested relop", () => {
       assert.deepStrictEqual(
         util.format(ast(complexRelop)),
         complexRelopExpected
       )
     }),
-    it("initialize variable to result of binary expression", () => {
-      assert.deepStrictEqual(
-        util.format(ast(initVarAsRelopResult)),
-        initVarAsRelopResultExpected
-      )
-    }),
-    it("multitype list", () => {
-      assert.deepStrictEqual(
-        util.format(ast(multiTypeLists)),
-        multiTypeListsExpected
-      )
+    it("instructions", () => {
+      assert.deepStrictEqual(util.format(ast(instructions)), instructionsExp)
     }),
     it("misc tests", () => {
       assert.deepStrictEqual(util.format(ast(miscTests)), miscTestsExpected)
     })
+})
+
+describe("Rejects malformed programs:", () => {
+  it("nonsense declaration", () => {
+    assert.throws(() => ast(`decl 0 and 1`))
+  })
 })

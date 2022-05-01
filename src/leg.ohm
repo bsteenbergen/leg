@@ -12,8 +12,8 @@ leg {
         
     Print = print Exp
 
-    VarDecl = Type id "=" Exp 
-    VarAssign = id "=" Exp
+    VarDecl = decl Type id Exp 
+    VarAssign = asgn id Exp
     FunDecl = funcName ":" Suite
     FunCall = (branch | branchLink) funcName (Exp)?
     
@@ -23,7 +23,7 @@ leg {
     
     Suite   = Stmt* "#"
         
-    Type = "int" | "float" | "str" | "bool" | "list"
+    Type = "int" | "float" | "str" | "bool" | "list" | "bin"
     
     IfStmt  = if Exp ":" Suite (else ":" Suite)?
                 
@@ -42,6 +42,7 @@ leg {
     Exp4    = Exp5 "^" Exp4                   --binary
             | Exp5      
     Exp5    = boollit
+            | binlit
             | floatlit
             | intlit
             | strlit
@@ -49,13 +50,14 @@ leg {
             | id                                            --id
     
     keyword =  print | true | false | int | float | bool | list
-            | list |  branch | branchLink | if | cmp 
-            | add | sub | else
+            | list |  branch | branchLink | if | cmp | decl
+            | add | sub | else | bin | decl | asgn
 
     strlit = "\"" char* "\""
     intlit = ("-")? digit+
     floatlit = ("-")? digit+ "." digit+ (("E" | "e") ("+" | "-")? digit+)?
     boollit = true | false
+    binlit = ("0" | "1")+ "b"
     List = "[" ListOf<Exp, ","> "]"
     
     logicop = ("!&" | "!|" | "!")
@@ -68,6 +70,8 @@ leg {
     branch = "b" ~idchar 
     branchLink = "bl" ~idchar
     cmp = "cmp" ~idchar
+    decl = "decl" ~idchar
+    asgn = "asgn" ~idchar
     add = "add" ~idchar
     sub = "sub" ~idchar
     if = "#if" ~idchar
@@ -79,6 +83,9 @@ leg {
     int = "int" ~idchar
     float = "float" ~idchar
     bool = "bool" ~idchar
+    bin = "binlit" ~idchar
+  
+    
 
     idchar = "_" | alnum
     id  = ~keyword letter idchar*

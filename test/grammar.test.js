@@ -5,10 +5,26 @@ import ast from "../src/ast.js"
 const syntaxChecks = [
   ["simplest syntactically correct program", 'prt "hi"'],
   [
+    "declaration for vars of all acceptable types",
+    `@ variable declaration
+    decl int l 0 
+    decl str s "hi"
+    decl float f -9.99
+    decl bin b1 00110101b`,
+  ],
+  [
+    "assignment for vars of all acceptable types",
+    `@ variable assignment
+    asgn l 0 
+    asgn s "hi"
+    asgn f -9.99
+    asgn b1 00110101b`,
+  ],
+  [
     "if statement",
     `
     #if x < 1 :
-	    x = x + 1
+      asgn x x + 1
     #
     `,
   ],
@@ -31,9 +47,9 @@ const syntaxChecks = [
     #
     `,
   ],
-  ["list declaration", 'list letters = ["a", "b", "c"]'],
-  ["empty list declaration", "list letters = []"],
-  ["reassign list", "letters = [1, 2, 3]"],
+  ["list declaration", 'decl list letters ["a", "b", "c"]'],
+  ["empty list declaration", "decl list letters []"],
+  ["reassign list", "asgn letters [1, 2, 3]"],
   ["cmp instruction", "cmp var_1 var_2 result"],
   ["add instruction (numbers)", "add 1 3 result"],
   ["add instruction (lists)", 'add [1, 2, 3] ["cat", "dog"] x'],

@@ -27,14 +27,14 @@ const astBuilder = grammar.createSemantics().addOperation("ast", {
   Print(_print, argument) {
     return new core.PrintStatement(argument.ast())
   },
-  VarDecl(type, varName, _eq, initializer) {
+  VarDecl(_decl, type, varName, initializer) {
     return new core.VariableDeclaration(
       type.ast(),
       varName.ast(),
       initializer.ast()
     )
   },
-  VarAssign(varName, _eq, initializer) {
+  VarAssign(_asgn, varName, initializer) {
     return new core.VariableAssignment(varName.ast(), initializer.ast())
   },
   FunDecl(funcName, _colon, suite) {
@@ -49,10 +49,10 @@ const astBuilder = grammar.createSemantics().addOperation("ast", {
   Instruction_cmp(_cmp, args) {
     return new core.CompareInstruction(args.asIteration().ast())
   },
-  Instruction_add(_cmp, args) {
+  Instruction_add(_add, args) {
     return new core.AddInstruction(args.asIteration().ast())
   },
-  Instruction_sub(_cmp, args) {
+  Instruction_sub(_sub, args) {
     return new core.SubInstruction(args.asIteration().ast())
   },
   Exp_or(left, op, right) {
@@ -93,6 +93,9 @@ const astBuilder = grammar.createSemantics().addOperation("ast", {
   },
   funcName(_hash, _id) {
     return new core.Token("Id", this.source)
+  },
+  binlit(_first, _b) {
+    return new core.Token("Bin", this.source)
   },
   strlit(_openQuote, _chars, _closeQuote) {
     return new core.Token("Str", this.source)
