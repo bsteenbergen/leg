@@ -95,6 +95,7 @@ export class Type {
   static FLOAT = new Type("float")
   static STRING = new Type("str")
   static BOOL = new Type("bool")
+  static BIN = new Type("bin")
   constructor(typeName) {
     Object.assign(this, { typeName })
   }
