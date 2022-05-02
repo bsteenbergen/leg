@@ -12,7 +12,7 @@ const optimizers = {
   },
   VariableDeclaration(d) {
     // console.log(d)
-    // d.variable = optimize(d.variable) TODO: ASK WHY IS THIS NEEDED
+    d.variable = optimize(d.variable) // TODO: ASK WHY IS THIS NEEDED -> for code generation?
     d.initializer = optimize(d.initializer)
     return d
   },
