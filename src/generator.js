@@ -1,4 +1,4 @@
-import { IfStatement, Type, StructType } from "./core.js"
+import { IfStatement, Type } from "./core.js"
 import * as stdlib from "./stdlib.js"
 
 export default function generate(program) {
@@ -33,6 +33,10 @@ export default function generate(program) {
     // generating a statement, write lines of translated JS to the output array.
     Program(p) {
       gen(p.statements)
+    },
+    PrintStatement(e) {
+      console.log(e)
+      output.push(`console.log(${e.argument});`)
     },
     VariableDeclaration(d) {
       // We don't care about const vs. let in the generated code! The analyzer has
