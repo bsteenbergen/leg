@@ -30,14 +30,31 @@ const optimizers = {
       return new core.Variable(v.type, v.name, varValue)
     }
   },
+  AddInstruction(a) {
+    console.log(a.args)
+    // if (v.value.constructor === core.BinaryExpression) {
+    //     const varValue = optimize(v.value)
+    //     return new core.Variable(v.type, v.name, varValue)
+    //   }
+  },
+  IfStatement(s) {
+    s.test = optimize(s.condition)
+    s.consequent = optimize(s.suite)
+    s.alternate = optimize(s.elseSuite)
+    if (s.test.constructor === Boolean) {
+      return s.test ? s.consequent : s.alternate
+    }
+    return s
+  },
+  Suite(s) {
+    console.log("optimizing suite")
+    s.statements = optimize(s.statements)
+    return s
+  },
   BinaryExpression(e) {
-    // FOR SOME TYPES (LIKE NUMBER ADDING AND STRING CONCAT), HANDLING IS THE SAME
-    // SO CONSIDER THE OUTER IF BE CHECKING OPERATOR
-    // AND INNER IFS BE CHECKING TYPES
     e.op = optimize(e.op)
     e.left = optimize(e.left)
     e.right = optimize(e.right)
-
     // SHARED CASES ACROSS NUM, BIGINT, AND STRING.
     if (
       [Number, BigInt, String].includes(e.left.constructor) &&
@@ -46,8 +63,6 @@ const optimizers = {
       switch (e.op) {
         case "+":
           return e.left + e.right
-        case "-":
-          return e.left - e.right
         case "==":
           return e.left === e.right
         case "!=":
@@ -62,6 +77,8 @@ const optimizers = {
       e.left.constructor === e.right.constructor
     ) {
       switch (e.op) {
+        case "-":
+          return e.left - e.right
         case "*":
           return e.left * e.right
         case "/":
@@ -77,7 +94,16 @@ const optimizers = {
         case ">=":
           return e.left >= e.right
         default:
-          return
+          break
+      }
+    }
+    // CASES APPLICABLE ONLY TO STRING.
+    if (e.left.constructor === e.right.constructor) {
+      switch (e.op) {
+        case "-":
+          return e.left.replace(e.right, "")
+        default:
+          break
       }
     }
     return e
@@ -90,6 +116,12 @@ const optimizers = {
         return -e.operand
       }
     }
+    return e
+  },
+  PrintStatement(e) {
+    return e
+  },
+  Array(e) {
     return e
   },
   BigInt(e) {
