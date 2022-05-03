@@ -11,8 +11,6 @@ const optimizers = {
     return p
   },
   VariableDeclaration(d) {
-    // console.log(d)
-    d.variable = optimize(d.variable) // TODO: ASK WHY IS THIS NEEDED -> for code generation?
     d.initializer = optimize(d.initializer)
     return d
   },
@@ -119,9 +117,7 @@ const optimizers = {
     return e
   },
   PrintStatement(e) {
-    return e
-  },
-  Array(e) {
+    e.argument = optimize(e.argument)
     return e
   },
   BigInt(e) {

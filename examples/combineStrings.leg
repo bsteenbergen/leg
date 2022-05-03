@@ -1,5 +1,5 @@
 decl str str_1 "Hello, "
-decl str sr_2 "World!"
+decl str str_2 "World!"
 
 #combineStrings:
     add result str_1 str_2

@@ -35,8 +35,7 @@ export default function generate(program) {
       gen(p.statements)
     },
     PrintStatement(e) {
-      console.log(e)
-      output.push(`console.log(${e.argument});`)
+      output.push(`console.log(${gen(e.argument)});`)
     },
     VariableDeclaration(d) {
       // We don't care about const vs. let in the generated code! The analyzer has
