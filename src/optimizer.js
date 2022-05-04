@@ -11,6 +11,7 @@ const optimizers = {
     return p
   },
   VariableDeclaration(d) {
+    d.name = optimize(d.name)
     d.initializer = optimize(d.initializer)
     return d
   },
@@ -22,6 +23,11 @@ const optimizers = {
     }
     return s
   },
+  FunctionDeclaration(d) {
+    d.funcName = optimize(d.funcName)
+    d.suite = optimize(d.suite)
+    return d
+  },
   Variable(v) {
     if (v.value.constructor === core.BinaryExpression) {
       const varValue = optimize(v.value)
@@ -29,11 +35,8 @@ const optimizers = {
     }
   },
   AddInstruction(a) {
-    console.log(a.args)
-    // if (v.value.constructor === core.BinaryExpression) {
-    //     const varValue = optimize(v.value)
-    //     return new core.Variable(v.type, v.name, varValue)
-    //   }
+    a.args = optimize(a.args)
+    return a
   },
   IfStatement(s) {
     s.test = optimize(s.condition)

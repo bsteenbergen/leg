@@ -1,0 +1,2 @@
+decl int x 5
+prt 1+2*7 + x

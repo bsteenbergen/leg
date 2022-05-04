@@ -3,6 +3,7 @@ import {
   Variable,
   Function,
   error,
+  Type,
   BinaryExpression,
   Token,
   Instruction,
@@ -17,6 +18,15 @@ class Context {
   add(name, entity) {
     // Do not allow shadowing.
     this.variables.set(name, entity)
+  }
+  lookup(name) {
+    let entity = this.variables.get(name)
+    if (entity !== undefined) return entity
+    entity = this.parent?.lookup(name)
+    if (entity === undefined || entity === null) {
+      error(`${name} has not been initialized.`)
+    }
+    return entity
   }
   newChildContext(props) {
     return new Context({
@@ -33,12 +43,12 @@ class Context {
     this.analyze(p.statements)
   }
   PrintStatement(d) {
-    // If printing variable, check if it has been declared.
-    if (d.argument.category === "Id" && !this.variables.has(d.argument.lexeme)) {
-      error(`Print statement argument "${d.argument.lexeme}" is uninitialized.`)
-    }
+    this.analyze(d.argument)
   }
-
+  BinaryExpression(e) {
+    this.analyze(e.left)
+    this.analyze(e.right)
+  }
   VariableDeclaration(d) {
     let type = d.type.typeName.lexeme
     let name = d.name.lexeme
@@ -73,6 +83,7 @@ class Context {
         )
       }
     }
+    d.variable = v
     this.variables.set(name, v)
   }
   VariableAssignment(d) {
@@ -80,7 +91,7 @@ class Context {
     let name = d.name.lexeme
     if (!this.variables.has(name)) {
       // If it has, throw!
-      error(`Must initialize variables before asignment`)
+      error(`Must initialize variables before assignment`)
     }
   }
 
@@ -232,6 +243,19 @@ class Context {
       }
     }
     return arg2Type
+  }
+
+  Token(t) {
+    // For ids being used, not defined
+    if (t.category === "Id") {
+      t.value = this.lookup(t.lexeme)
+      t.type = t.value.type
+    }
+    if (t.category === "Int") [t.value, t.type] = [Number(t.lexeme), Type.INT]
+    if (t.category === "Float") [t.value, t.type] = [Number(t.lexeme), Type.FLOAT]
+    if (t.category === "Str") [t.value, t.type] = [t.lexeme, Type.STRING]
+    if (t.category === "Bool") [t.value, t.type] = [t.lexeme === "true", Type.BOOLEAN]
+    // TODO: handle bin
   }
 
   Array(a) {

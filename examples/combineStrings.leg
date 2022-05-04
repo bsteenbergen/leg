@@ -1,8 +1,10 @@
 decl str str_1 "Hello, "
 decl str str_2 "World!"
 
+decl int result 0
+
 #combineStrings:
-    add result str_1 str_2
+  add result str_1 str_2
 #
 
 prt result
