@@ -33,6 +33,36 @@ const fixtures = [
         let hey_4 = "hey";
       `,
   },
+  {
+    name: "variable assignment",
+    source: `
+        decl int x 5
+        decl int y 1
+        asgn y y + x
+        prt y
+    `,
+    expected: `
+        let x_1 = 5;
+        let y_2 = 1;
+        y_2 = y_2 + x_1;
+        console.log(y_2);
+    `,
+  },
+  {
+    name: "small",
+    source: `
+      decl int x 3
+      decl bool y true
+      prt y && y
+      prt x^x
+    `,
+    expected: dedent`
+      let x_1 = 3;
+      let y_2 = true;
+      console.log((y_2 && y_2));
+      console.log((x_1 ** x_1));
+    `,
+  },
 ]
 
 describe("The code generator", () => {
