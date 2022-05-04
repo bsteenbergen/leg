@@ -237,17 +237,13 @@ const semanticErrors = [
     "decl str x 19",
     /Error: Initializer type does not match variable type/,
   ],
-  [
-    "print undeclared identifier",
-    "prt hi",
-    /Error: Print statement argument "hi" is uninitialized/,
-  ],
+  ["print undeclared identifier", "prt hi", /hi has not been initialized/],
   [
     "increment untilitialized variable",
     `
     asgn x x + 0.2
     `,
-    /Error: Must initialize variables before asignment/,
+    /Error: Must initialize variables before assignment/,
   ],
   [
     "if statement condition that is neither a bool nor an id",
