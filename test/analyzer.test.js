@@ -15,7 +15,19 @@ const semanticChecks = [
   ["print float", "prt -3.4"],
   ["print bools", "prt true"],
   ["variable declaration", "decl int x 3"],
-  ["list declaration", 'decl list letters ["a", "b", "c"]'],
+  [
+    "list declaration",
+    `
+    decl list letters ["a", "b", "c"]
+  `,
+  ],
+  // [
+  //   "list declaration",
+  //   `
+  //   decl str letter "b"
+  //   decl list letters ["a", letter, "c"]
+  // `,
+  // ],
   [
     "function declaration",
     `
@@ -156,7 +168,7 @@ const semanticErrors = [
     `
     decl int j k
     `,
-    /Error: Initializer k has not been initalized./,
+    /Error: k has not been initalized./,
   ],
   [
     "initialize non-bool var to result of boolean expression",
@@ -232,6 +244,7 @@ const semanticErrors = [
     "add result 1 my_int",
     /Error: Variable my_int is undeclared/,
   ],
+
   [
     "variable initilized with wrong type",
     "decl str x 19",

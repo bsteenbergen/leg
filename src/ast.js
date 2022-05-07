@@ -28,11 +28,7 @@ const astBuilder = grammar.createSemantics().addOperation("ast", {
     return new core.PrintStatement(argument.ast())
   },
   VarDecl(_decl, type, varName, initializer) {
-    return new core.VariableDeclaration(
-      type.ast(),
-      varName.ast(),
-      initializer.ast()
-    )
+    return new core.VariableDeclaration(type.ast(), varName.ast(), initializer.ast())
   },
   VarAssign(_asgn, varName, initializer) {
     return new core.VariableAssignment(varName.ast(), initializer.ast())
@@ -85,8 +81,11 @@ const astBuilder = grammar.createSemantics().addOperation("ast", {
   Type(typeName) {
     return new core.TypeName(typeName.ast())
   },
-  List(_open, contents, _close) {
-    return new core.List(contents.asIteration().ast())
+  LegArray(_open, contents, _close) {
+    return new core.ArrayType(contents.asIteration().ast())
+  },
+  Type_arr(_open, base, _close) {
+    return new core.ArrayType(base.ast())
   },
   id(_first, _rest) {
     return new core.Token("Id", this.source)

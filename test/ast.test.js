@@ -17,17 +17,19 @@ const prtExp = `   1 | Program statements=[#2,#3,#4,#6]
 const varDeclAndAsgn = `
   decl bin b1 00110101b
   asgn b1 10101111b
-  decl list collection []
+  decl [int] collection []
   asgn collection [1, "b", true]`
-const varDeclAndAsgnExp = `   1 | Program statements=[#2,#4,#5,#8]
+const varDeclAndAsgnExp = `   1 | Program statements=[#2,#4,#5,#10]
    2 | VariableDeclaration type=#3 name=(Id,"b1") initializer=(Bin,"00110101b")
    3 | TypeName typeName=(Sym,"bin")
    4 | VariableAssignment name=(Id,"b1") initializer=(Bin,"10101111b")
-   5 | VariableDeclaration type=#6 name=(Id,"collection") initializer=#7
-   6 | TypeName typeName=(Sym,"list")
-   7 | List contents=[]
-   8 | VariableAssignment name=(Id,"collection") initializer=#9
-   9 | List contents=[(Int,"1"),(Str,""b""),(Bool,"true")]`
+   5 | VariableDeclaration type=#6 name=(Id,"collection") initializer=#9
+   6 | TypeName typeName=#7
+   7 | ArrayType baseType=#8
+   8 | TypeName typeName=(Sym,"int")
+   9 | ArrayType baseType=[]
+  10 | VariableAssignment name=(Id,"collection") initializer=#11
+  11 | ArrayType baseType=[(Int,"1"),(Str,""b""),(Bool,"true")]`
 
 const funcDecl = `
 #my_func:
@@ -137,10 +139,7 @@ describe("The AST generator produces a correct AST for ", () => {
     assert.deepStrictEqual(util.format(ast(prt)), prtExp)
   }),
     it("variable declarations and reassignments", () => {
-      assert.deepStrictEqual(
-        util.format(ast(varDeclAndAsgn)),
-        varDeclAndAsgnExp
-      )
+      assert.deepStrictEqual(util.format(ast(varDeclAndAsgn)), varDeclAndAsgnExp)
     }),
     it("function declarations", () => {
       assert.deepStrictEqual(util.format(ast(funcDecl)), funcDeclExpected)
@@ -158,10 +157,7 @@ describe("The AST generator produces a correct AST for ", () => {
       assert.deepStrictEqual(util.format(ast(ifAndLoop)), ifAndLoopExp)
     }),
     it("initialize variable as result of complex/nested relop", () => {
-      assert.deepStrictEqual(
-        util.format(ast(complexRelop)),
-        complexRelopExpected
-      )
+      assert.deepStrictEqual(util.format(ast(complexRelop)), complexRelopExpected)
     }),
     it("instructions", () => {
       assert.deepStrictEqual(util.format(ast(instructions)), instructionsExp)

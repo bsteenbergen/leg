@@ -11,6 +11,11 @@ import {
 
 import * as stdlib from "./stdlib.js"
 
+/**
+ * All semantic analysis takes place inside of a context. Leg is unique in that, in
+ * an attempt to mimick assembly, we only have a single, global context.
+ */
+
 class Context {
   constructor({ parent = null, functions = new Map(), variables = new Map() }) {
     Object.assign(this, { parent, functions, variables })
@@ -28,14 +33,6 @@ class Context {
     }
     return entity
   }
-  newChildContext(props) {
-    return new Context({
-      ...this,
-      parent: this,
-      variables: new Map(),
-      ...props,
-    })
-  }
   analyze(node) {
     return this[node.constructor.name](node)
   }
@@ -43,6 +40,7 @@ class Context {
     this.analyze(p.statements)
   }
   PrintStatement(d) {
+    // console.log(d.argument.constructor)
     this.analyze(d.argument)
   }
   BinaryExpression(e) {
@@ -50,29 +48,45 @@ class Context {
     this.analyze(e.right)
   }
   VariableDeclaration(d) {
-    let type = d.type.typeName.lexeme
-    let name = d.name.lexeme
-    let initilizer = d.initializer.lexeme
-    let v = new Variable(type, name, initilizer)
-    // Make sure variable has not already been declared.
-    if (this.variables.has(name)) {
-      // If it has, throw!
-      error(`Variable ${name} already declared`)
+    d.name = d.name.lexeme
+    d.type = d.type.typeName.lexeme
+
+    // console.log(d.initializer)
+
+    this.analyze(d.initializer)
+
+    /*
+
+    if (d.type === "list") {
+      console.log(d.initializer)
+      console.log("----------")
+      d.initializer.contents.forEach((e) => this.analyze(e))
+      console.log(d.initializer)
     }
-    // Make sure variable is being initialized to the correct type.
-    if (d.initializer.constructor === Token) {
-      // If initialized to id, make sure id has been declared.
-      if (d.initializer.category === "Id") {
-        if (!this.variables.has(d.initializer.lexeme)) {
-          error(`Initializer ${d.initializer.lexeme} has not been initalized.`)
-        }
-      }
-      if (["Int", "Float", "Bool"].includes(d.initializer.category)) {
-        if (d.initializer.category.toLowerCase() !== type.toLowerCase()) {
-          error(`Initializer type does not match variable type`)
-        }
-      }
+
+    this.analyze(d.initializer)
+
+    if (d.type === "list") {
+      console.log("INITIALIZER:")
+      console.log(d.initializer)
     }
+    */
+
+    console.log(d.type)
+    console.log(d.initializer)
+
+    // Validate initializer has correct type.
+    if (d.type !== d.initializer.type)
+      error(`Initializer type does not match variable type`)
+    // Validate variable has not already been declared.
+    if (this.variables.has(d.name)) error(`Variable ${d.name} already declared`)
+
+    let v = new Variable(d.type, d.initializer.value)
+    this.add(d.name, v)
+  }
+  /*
+  VariableDeclaration(d) {
+
     // If we initialize our variable to the result of a binary expression ...
     if (d.initializer.constructor === BinaryExpression) {
       // Ensure that the variable type is a bool (b/c the result of a binary
@@ -83,9 +97,10 @@ class Context {
         )
       }
     }
-    d.variable = v
+    // d.variable = v
     this.variables.set(name, v)
   }
+  */
   VariableAssignment(d) {
     // Ensure LHS has already been initialized.
     let name = d.name.lexeme
@@ -107,12 +122,12 @@ class Context {
     // If it has not, add the function being created to the Context's functions.
     this.functions.set(funcName, func)
     // Create new child context
-    const childContext = this.newChildContext({
-      functions: this.functions,
-      variables: this.variables,
-      function: func,
-    })
-    childContext.analyze(suite.statements)
+    // const childContext = this.newChildContext({
+    //   functions: this.functions,
+    //   variables: this.variables,
+    //   function: func,
+    // })
+    // childContext.analyze(suite.statements)
   }
 
   FunctionCall(d) {
@@ -248,14 +263,26 @@ class Context {
   Token(t) {
     // For ids being used, not defined
     if (t.category === "Id") {
-      t.value = this.lookup(t.lexeme)
-      t.type = t.value.type
+      let v = this.lookup(t.lexeme)
+      t.value = v.value
+      t.type = v.type
     }
-    if (t.category === "Int") [t.value, t.type] = [Number(t.lexeme), Type.INT]
-    if (t.category === "Float") [t.value, t.type] = [Number(t.lexeme), Type.FLOAT]
-    if (t.category === "Str") [t.value, t.type] = [t.lexeme, Type.STRING]
-    if (t.category === "Bool") [t.value, t.type] = [t.lexeme === "true", Type.BOOLEAN]
+    if (t.category === "Int") [t.value, t.type] = [Number(t.lexeme), Type.INT.typeName]
+    if (t.category === "Float")
+      [t.value, t.type] = [Number(t.lexeme), Type.FLOAT.typeName]
+    // if (t.category === "Str") [t.value, t.type] = [t.lexeme, Type.STRING]
+    if (t.category === "Str") [t.value, t.type] = [t.lexeme, Type.STRING.typeName]
+
+    if (t.category === "Bool")
+      [t.value, t.type] = [t.lexeme === "true", Type.BOOL.typeName]
     // TODO: handle bin
+  }
+
+  List(a) {
+    a.contents.forEach((e) => this.analyze(e))[(t.value, t.type)] = [
+      a.contents,
+      "Type.STRING.typeName",
+    ]
   }
 
   Array(a) {

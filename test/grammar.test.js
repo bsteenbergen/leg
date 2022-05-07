@@ -47,8 +47,8 @@ const syntaxChecks = [
     #
     `,
   ],
-  ["list declaration", 'decl list letters ["a", "b", "c"]'],
-  ["empty list declaration", "decl list letters []"],
+  ["list declaration", 'decl [str] letters ["a", "b", "c"]'],
+  ["empty list declaration", "decl [] letters []"],
   ["reassign list", "asgn letters [1, 2, 3]"],
   ["cmp instruction", "cmp var_1 var_2 result"],
   ["add instruction (numbers)", "add 1 3 result"],
