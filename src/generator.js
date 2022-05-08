@@ -29,8 +29,6 @@ export default function generate(program) {
   }
 
   const generators = {
-    // Key idea: when generating an expression, just return the JS string; when
-    // generating a statement, write lines of translated JS to the output array.
     Program(p) {
       gen(p.statements)
     },
@@ -38,15 +36,38 @@ export default function generate(program) {
       output.push(`console.log(${gen(e.argument)});`)
     },
     VariableDeclaration(d) {
-      // We don't care about const vs. let in the generated code! The analyzer has
-      // already checked that we never updated a const, so let is always fine.
-      output.push(`let ${gen(d.variable)} = ${gen(d.initializer)};`)
+      output.push(`let ${gen(d.name)} = ${gen(d.initializer)};`)
     },
     VariableAssignment(s) {
-      output.push(`${gen(s.target)} = ${gen(s.source)};`)
+      output.push(`${gen(s.source)} = ${gen(s.target)};`)
+    },
+    FunctionDeclaration(d) {
+      output.push(`function ${gen(d.funcName)}() {`) // no function args for now
+      gen(d.suite)
+      output.push("}")
     },
     Variable(v) {
       return targetName(v)
+    },
+    Function(f) {
+      return targetName(f)
+    },
+    AddInstruction(a) {},
+    Suite(s) {
+      s.statements = gen(s.statements)
+      return s
+    },
+    IfStatement(s) {
+      output.push(`if (${gen(s.test)}) {`)
+      gen(s.consequent)
+      if (s.alternate.constructor === IfStatement) {
+        output.push("} else")
+        gen(s.alternate)
+      } else {
+        output.push("} else {")
+        gen(s.alternate)
+        output.push("}")
+      }
     },
     BinaryExpression(e) {
       const op = { "==": "===", "!=": "!==", "^": "**" }[e.op] ?? e.op
