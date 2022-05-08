@@ -296,6 +296,26 @@ const semanticErrors = [
     `,
     /Error: Must initialize variables before use in conditional expression/,
   ],
+  [
+    "incompatible operands in binary expression",
+    "decl int x 19 < true",
+    /Error: Incompatible operands in binary expression/,
+  ],
+  [
+    "cmp instr with leg arrays",
+    `cmp result [1, 2, 3] [1, 3, 4]`,
+    /Error: Instructions currently unsupported for LegArrays./,
+  ],
+  [
+    "add instr with leg arrays",
+    `add result [1, 2, 3] [1, 3, 4]`,
+    /Error: Instructions currently unsupported for LegArrays./,
+  ],
+  [
+    "sub instr with leg arrays",
+    `sub result [1, 2, 3] [1, 3, 4]`,
+    /Error: Instructions currently unsupported for LegArrays./,
+  ],
   // [
   //   "while loop with nonsensical condition",
   //   `

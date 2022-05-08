@@ -135,14 +135,14 @@ class Context {
       error(`Function ${funcName} has not yet been declared`)
     }
     // Check if there is a condition being attatched to the function call.
-    if (d.condition.length !== 0) {
-      d.condition.forEach((c) => {
-        // If we have a binary operator.
-        if (c.left !== undefined && c.right !== undefined) {
-          let be = new BinaryExpression(c.left, c.op, c.right)
-        }
-      })
-    }
+    // if (d.condition.length !== 0) {
+    //   d.condition.forEach((c) => {
+    //     // If we have a binary operator.
+    //     if (c.left !== undefined && c.right !== undefined) {
+    //       let be = new BinaryExpression(c.left, c.op, c.right)
+    //     }
+    //   })
+    // }
   }
 
   IfStatement(d) {
@@ -231,7 +231,7 @@ class Context {
     })
   }
 
-  ValidateArithmeticInstructionArguments(d, instructionName) {
+  ValidateArithmeticInstructionArguments(d) {
     // Set arg2 type.
     let arg2Type
     if (this.variables.has(d.args[1].description)) {
