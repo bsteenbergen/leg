@@ -9,21 +9,6 @@ function dedent(s) {
 }
 
 const fixtures = [
-  //   {
-  //     name: "small",
-  //     source: `
-  //       decl int x 3
-  //       decl int y 0
-  //       asgn y 5 ^ x
-  //       prt y
-  //     `,
-  //     expected: dedent`
-  //       let x_1 = 3;
-  //       let y_2 = 0;
-  //       y_2 = 5**x_1;
-  //       console.log(y_2);
-  //     `,
-  //   },
   {
     name: "miniscule",
     source: `
@@ -31,6 +16,51 @@ const fixtures = [
     `,
     expected: dedent`
       console.log("hello world");
+    `,
+  },
+  {
+    name: "variable declaration",
+    source: `
+        decl int x 3
+        decl int y 0
+        decl bool z true
+        decl str hey "hey"
+      `,
+    expected: dedent`
+        let x_1 = 3;
+        let y_2 = 0;
+        let z_3 = true;
+        let hey_4 = "hey";
+      `,
+  },
+  {
+    name: "variable assignment",
+    source: `
+        decl int x 5
+        decl int y 1
+        asgn y y + x
+        prt y
+    `,
+    expected: `
+        let x_1 = 5;
+        let y_2 = 1;
+        y_2 = y_2 + x_1;
+        console.log(y_2);
+    `,
+  },
+  {
+    name: "small",
+    source: `
+      decl int x 3
+      decl bool y true
+      prt y && y
+      prt x^x
+    `,
+    expected: dedent`
+      let x_1 = 3;
+      let y_2 = true;
+      console.log((y_2 && y_2));
+      console.log((x_1 ** x_1));
     `,
   },
 ]
