@@ -30,8 +30,8 @@ export class VariableAssignment {
 
 export class Variable {
   // Generated when processing a variable declaration
-  constructor(type, name, value) {
-    Object.assign(this, { type, name, value })
+  constructor(type, value) {
+    Object.assign(this, { type, value })
   }
 }
 
@@ -84,12 +84,6 @@ export class Suite {
   }
 }
 
-export class List {
-  constructor(contents) {
-    this.contents = contents
-  }
-}
-
 export class Type {
   static INT = new Type("int")
   static FLOAT = new Type("float")
@@ -98,6 +92,18 @@ export class Type {
   static BIN = new Type("bin")
   constructor(typeName) {
     Object.assign(this, { typeName })
+  }
+}
+
+export class ArrayType {
+  constructor(baseType) {
+    Object.assign(this, { baseType })
+  }
+}
+
+export class LegArray {
+  constructor(contents) {
+    this.contents = contents
   }
 }
 

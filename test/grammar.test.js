@@ -47,12 +47,11 @@ const syntaxChecks = [
     #
     `,
   ],
-  ["list declaration", 'decl list letters ["a", "b", "c"]'],
-  ["empty list declaration", "decl list letters []"],
-  ["reassign list", "asgn letters [1, 2, 3]"],
+  ["array declaration", 'decl [str] letters ["a", "b", "c"]'],
+  ["reassign array", "asgn letters [1, 2, 3]"],
   ["cmp instruction", "cmp var_1 var_2 result"],
   ["add instruction (numbers)", "add 1 3 result"],
-  ["add instruction (lists)", 'add [1, 2, 3] ["cat", "dog"] x'],
+  ["add instruction (arrays)", 'add [1, 2, 3] ["cat", "dog"] x'],
   ["sub instruction (strings)", 'sub "hi" " and shalom" result'],
   ["sub instruction (floats)", "sub 9.999 -10.0 r"],
 ]
@@ -64,6 +63,7 @@ const syntaxErrors = [
   ["keyword as variable name 2", "int #if = 10"],
   ["symbol as variable name", "int # = 11"],
   ["space as variable name", "int   = 11"],
+  ["array decl without base type", "decl [] letters []"],
   [
     "malformed if statement",
     `

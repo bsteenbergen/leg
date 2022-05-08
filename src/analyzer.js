@@ -7,9 +7,15 @@ import {
   BinaryExpression,
   Token,
   Instruction,
+  LegArray,
 } from "./core.js"
 
 import * as stdlib from "./stdlib.js"
+
+/**
+ * All semantic analysis takes place inside of a context. Leg is unique in that, in
+ * an attempt to mimick assembly, we only have a single, global context.
+ */
 
 class Context {
   constructor({ parent = null, functions = new Map(), variables = new Map() }) {
@@ -24,17 +30,9 @@ class Context {
     if (entity !== undefined) return entity
     entity = this.parent?.lookup(name)
     if (entity === undefined || entity === null) {
-      error(`${name} has not been initialized.`)
+      error(`${name} has not been initialized`)
     }
     return entity
-  }
-  newChildContext(props) {
-    return new Context({
-      ...this,
-      parent: this,
-      variables: new Map(),
-      ...props,
-    })
   }
   analyze(node) {
     return this[node.constructor.name](node)
@@ -48,43 +46,62 @@ class Context {
   BinaryExpression(e) {
     this.analyze(e.left)
     this.analyze(e.right)
+    // Validate operator and operand type compatibility.
+    if (e.left.type === e.right.type) {
+      // Numbers (int, float, bin)
+      if (["int", "float", "bin"].includes(e.left.type)) {
+        if (["+", "-", "*", "/", "^", "%"].includes(e.op))
+          e.resultType = e.left.type // arithop
+        else if (["<=", "<", "!=", "==", ">=", ">"].includes(e.op)) e.resultType = "bool" // relop
+      }
+      // Strings
+      else if (e.left.type === "str") {
+        if (["+"].includes(e.op)) e.resultType = "str"
+        else if (["!=", "=="].includes(e.op)) e.resultType = "bool"
+        else if (["-", "*", "/", "^", "%", "<=", "<", ">=", ">"].includes(e.op))
+          error("Unsupported operation in BinaryExpression with two strings")
+      }
+      // Bools
+      else if (e.left.type === "bool") {
+        if (["!=", "=="].includes(e.op)) e.resultType = "bool"
+        else if (["+", "-", "*", "/", "^", "%", "<=", "<", ">=", ">"].includes(e.op))
+          error("Unsupported operation in BinaryExpression with two bools")
+      }
+    } else {
+      error("Incompatible operands in binary expression")
+    }
   }
   VariableDeclaration(d) {
-    let type = d.type.typeName.lexeme
-    let name = d.name.lexeme
-    let initilizer = d.initializer.lexeme
-    let v = new Variable(type, name, initilizer)
-    // Make sure variable has not already been declared.
-    if (this.variables.has(name)) {
-      // If it has, throw!
-      error(`Variable ${name} already declared`)
+    let v = new Variable()
+    d.name = d.name.lexeme
+    // Validate variable has not already been declared.
+    if (this.variables.has(d.name)) error(`Variable ${d.name} already declared`)
+    // Type checking unique for arrays ...
+    if (d.initializer.constructor === LegArray) {
+      d.type = d.type.typeName.baseType.typeName.lexeme
+      d.initializer.contents.forEach((e) => this.analyze(e))
+      let contentValues = []
+      d.initializer.contents.forEach((e) => {
+        if (e.type !== d.type)
+          error(`Array element ${e.value} does not match array type ${d.type}`)
+        contentValues.push(e.value)
+      })
+      v = new Variable(d.type, contentValues)
+      // ... and for binary expressions.
+    } else if (d.initializer.constructor === BinaryExpression) {
+      this.analyze(d.initializer)
+      d.type = d.type.typeName.lexeme
+      if (d.initializer.resultType !== d.type)
+        error("Variable type does not match result of BinaryExpression initializer")
+    } else {
+      d.type = d.type.typeName.lexeme
+      this.analyze(d.initializer)
+      // Validate initializer has correct type.
+      if (d.type !== d.initializer.type)
+        error(`Initializer type does not match variable type`)
+      v = new Variable(d.type, d.initializer.value)
     }
-    // Make sure variable is being initialized to the correct type.
-    if (d.initializer.constructor === Token) {
-      // If initialized to id, make sure id has been declared.
-      if (d.initializer.category === "Id") {
-        if (!this.variables.has(d.initializer.lexeme)) {
-          error(`Initializer ${d.initializer.lexeme} has not been initalized.`)
-        }
-      }
-      if (["Int", "Float", "Bool"].includes(d.initializer.category)) {
-        if (d.initializer.category.toLowerCase() !== type.toLowerCase()) {
-          error(`Initializer type does not match variable type`)
-        }
-      }
-    }
-    // If we initialize our variable to the result of a binary expression ...
-    if (d.initializer.constructor === BinaryExpression) {
-      // Ensure that the variable type is a bool (b/c the result of a binary
-      // expression cannot be anything else.)
-      if (type !== "bool") {
-        error(
-          `Variable ${name} is being initalized to result of binary expression but is not type bool`
-        )
-      }
-    }
-    d.variable = v
-    this.variables.set(name, v)
+    this.add(d.name, v)
   }
   VariableAssignment(d) {
     // Ensure LHS has already been initialized.
@@ -106,13 +123,6 @@ class Context {
     }
     // If it has not, add the function being created to the Context's functions.
     this.functions.set(funcName, func)
-    // Create new child context
-    const childContext = this.newChildContext({
-      functions: this.functions,
-      variables: this.variables,
-      function: func,
-    })
-    childContext.analyze(suite.statements)
   }
 
   FunctionCall(d) {
@@ -125,14 +135,14 @@ class Context {
       error(`Function ${funcName} has not yet been declared`)
     }
     // Check if there is a condition being attatched to the function call.
-    if (d.condition.length !== 0) {
-      d.condition.forEach((c) => {
-        // If we have a binary operator.
-        if (c.left !== undefined && c.right !== undefined) {
-          let be = new BinaryExpression(c.left, c.op, c.right)
-        }
-      })
-    }
+    // if (d.condition.length !== 0) {
+    //   d.condition.forEach((c) => {
+    //     // If we have a binary operator.
+    //     if (c.left !== undefined && c.right !== undefined) {
+    //       let be = new BinaryExpression(c.left, c.op, c.right)
+    //     }
+    //   })
+    // }
   }
 
   IfStatement(d) {
@@ -153,11 +163,13 @@ class Context {
         error(`If statement condition must evaluate to a boolean`)
       }
     }
-    // TODO: check for binary expressions
   }
 
   CompareInstruction(d) {
     this.ValidateInstructionParameterLength(d, 3)
+    if (d.args[1].constructor === LegArray || d.args[2].constructor === LegArray) {
+      error("Instructions currently unsupported for LegArrays.")
+    }
     // If arg_1 already exists, make sure it's a boolean.
     if (this.variables.has(d.args[0].description)) {
       if (this.variables.get(d.args[0].description).type !== "bool") {
@@ -176,6 +188,9 @@ class Context {
 
   AddInstruction(d) {
     this.ValidateInstructionParameterLength(d, 3)
+    if (d.args[1].constructor === LegArray || d.args[2].constructor === LegArray) {
+      error("Instructions currently unsupported for LegArrays.")
+    }
     // Check types of arguments
     let arg1Type = this.ValidateArithmeticInstructionArguments(d, Instruction.ADD)
     // Initializer just stores info about the params and the instruction type
@@ -190,6 +205,9 @@ class Context {
 
   SubInstruction(d) {
     this.ValidateInstructionParameterLength(d, 3) // Check length of instruction
+    if (d.args[1].constructor === LegArray || d.args[2].constructor === LegArray) {
+      error("Instructions currently unsupported for LegArrays.")
+    }
     let arg1Type = this.ValidateArithmeticInstructionArguments(d, Instruction.SUB)
     // Initializer just stores info about the params and the instruction type
     // since we won't know the result until runtime.
@@ -213,7 +231,7 @@ class Context {
     })
   }
 
-  ValidateArithmeticInstructionArguments(d, instructionName) {
+  ValidateArithmeticInstructionArguments(d) {
     // Set arg2 type.
     let arg2Type
     if (this.variables.has(d.args[1].description)) {
@@ -238,7 +256,7 @@ class Context {
     }
     // If arg_1 already exists, make sure it's the same type as arg_2 and arg_3.
     if (this.variables.has(d.args[0].description)) {
-      if (this.variables.get(d.args[0].description).type !== arg2Type) {
+      if (this.variables.get(d.args[0].description).type !== arg2Type.toLowerCase()) {
         error(`Result of instruction must be same type as arguments.`)
       }
     }
@@ -248,14 +266,17 @@ class Context {
   Token(t) {
     // For ids being used, not defined
     if (t.category === "Id") {
-      t.value = this.lookup(t.lexeme)
-      t.type = t.value.type
+      let v = this.lookup(t.lexeme)
+      t.value = v.value
+      t.type = v.type
     }
-    if (t.category === "Int") [t.value, t.type] = [Number(t.lexeme), Type.INT]
-    if (t.category === "Float") [t.value, t.type] = [Number(t.lexeme), Type.FLOAT]
-    if (t.category === "Str") [t.value, t.type] = [t.lexeme, Type.STRING]
-    if (t.category === "Bool") [t.value, t.type] = [t.lexeme === "true", Type.BOOLEAN]
-    // TODO: handle bin
+    if (t.category === "Int") [t.value, t.type] = [Number(t.lexeme), Type.INT.typeName]
+    if (t.category === "Float")
+      [t.value, t.type] = [Number(t.lexeme), Type.FLOAT.typeName]
+    if (t.category === "Str") [t.value, t.type] = [t.lexeme, Type.STRING.typeName]
+    if (t.category === "Bool")
+      [t.value, t.type] = [t.lexeme === "true", Type.BOOL.typeName]
+    if (t.category === "Bin") [t.value, t.type] = [t.lexeme, Type.BIN.typeName]
   }
 
   Array(a) {

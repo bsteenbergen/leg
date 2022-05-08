@@ -15,7 +15,15 @@ const semanticChecks = [
   ["print float", "prt -3.4"],
   ["print bools", "prt true"],
   ["variable declaration", "decl int x 3"],
-  ["list declaration", 'decl list letters ["a", "b", "c"]'],
+  ["array declaration", `decl [str] letters ["a", "b", "c"]`],
+  [
+    "array declaration with variables in initializer",
+    `
+    decl str letter1 "b"
+    decl [str] letters ["a", letter1, "c"]`,
+  ],
+  ["variable initialized to binary exp 1", `decl float f 0.5 + 0.6`],
+  ["variable initialized to binary exp 2", `decl bool b1 001011b < 0011101b`],
   [
     "function declaration",
     `
@@ -60,8 +68,8 @@ const semanticChecks = [
   [
     "valid add instruction with pre-declared result variable",
     `
-    decl list sum []
-    add sum [1, 2, 3] [4, 5, 6]
+    decl int sum 0
+    add sum 1 1029383289
     `,
   ],
   [
@@ -70,13 +78,13 @@ const semanticChecks = [
     sub result "hello" "goodbye" 
     `,
   ],
-  [
-    "valid sub instruction with pre-declared result variable",
-    `
-    decl list diff []
-    sub diff [1, 2, 3] [1, 2, 3, 4, 5, 6]
-    `,
-  ],
+  // [
+  //   "valid sub instruction with pre-declared result variable",
+  //   `
+  //   decl [int] diff []
+  //   sub diff [1, 2, 3] [1, 2, 3, 4, 5, 6]
+  //   `,
+  // ],
   [
     "increment variable",
     `
@@ -152,18 +160,32 @@ const semanticErrors = [
     /Error: Function #my_func already declared/,
   ],
   [
+    "array element does not match type of array",
+    `
+    decl [int] nums [1, 2, 3, 4, 1011101b]
+    `,
+    /Error: Array element 1011101b does not match array type int/,
+  ],
+  [
     "initialize to uninitialized variable",
     `
     decl int j k
     `,
-    /Error: Initializer k has not been initalized./,
+    /Error: k has not been initialized/,
   ],
   [
     "initialize non-bool var to result of boolean expression",
     `
     decl int j 19 < 9
     `,
-    /Error: Variable j is being initalized to result of binary expression but is not type bool/,
+    /Error: Variable type does not match result of BinaryExpression initializer/,
+  ],
+  [
+    "initialize bool var to result of arithmetic expression",
+    `
+    decl bool j 19 + 9
+    `,
+    /Error: Variable type does not match result of BinaryExpression initializer/,
   ],
   [
     "function that has not yet been declared",
@@ -220,8 +242,8 @@ const semanticErrors = [
   [
     "add instruction with result of incorrect type",
     `
-    decl list l1 ["hello"]
-    decl list l2 ["world"]
+    decl [str] l1 ["hello"]
+    decl [str] l2 ["world"]
     decl int result 0
     add result l1 l2
     `,
@@ -232,6 +254,7 @@ const semanticErrors = [
     "add result 1 my_int",
     /Error: Variable my_int is undeclared/,
   ],
+
   [
     "variable initilized with wrong type",
     "decl str x 19",
@@ -272,6 +295,26 @@ const semanticErrors = [
     #
     `,
     /Error: Must initialize variables before use in conditional expression/,
+  ],
+  [
+    "incompatible operands in binary expression",
+    "decl int x 19 < true",
+    /Error: Incompatible operands in binary expression/,
+  ],
+  [
+    "cmp instr with leg arrays",
+    `cmp result [1, 2, 3] [1, 3, 4]`,
+    /Error: Instructions currently unsupported for LegArrays./,
+  ],
+  [
+    "add instr with leg arrays",
+    `add result [1, 2, 3] [1, 3, 4]`,
+    /Error: Instructions currently unsupported for LegArrays./,
+  ],
+  [
+    "sub instr with leg arrays",
+    `sub result [1, 2, 3] [1, 3, 4]`,
+    /Error: Instructions currently unsupported for LegArrays./,
   ],
   // [
   //   "while loop with nonsensical condition",
