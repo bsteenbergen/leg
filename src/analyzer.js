@@ -8,6 +8,7 @@ import {
   Token,
   Instruction,
   ArrayType,
+  LegArray,
 } from "./core.js"
 
 import * as stdlib from "./stdlib.js"
@@ -46,14 +47,38 @@ class Context {
   BinaryExpression(e) {
     this.analyze(e.left)
     this.analyze(e.right)
+    // Validate operator and operand type compatibility.
+    if (e.left.type === e.right.type) {
+      // Numbers (int, float, bin)
+      if (["int", "float", "bin"].includes(e.left.type)) {
+        if (["+", "-", "*", "/", "^", "%"].includes(e.op))
+          e.resultType = e.left.type // arithop
+        else if (["<=", "<", "!=", "==", ">=", ">"].includes(e.op)) e.resultType = "bool" // relop
+      }
+      // Strings
+      else if (e.left.type === "str") {
+        if (["+"].includes(e.op)) e.resultType = "str"
+        else if (["!=", "=="].includes(e.op)) e.resultType = "bool"
+        else if (["-", "*", "/", "^", "%", "<=", "<", ">=", ">"].includes(e.op))
+          error("Unsupported operation in BinaryExpression with two strings")
+      }
+      // Bools
+      else if (e.left.type === "bool") {
+        if (["!=", "=="].includes(e.op)) e.resultType = "bool"
+        else if (["+", "-", "*", "/", "^", "%", "<=", "<", ">=", ">"].includes(e.op))
+          error("Unsupported operation in BinaryExpression with two bools")
+      }
+    } else {
+      error("Incompatible operands in binary expression")
+    }
   }
   VariableDeclaration(d) {
     let v = new Variable()
     d.name = d.name.lexeme
     // Validate variable has not already been declared.
     if (this.variables.has(d.name)) error(`Variable ${d.name} already declared`)
-    // Type checking unique for arrays.
-    if (d.type.typeName.constructor === ArrayType) {
+    // Type checking unique for arrays ...
+    if (d.initializer.constructor === LegArray) {
       d.type = d.type.typeName.baseType.typeName.lexeme
       d.initializer.contents.forEach((e) => this.analyze(e))
       let contentValues = []
@@ -64,6 +89,12 @@ class Context {
         contentValues.push(e.value)
       })
       v = new Variable(d.type, contentValues)
+      // ... and for binary expressions.
+    } else if (d.initializer.constructor === BinaryExpression) {
+      this.analyze(d.initializer)
+      d.type = d.type.typeName.lexeme
+      if (d.initializer.resultType !== d.type)
+        error("Variable type does not match result of BinaryExpression initializer")
     } else {
       d.type = d.type.typeName.lexeme
       this.analyze(d.initializer)
@@ -73,6 +104,7 @@ class Context {
       v = new Variable(d.type, d.initializer.value)
     }
     this.add(d.name, v)
+    // console.log(this.variables)
   }
   VariableAssignment(d) {
     // Ensure LHS has already been initialized.

@@ -16,14 +16,14 @@ const semanticChecks = [
   ["print bools", "prt true"],
   ["variable declaration", "decl int x 3"],
   ["array declaration", `decl [str] letters ["a", "b", "c"]`],
-  // [
-  //   "list declaration",
-  //   `
-  //   decl str letter "b"
-  //   decl list letters ["a", letter, "c"]
-  // `,
-  // ],
-  /*
+  [
+    "array declaration with variables in initializer",
+    `
+    decl str letter1 "b"
+    decl [str] letters ["a", letter1, "c"]`,
+  ],
+  ["variable initialized to binary exp 1", `decl float f 0.5 + 0.6`],
+  ["variable initialized to binary exp 2", `decl bool b1 001011b < 0011101b`],
   [
     "function declaration",
     `
@@ -65,26 +65,26 @@ const semanticChecks = [
     add sum 3 5
     `,
   ],
-  [
-    "valid add instruction with pre-declared result variable",
-    `
-    decl [int] sum []
-    add sum [1, 2, 3] [4, 5, 6]
-    `,
-  ],
+  // [
+  //   "valid add instruction with pre-declared result variable",
+  //   `
+  //   decl [int] sum []
+  //   add sum [1, 2, 3] [4, 5, 6]
+  //   `,
+  // ],
   [
     "valid sub instruction with undeclared result variable",
     `
     sub result "hello" "goodbye" 
     `,
   ],
-  [
-    "valid sub instruction with pre-declared result variable",
-    `
-    decl [int] diff []
-    sub diff [1, 2, 3] [1, 2, 3, 4, 5, 6]
-    `,
-  ],
+  // [
+  //   "valid sub instruction with pre-declared result variable",
+  //   `
+  //   decl [int] diff []
+  //   sub diff [1, 2, 3] [1, 2, 3, 4, 5, 6]
+  //   `,
+  // ],
   [
     "increment variable",
     `
@@ -144,7 +144,6 @@ const semanticChecks = [
     decl bool i 9 > j
     `,
   ],
-  */
 ]
 
 const semanticErrors = [
@@ -179,7 +178,14 @@ const semanticErrors = [
     `
     decl int j 19 < 9
     `,
-    /Error: Variable j is being initalized to result of binary expression but is not type bool/,
+    /Error: Variable type does not match result of BinaryExpression initializer/,
+  ],
+  [
+    "initialize bool var to result of arithmetic expression",
+    `
+    decl bool j 19 + 9
+    `,
+    /Error: Variable type does not match result of BinaryExpression initializer/,
   ],
   [
     "function that has not yet been declared",

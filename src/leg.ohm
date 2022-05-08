@@ -62,7 +62,7 @@ leg {
 
     LegArray = "[" ListOf<Exp, ","> "]"
     
-    logicop = ("!&" | "!|" | "!")
+    logicop = "!"
     relop   = ("<=" | "<" | "!=" | "==" | ">=" | ">")
 
     print = "prt" ~idchar
