@@ -27,9 +27,9 @@ const varDeclAndAsgnExp = `   1 | Program statements=[#2,#4,#5,#10]
    6 | TypeName typeName=#7
    7 | ArrayType baseType=#8
    8 | TypeName typeName=(Sym,"int")
-   9 | ArrayType baseType=[]
+   9 | LegArray contents=[]
   10 | VariableAssignment name=(Id,"collection") initializer=#11
-  11 | ArrayType baseType=[(Int,"1"),(Str,""b""),(Bool,"true")]`
+  11 | LegArray contents=[(Int,"1"),(Str,""b""),(Bool,"true")]`
 
 const funcDecl = `
 #my_func:

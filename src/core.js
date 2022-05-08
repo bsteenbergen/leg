@@ -28,12 +28,6 @@ export class VariableAssignment {
   }
 }
 
-// export class Variable {
-//   // Generated when processing a variable declaration
-//   constructor(type, name, value) {
-//     Object.assign(this, { type, name, value })
-//   }
-// }
 export class Variable {
   // Generated when processing a variable declaration
   constructor(type, value) {

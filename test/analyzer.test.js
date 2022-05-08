@@ -65,13 +65,13 @@ const semanticChecks = [
     add sum 3 5
     `,
   ],
-  // [
-  //   "valid add instruction with pre-declared result variable",
-  //   `
-  //   decl [int] sum []
-  //   add sum [1, 2, 3] [4, 5, 6]
-  //   `,
-  // ],
+  [
+    "valid add instruction with pre-declared result variable",
+    `
+    decl int sum 0
+    add sum 1 1029383289
+    `,
+  ],
   [
     "valid sub instruction with undeclared result variable",
     `

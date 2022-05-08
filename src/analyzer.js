@@ -7,7 +7,6 @@ import {
   BinaryExpression,
   Token,
   Instruction,
-  ArrayType,
   LegArray,
 } from "./core.js"
 
@@ -83,7 +82,6 @@ class Context {
       d.initializer.contents.forEach((e) => this.analyze(e))
       let contentValues = []
       d.initializer.contents.forEach((e) => {
-        // console.log(e)
         if (e.type !== d.type)
           error(`Array element ${e.value} does not match array type ${d.type}`)
         contentValues.push(e.value)
@@ -104,7 +102,6 @@ class Context {
       v = new Variable(d.type, d.initializer.value)
     }
     this.add(d.name, v)
-    // console.log(this.variables)
   }
   VariableAssignment(d) {
     // Ensure LHS has already been initialized.
@@ -126,13 +123,6 @@ class Context {
     }
     // If it has not, add the function being created to the Context's functions.
     this.functions.set(funcName, func)
-    // Create new child context
-    // const childContext = this.newChildContext({
-    //   functions: this.functions,
-    //   variables: this.variables,
-    //   function: func,
-    // })
-    // childContext.analyze(suite.statements)
   }
 
   FunctionCall(d) {
@@ -173,11 +163,13 @@ class Context {
         error(`If statement condition must evaluate to a boolean`)
       }
     }
-    // TODO: check for binary expressions
   }
 
   CompareInstruction(d) {
     this.ValidateInstructionParameterLength(d, 3)
+    if (d.args[1].constructor === LegArray || d.args[2].constructor === LegArray) {
+      error("Instructions currently unsupported for LegArrays.")
+    }
     // If arg_1 already exists, make sure it's a boolean.
     if (this.variables.has(d.args[0].description)) {
       if (this.variables.get(d.args[0].description).type !== "bool") {
@@ -196,6 +188,9 @@ class Context {
 
   AddInstruction(d) {
     this.ValidateInstructionParameterLength(d, 3)
+    if (d.args[1].constructor === LegArray || d.args[2].constructor === LegArray) {
+      error("Instructions currently unsupported for LegArrays.")
+    }
     // Check types of arguments
     let arg1Type = this.ValidateArithmeticInstructionArguments(d, Instruction.ADD)
     // Initializer just stores info about the params and the instruction type
@@ -210,6 +205,9 @@ class Context {
 
   SubInstruction(d) {
     this.ValidateInstructionParameterLength(d, 3) // Check length of instruction
+    if (d.args[1].constructor === LegArray || d.args[2].constructor === LegArray) {
+      error("Instructions currently unsupported for LegArrays.")
+    }
     let arg1Type = this.ValidateArithmeticInstructionArguments(d, Instruction.SUB)
     // Initializer just stores info about the params and the instruction type
     // since we won't know the result until runtime.
@@ -258,7 +256,7 @@ class Context {
     }
     // If arg_1 already exists, make sure it's the same type as arg_2 and arg_3.
     if (this.variables.has(d.args[0].description)) {
-      if (this.variables.get(d.args[0].description).type !== arg2Type) {
+      if (this.variables.get(d.args[0].description).type !== arg2Type.toLowerCase()) {
         error(`Result of instruction must be same type as arguments.`)
       }
     }
