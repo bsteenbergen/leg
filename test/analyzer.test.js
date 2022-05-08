@@ -15,12 +15,7 @@ const semanticChecks = [
   ["print float", "prt -3.4"],
   ["print bools", "prt true"],
   ["variable declaration", "decl int x 3"],
-  [
-    "list declaration",
-    `
-    decl list letters ["a", "b", "c"]
-  `,
-  ],
+  ["array declaration", `decl [str] letters ["a", "b", "c"]`],
   // [
   //   "list declaration",
   //   `
@@ -28,6 +23,7 @@ const semanticChecks = [
   //   decl list letters ["a", letter, "c"]
   // `,
   // ],
+  /*
   [
     "function declaration",
     `
@@ -72,7 +68,7 @@ const semanticChecks = [
   [
     "valid add instruction with pre-declared result variable",
     `
-    decl list sum []
+    decl [int] sum []
     add sum [1, 2, 3] [4, 5, 6]
     `,
   ],
@@ -85,7 +81,7 @@ const semanticChecks = [
   [
     "valid sub instruction with pre-declared result variable",
     `
-    decl list diff []
+    decl [int] diff []
     sub diff [1, 2, 3] [1, 2, 3, 4, 5, 6]
     `,
   ],
@@ -148,6 +144,7 @@ const semanticChecks = [
     decl bool i 9 > j
     `,
   ],
+  */
 ]
 
 const semanticErrors = [
@@ -164,11 +161,18 @@ const semanticErrors = [
     /Error: Function #my_func already declared/,
   ],
   [
+    "array element does not match type of array",
+    `
+    decl [int] nums [1, 2, 3, 4, 1011101b]
+    `,
+    /Error: Array element 1011101b does not match array type int/,
+  ],
+  [
     "initialize to uninitialized variable",
     `
     decl int j k
     `,
-    /Error: k has not been initalized./,
+    /Error: k has not been initialized/,
   ],
   [
     "initialize non-bool var to result of boolean expression",
@@ -232,8 +236,8 @@ const semanticErrors = [
   [
     "add instruction with result of incorrect type",
     `
-    decl list l1 ["hello"]
-    decl list l2 ["world"]
+    decl [str] l1 ["hello"]
+    decl [str] l2 ["world"]
     decl int result 0
     add result l1 l2
     `,

@@ -7,6 +7,7 @@ import {
   BinaryExpression,
   Token,
   Instruction,
+  ArrayType,
 } from "./core.js"
 
 import * as stdlib from "./stdlib.js"
@@ -29,7 +30,7 @@ class Context {
     if (entity !== undefined) return entity
     entity = this.parent?.lookup(name)
     if (entity === undefined || entity === null) {
-      error(`${name} has not been initialized.`)
+      error(`${name} has not been initialized`)
     }
     return entity
   }
@@ -40,7 +41,6 @@ class Context {
     this.analyze(p.statements)
   }
   PrintStatement(d) {
-    // console.log(d.argument.constructor)
     this.analyze(d.argument)
   }
   BinaryExpression(e) {
@@ -48,59 +48,32 @@ class Context {
     this.analyze(e.right)
   }
   VariableDeclaration(d) {
+    let v = new Variable()
     d.name = d.name.lexeme
-    d.type = d.type.typeName.lexeme
-
-    // console.log(d.initializer)
-
-    this.analyze(d.initializer)
-
-    /*
-
-    if (d.type === "list") {
-      console.log(d.initializer)
-      console.log("----------")
-      d.initializer.contents.forEach((e) => this.analyze(e))
-      console.log(d.initializer)
-    }
-
-    this.analyze(d.initializer)
-
-    if (d.type === "list") {
-      console.log("INITIALIZER:")
-      console.log(d.initializer)
-    }
-    */
-
-    console.log(d.type)
-    console.log(d.initializer)
-
-    // Validate initializer has correct type.
-    if (d.type !== d.initializer.type)
-      error(`Initializer type does not match variable type`)
     // Validate variable has not already been declared.
     if (this.variables.has(d.name)) error(`Variable ${d.name} already declared`)
-
-    let v = new Variable(d.type, d.initializer.value)
+    // Type checking unique for arrays.
+    if (d.type.typeName.constructor === ArrayType) {
+      d.type = d.type.typeName.baseType.typeName.lexeme
+      d.initializer.contents.forEach((e) => this.analyze(e))
+      let contentValues = []
+      d.initializer.contents.forEach((e) => {
+        // console.log(e)
+        if (e.type !== d.type)
+          error(`Array element ${e.value} does not match array type ${d.type}`)
+        contentValues.push(e.value)
+      })
+      v = new Variable(d.type, contentValues)
+    } else {
+      d.type = d.type.typeName.lexeme
+      this.analyze(d.initializer)
+      // Validate initializer has correct type.
+      if (d.type !== d.initializer.type)
+        error(`Initializer type does not match variable type`)
+      v = new Variable(d.type, d.initializer.value)
+    }
     this.add(d.name, v)
   }
-  /*
-  VariableDeclaration(d) {
-
-    // If we initialize our variable to the result of a binary expression ...
-    if (d.initializer.constructor === BinaryExpression) {
-      // Ensure that the variable type is a bool (b/c the result of a binary
-      // expression cannot be anything else.)
-      if (type !== "bool") {
-        error(
-          `Variable ${name} is being initalized to result of binary expression but is not type bool`
-        )
-      }
-    }
-    // d.variable = v
-    this.variables.set(name, v)
-  }
-  */
   VariableAssignment(d) {
     // Ensure LHS has already been initialized.
     let name = d.name.lexeme
@@ -270,19 +243,10 @@ class Context {
     if (t.category === "Int") [t.value, t.type] = [Number(t.lexeme), Type.INT.typeName]
     if (t.category === "Float")
       [t.value, t.type] = [Number(t.lexeme), Type.FLOAT.typeName]
-    // if (t.category === "Str") [t.value, t.type] = [t.lexeme, Type.STRING]
     if (t.category === "Str") [t.value, t.type] = [t.lexeme, Type.STRING.typeName]
-
     if (t.category === "Bool")
       [t.value, t.type] = [t.lexeme === "true", Type.BOOL.typeName]
-    // TODO: handle bin
-  }
-
-  List(a) {
-    a.contents.forEach((e) => this.analyze(e))[(t.value, t.type)] = [
-      a.contents,
-      "Type.STRING.typeName",
-    ]
+    if (t.category === "Bin") [t.value, t.type] = [t.lexeme, Type.BIN.typeName]
   }
 
   Array(a) {

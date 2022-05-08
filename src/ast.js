@@ -82,7 +82,7 @@ const astBuilder = grammar.createSemantics().addOperation("ast", {
     return new core.TypeName(typeName.ast())
   },
   LegArray(_open, contents, _close) {
-    return new core.ArrayType(contents.asIteration().ast())
+    return new core.LegArray(contents.asIteration().ast())
   },
   Type_arr(_open, base, _close) {
     return new core.ArrayType(base.ast())
