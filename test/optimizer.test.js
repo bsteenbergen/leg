@@ -38,68 +38,8 @@ const tests = [
     new core.BinaryExpression(new core.BinaryExpression(3, "*", x), "&&", true),
     27,
   ],
-  /*
-  [
-    "folds result of add instruction on two integers",
-    new core.Variable(core.Type.INT, "result", new core.BinaryExpression(10, "+", 30)),
-    new core.Variable(core.Type.INT, "result", 40),
-  ],
-  [
-    "folds result of sub instruction on two integers",
-    new core.Variable(core.Type.INT, "result", new core.BinaryExpression(10, "-", 30)),
-    new core.Variable(core.Type.INT, "result", -20),
-  ],
-  [
-    "folds result of cmp instruction on two integers",
-    new core.Variable(core.Type.INT, "result", new core.BinaryExpression(10, "==", 30)),
-    new core.Variable(core.Type.INT, "result", false),
-  ],
-  [
-    "folds result of add instruction on two strings",
-    new core.Variable(
-      core.Type.STRING,
-      "result",
-      new core.BinaryExpression("Hello and ", "+", "goodbye.")
-    ),
-    new core.Variable(core.Type.STRING, "result", "Hello and goodbye."),
-  ],
-  [
-    "folds result of sub instruction on two strings",
-    new core.Variable(
-      core.Type.STRING,
-      "result",
-      new core.BinaryExpression(
-        "The cats and the dogs went to the park.",
-        "-",
-        "cats and the "
-      )
-    ),
-    new core.Variable(core.Type.STRING, "result", "The dogs went to the park."),
-  ],
-  [
-    "folds result of cmp instruction on two strings",
-    new core.Variable(
-      core.Type.STRING,
-      "result",
-      new core.BinaryExpression(
-        "The cats and the dogs went to the park.",
-        "==",
-        "The cats and the dogs went to the park."
-      )
-    ),
-    new core.Variable(core.Type.STRING, "result", true),
-  ],
-  [
-    "folds result of add instruction on two string variables",
-    new core.Variable(
-      core.Type.STRING,
-      "result",
-      new core.BinaryExpression(svar1, "+", svar2)
-    ),
-    new core.Variable(core.Type.STRING, "result", "Hello, World"),
-  ],
-  ["optimizes if-true", new core.IfStatement(true, suite1, suite2), suite1],
-  ["optimizes if-false", new core.IfStatement(false, suite2, suite1), suite1],
+  ["optimizes if-true", new core.IfStatement(true, `prt "hi"`, []), `prt "hi"`],
+  ["optimizes if-false", new core.IfStatement(false, [], `prt "hi"`), `prt "hi"`],
   [
     "passes through nonoptimizable constructs",
     ...Array(2).fill([
@@ -113,7 +53,6 @@ const tests = [
       new core.VariableAssignment(x, new core.UnaryExpression("-", x)),
     ]),
   ],
-  */
 ]
 
 describe("The optimizer", () => {
