@@ -3,11 +3,9 @@ import ast from "../src/ast.js"
 import analyze from "../src/analyzer.js"
 import optimize from "../src/optimizer.js"
 import generate from "../src/generator.js"
-
 function dedent(s) {
   return `${s}`.replace(/(?<=\n)\s+/g, "").trim()
 }
-
 const fixtures = [
   {
     name: "miniscule",
@@ -24,6 +22,7 @@ const fixtures = [
         decl int x 3
         decl int y 0
         decl bool z true
+        decl int big 9007199254740991
         decl str hey "hey"
       `,
     expected: dedent`
@@ -39,7 +38,7 @@ const fixtures = [
     source: `
         decl int x 5
         decl int y 1
-        asgn y y + x
+        asgn y x
         prt y
     `,
     expected: dedent`
@@ -64,7 +63,7 @@ const fixtures = [
       let y = true;
       let z = true;
       z = !(z);
-      console.log((true && true));
+      console.log(true);
       console.log(27);
     `,
   },
@@ -103,7 +102,6 @@ const fixtures = [
     `,
   },
 ]
-
 describe("The code generator", () => {
   for (const fixture of fixtures) {
     it(`produces expected js output for the ${fixture.name} program`, () => {

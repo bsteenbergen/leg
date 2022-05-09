@@ -1,15 +1,11 @@
 import { IfStatement, Type } from "./core.js"
 import * as stdlib from "./stdlib.js"
-
 export default function generate(program) {
   const output = []
-
   const standardFunctions = new Map([[stdlib.contents.print, (x) => `console.log(${x})`]])
-
   function gen(node) {
     return generators[node.constructor.name](node)
   }
-
   const generators = {
     Program(p) {
       gen(p.statements)
@@ -78,7 +74,6 @@ export default function generate(program) {
       return a.map(gen)
     },
   }
-
   gen(program)
   return output.join("\n")
 }
