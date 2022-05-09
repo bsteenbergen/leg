@@ -1,17 +1,17 @@
 decl int percent 87
 #letter_grade:
-    if percent >= 90:
+    #if percent >= 90:
         prt "You got an A, amazing job."
-        break all
-    if percent >= 80 && percent < 90:
+        break all #
+    #if percent >= 80 && percent < 90:
         prt "You got an B, good job."
-        break all
-    if percent >= 70 && percent <80:
+        break all #
+    #if percent >= 70 && percent <80:
         prt "You got a C, try a little harder next time."
-        break all
-    if percent >= 60 && percent <70:
+        break all #
+    #if percent >= 60 && percent <70:
         prt "You got a D, good luck next time."
         break all
-    else:
-        prt "You failed."
+    #else:
+        prt "You failed." #
 #
