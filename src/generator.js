@@ -4,16 +4,7 @@ import * as stdlib from "./stdlib.js"
 export default function generate(program) {
   const output = []
 
-  const standardFunctions = new Map([
-    [stdlib.contents.print, (x) => `console.log(${x})`],
-    // [stdlib.contents.sin, (x) => `Math.sin(${x})`],
-    // [stdlib.contents.cos, (x) => `Math.cos(${x})`],
-    // [stdlib.contents.exp, (x) => `Math.exp(${x})`],
-    // [stdlib.contents.ln, (x) => `Math.log(${x})`],
-    // [stdlib.contents.hypot, ([x, y]) => `Math.hypot(${x},${y})`],
-    // [stdlib.contents.bytes, (s) => `[...Buffer.from(${s}, "utf8")]`],
-    // [stdlib.contents.codepoints, (s) => `[...(${s})].map(s=>s.codePointAt(0))`],
-  ])
+  const standardFunctions = new Map([[stdlib.contents.print, (x) => `console.log(${x})`]])
 
   const targetName = ((mapping) => {
     return (entity) => {
@@ -52,7 +43,9 @@ export default function generate(program) {
     Function(f) {
       return targetName(f)
     },
-    AddInstruction(a) {},
+    // AddInstruction(a) {
+    //   output.push(``)
+    // },
     Suite(s) {
       s.statements = gen(s.statements)
       return s
@@ -79,9 +72,10 @@ export default function generate(program) {
     Number(e) {
       return e
     },
-    BigInt(e) {
-      return e
-    },
+    // BigInt(e) {
+    //   return e
+    // },
+    // do we need this?
     Boolean(e) {
       return e
     },
