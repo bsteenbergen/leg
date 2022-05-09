@@ -29,10 +29,7 @@ const optimizers = {
     return d
   },
   Variable(v) {
-    if (v.value.constructor === core.BinaryExpression) {
-      const varValue = optimize(v.value)
-      return new core.Variable(v.type, v.name, varValue)
-    }
+    return v
   },
   AddInstruction(a) {
     a.args = optimize(a.args)
@@ -56,6 +53,15 @@ const optimizers = {
     e.op = optimize(e.op)
     e.left = optimize(e.left)
     e.right = optimize(e.right)
+    if (e.op === "&&") {
+      // Optimize boolean constants in && and ||
+      if (e.left === true) return e.right
+      else if (e.right === true) return e.left
+    }
+    if (e.op === "||") {
+      if (e.left === false) return e.right
+      else if (e.right === false) return e.left
+    }
     // SHARED CASES ACROSS NUM, BIGINT, AND STRING.
     if (
       [Number, BigInt, String].includes(e.left.constructor) &&

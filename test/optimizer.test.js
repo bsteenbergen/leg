@@ -3,20 +3,6 @@ import optimize from "../src/optimizer.js"
 import * as core from "../src/core.js"
 
 const x = 9
-const svar1 = "Hello, "
-const svar2 = "World"
-// const x = new core.Variable(core.Type.INT, "x", 100)
-const neg = (x) => new core.UnaryExpression("-", x)
-const suite1 = new core.Suite([new core.PrintStatement(svar1)])
-const suite2 = new core.Suite([])
-
-let instr = new core.AddInstruction(
-  new core.Variable(core.Type.STRING, "result", ""),
-  "HI ",
-  "AND BYE"
-)
-
-console.log(optimize(instr))
 
 const tests = [
   ["folds +", new core.BinaryExpression(5, "+", 8), 13],
@@ -40,6 +26,19 @@ const tests = [
   ["folds negation", new core.UnaryExpression("-", 8), -8],
   ["optimizes 1**", new core.BinaryExpression(1, "^", x), 1],
   ["optimizes **0", new core.BinaryExpression(x, "^", 0), 1],
+  ["removes left false from ||", new core.BinaryExpression(false, "||", 0), 0],
+  ["removes right false from ||", new core.BinaryExpression(0, "||", false), 0],
+  [
+    "removes left true from &&",
+    new core.BinaryExpression(true, "&&", new core.BinaryExpression(3, "*", x)),
+    27,
+  ],
+  [
+    "removes left true from &&",
+    new core.BinaryExpression(new core.BinaryExpression(3, "*", x), "&&", true),
+    27,
+  ],
+  /*
   [
     "folds result of add instruction on two integers",
     new core.Variable(core.Type.INT, "result", new core.BinaryExpression(10, "+", 30)),
@@ -114,6 +113,7 @@ const tests = [
       new core.VariableAssignment(x, new core.UnaryExpression("-", x)),
     ]),
   ],
+  */
 ]
 
 describe("The optimizer", () => {
