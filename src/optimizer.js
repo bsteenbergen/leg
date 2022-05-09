@@ -62,16 +62,9 @@ const optimizers = {
       [Number, BigInt, String].includes(e.left.constructor) &&
       e.left.constructor === e.right.constructor
     ) {
-      switch (e.op) {
-        case "+":
-          return e.left + e.right
-        case "==":
-          return e.left === e.right
-        case "!=":
-          return e.left !== e.right
-        default:
-          break
-      }
+      if (e.op === "+") return e.left + e.right
+      else if (e.op === "==") return e.left == e.right
+      else if (e.op === "!=") return e.left != e.right
     }
     // CASES APPLICABLE ONLY TO NUMBER AND BIGINT.
     if (

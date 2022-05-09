@@ -101,6 +101,15 @@ const fixtures = [
       }
     `,
   },
+  {
+    name: "add instr",
+    source: `
+    add result "Hello" " World!"
+    `,
+    expected: dedent`
+    let result = "Hello World!";
+    `,
+  },
 ]
 describe("The code generator", () => {
   for (const fixture of fixtures) {

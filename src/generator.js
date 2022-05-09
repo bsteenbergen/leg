@@ -24,6 +24,15 @@ export default function generate(program) {
       gen(d.suite)
       output.push("}")
     },
+    AddInstruction(i) {
+      // Concatenate strings
+      if (i.args[1].category === "Str" && i.args[2].category === "Str") {
+        let resName = i.args[0].source._contents
+        let operand1 = i.args[1].source._contents.slice(1, -1)
+        let operand2 = i.args[2].source._contents.slice(1, -1)
+        output.push(`let ${resName} = "${gen(operand1 + operand2)}";`)
+      }
+    },
     // Variable(v) {
     //   console.log("variable")
     //   return targetName(v)
