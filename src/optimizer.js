@@ -1,6 +1,3 @@
-import * as core from "./core.js"
-import * as stdlib from "./stdlib.js"
-
 export default function optimize(node) {
   return optimizers[node.constructor.name](node)
 }
@@ -18,9 +15,6 @@ const optimizers = {
   VariableAssignment(s) {
     s.source = optimize(s.name)
     s.target = optimize(s.initializer)
-    if (s.source === s.target) {
-      return []
-    }
     return s
   },
   FunctionDeclaration(d) {
@@ -28,12 +22,14 @@ const optimizers = {
     d.suite = optimize(d.suite)
     return d
   },
+  Function(f) {
+    return f
+  },
+  FunctionCall(c) {
+    return c
+  },
   Variable(v) {
     return v
-  },
-  AddInstruction(a) {
-    a.args = optimize(a.args)
-    return a
   },
   IfStatement(s) {
     s.test = optimize(s.condition)
@@ -45,7 +41,6 @@ const optimizers = {
     return s
   },
   Suite(s) {
-    console.log("optimizing suite")
     s.statements = optimize(s.statements)
     return s
   },
@@ -83,35 +78,22 @@ const optimizers = {
       [Number, BigInt].includes(e.left.constructor) &&
       e.left.constructor === e.right.constructor
     ) {
-      switch (e.op) {
-        case "-":
-          return e.left - e.right
-        case "*":
-          return e.left * e.right
-        case "/":
-          return e.left / e.right
-        case "^":
-          return e.left ** e.right
-        case "<":
-          return e.left < e.right
-        case "<=":
-          return e.left <= e.right
-        case ">":
-          return e.left > e.right
-        case ">=":
-          return e.left >= e.right
-        default:
-          break
+      if (e.op === "-") return e.left - e.right
+      else if (e.op === "*") return e.left * e.right
+      else if (e.op === "/") return e.left / e.right
+      else if (e.op === "<") return e.left < e.right
+      else if (e.op === "<=") return e.left <= e.right
+      else if (e.op === ">") return e.left > e.right
+      else if (e.op === ">=") return e.left >= e.right
+      else if (e.op === "^") {
+        if (e.right === 0) return 1
+        else if (e.left === 1) return 1
+        else return e.left ** e.right
       }
     }
     // CASES APPLICABLE ONLY TO STRING.
     if (e.left.constructor === e.right.constructor) {
-      switch (e.op) {
-        case "-":
-          return e.left.replace(e.right, "")
-        default:
-          break
-      }
+      if (e.op === "-") return e.left.replace(e.right, "")
     }
     return e
   },
@@ -129,8 +111,14 @@ const optimizers = {
     e.argument = optimize(e.argument)
     return e
   },
-  BigInt(e) {
-    return e
+  CompareInstruction(i) {
+    return i
+  },
+  AddInstruction(i) {
+    return i
+  },
+  SubInstruction(i) {
+    return i
   },
   Number(e) {
     return e
