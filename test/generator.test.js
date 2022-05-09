@@ -28,11 +28,11 @@ const fixtures = [
         decl str hey "hey"
       `,
     expected: dedent`
-        let x_1 = 3;
-        let y_2 = 0;
-        let z_3 = true;
-        let big_4 = 9007199254740991;
-        let hey_5 = "hey";
+        let x = 3;
+        let y = 0;
+        let z = true;
+        let big = 9007199254740991;
+        let hey = "hey";
       `,
   },
   {
@@ -44,9 +44,9 @@ const fixtures = [
         prt y
     `,
     expected: dedent`
-        let x_1 = 5;
-        let y_2 = 1;
-        y_2 = x_1;
+        let x = 5;
+        let y = 1;
+        y = x;
         console.log(1);
     `,
   },
@@ -57,16 +57,14 @@ const fixtures = [
       decl bool y true
       decl bool z true
       asgn z !z
-      prt z
       prt y && y
       prt x^x
     `,
     expected: dedent`
-      let x_1 = 3;
-      let y_2 = true;
-      let z_3 = true;
-      z_3 = !(z_3)
-      console.log(false);
+      let x = 3;
+      let y = true;
+      let z = true;
+      z = !(z);
       console.log((true && true));
       console.log(27);
     `,
@@ -80,9 +78,9 @@ const fixtures = [
     #
     `,
     expected: dedent`
-    function my_func_1() {
-      let x_2 = 5;
-      console.log(x_2);
+    function #my_func() {
+      let x = 5;
+      console.log(x);
     }
     `,
   },
@@ -97,8 +95,8 @@ const fixtures = [
     #
     `,
     expected: dedent`
-      let x_1 = 0;
-      if ((x_1 > 5)) {
+      let x = 0;
+      if ((x > 5)) {
         console.log(1);
       } else {
         console.log(2);
