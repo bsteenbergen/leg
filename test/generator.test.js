@@ -30,6 +30,7 @@ const fixtures = [
         let x = 3;
         let y = 0;
         let z = true;
+        let big = 9007199254740991;
         let hey = "hey";
       `,
   },
@@ -41,11 +42,11 @@ const fixtures = [
         asgn y y + x
         prt y
     `,
-    expected: `
+    expected: dedent`
         let x = 5;
         let y = 1;
-        y = y + x;
-        console.log(y);
+        y = x;
+        console.log(1);
     `,
   },
   {
@@ -53,14 +54,52 @@ const fixtures = [
     source: `
       decl int x 3
       decl bool y true
+      decl bool z true
+      asgn z !z
       prt y && y
       prt x^x
     `,
     expected: dedent`
       let x = 3;
       let y = true;
-      console.log((y && y));
-      console.log((x ** x));
+      let z = true;
+      z = !(z);
+      console.log((true && true));
+      console.log(27);
+    `,
+  },
+  {
+    name: "function",
+    source: `
+    #my_func:
+      decl int x 5
+      prt x
+    #
+    `,
+    expected: dedent`
+    function #my_func() {
+      let x = 5;
+      console.log(x);
+    }
+    `,
+  },
+  {
+    name: "if",
+    source: `
+    decl int x 0
+    #if x > 5:
+      prt 1
+    # else:
+      prt 2
+    #
+    `,
+    expected: dedent`
+      let x = 0;
+      if ((x > 5)) {
+        console.log(1);
+      } else {
+        console.log(2);
+      }
     `,
   },
 ]

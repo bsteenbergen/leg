@@ -24,11 +24,12 @@ export default function generate(program) {
       output.push(`${gen(s.source)} = ${gen(s.target)};`)
     },
     FunctionDeclaration(d) {
-      output.push(`function ${gen(d.funcName)}() {`) // no function args for now
+      output.push(`function ${gen(d.funcName)}() {`)
       gen(d.suite)
       output.push("}")
     },
     // Variable(v) {
+    //   console.log("variable")
     //   return targetName(v)
     // },
     // Function(f) {
