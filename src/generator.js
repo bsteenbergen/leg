@@ -6,15 +6,6 @@ export default function generate(program) {
 
   const standardFunctions = new Map([[stdlib.contents.print, (x) => `console.log(${x})`]])
 
-  const targetName = ((mapping) => {
-    return (entity) => {
-      if (!mapping.has(entity)) {
-        mapping.set(entity, mapping.size + 1)
-      }
-      return `${entity.name ?? entity.description}_${mapping.get(entity)}`
-    }
-  })(new Map())
-
   function gen(node) {
     return generators[node.constructor.name](node)
   }
@@ -33,16 +24,17 @@ export default function generate(program) {
       output.push(`${gen(s.source)} = ${gen(s.target)};`)
     },
     FunctionDeclaration(d) {
-      output.push(`function ${gen(d.funcName)}() {`) // no function args for now
+      output.push(`function ${gen(d.funcName)}() {`)
       gen(d.suite)
       output.push("}")
     },
-    Variable(v) {
-      return targetName(v)
-    },
-    Function(f) {
-      return targetName(f)
-    },
+    // Variable(v) {
+    //   console.log("variable")
+    //   return targetName(v)
+    // },
+    // Function(f) {
+    //   return targetName(f)
+    // },
     // AddInstruction(a) {
     //   output.push(``)
     // },
