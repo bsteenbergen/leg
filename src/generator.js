@@ -50,14 +50,9 @@ export default function generate(program) {
     IfStatement(s) {
       output.push(`if (${gen(s.test)}) {`)
       gen(s.consequent)
-      if (s.alternate.constructor === IfStatement) {
-        output.push("} else")
-        gen(s.alternate)
-      } else {
-        output.push("} else {")
-        gen(s.alternate)
-        output.push("}")
-      }
+      output.push("} else {")
+      gen(s.alternate)
+      output.push("}")
     },
     BinaryExpression(e) {
       const op = { "==": "===", "!=": "!==", "^": "**" }[e.op] ?? e.op
